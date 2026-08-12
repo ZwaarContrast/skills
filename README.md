@@ -17,6 +17,22 @@ npx skills add ZwaarContrast/skills --skill clean-room # just one
 
 Both work the same way — a real context boundary as the measuring instrument, rather than asking an agent to pretend it doesn't know something.
 
+## Developing a skill in this repo
+
+Do not run the install command above from inside this repo. It replaces
+`skills/<name>/` with symlinks into `.agents/skills/`, and any uncommitted edits
+to a `SKILL.md` go with them.
+
+Install from a local checkout instead, from a directory outside it:
+
+```bash
+cd /tmp/try
+npx skills add /path/to/this/clone --skill clean-room
+```
+
+`--list` against the same path is a safe read-only check that a new skill is
+discoverable and its frontmatter parses.
+
 ## Add a skill
 
 ```

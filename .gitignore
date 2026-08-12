@@ -14,3 +14,9 @@ yarn-error.log*
 
 # Local agent config
 .claude/settings.local.json
+
+# skills CLI install artifacts
+.agents/
+agent/
+.claude/skills/
+skills-lock.json
