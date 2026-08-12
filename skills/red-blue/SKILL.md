@@ -29,12 +29,12 @@ proof the app is secure.
 1. **Sandbox the whole game.** Red runs real attacks with a live agent's full
    tooling; the only safe place for that is one it cannot escape. Run everything
    — the app and both agents — where nothing but the app under test is
-   reachable: a container with egress blocked, a disposable VM, or the
-   equivalent this harness offers. If you cannot establish that isolation, stop
+   reachable, and the app itself reaches nothing but its own seeded deps: no
+   internet egress on either side. If you cannot establish that isolation, stop
    and say so; do not run. The fence below is the rules of the game — the
-   sandbox is the wall that enforces them. **Build it and prove it holds before
-   any move — see [Building the sandbox](#building-the-sandbox) for a tested
-   recipe and the verification gate.**
+   sandbox is the wall that enforces them. Create the jail networks now; connect
+   the app and prove the wall holds once it is booted (step 5), following
+   [`sandbox-recipe.md`](sandbox-recipe.md).
 2. **Isolate the code.** Create a git worktree on a fresh branch
    (`redblue/<app>`), or whatever this harness calls an isolated checkout. The
    app runs here and blue commits fixes here; the user's working tree is never
@@ -50,8 +50,11 @@ proof the app is secure.
    throwaway store seeded with test data — never a real or shared one. Work out
    the launch from the repo the way any newcomer would. Keep it running across
    turns; note the restart command — blue will need it.
-5. **Capture the baselines.** With the app up and untouched, record the two
-   things the game measures against:
+5. **Prove the wall, then capture the baselines.** With the app up and
+   untouched, first run the sandbox verification gate from
+   [`sandbox-recipe.md`](sandbox-recipe.md): the attacker box must reach only the
+   app, and the app must reach only its deps — any "expect fail" probe that
+   succeeds stops the game. Then record the two things the game measures against:
    - The **data baseline** — rebuilt from the app's own migrate and seed
      commands, so blue's committed schema or data fixes replay on every reset
      instead of being frozen out by a stale dump. After any move or rerun that
@@ -70,67 +73,37 @@ proof the app is secure.
    turns, only the board and blue's committed fixes carry over — the datastore
    rebuilds to the baseline.
 
-## Building the sandbox
+## The sandbox
 
-The skill names the wall — "a container with egress blocked" — but a wall you
-did not test is a wall you are guessing at. This is how to build one and, more
-importantly, how to prove it holds. The recipe is for a containerised app; a
-disposable VM with egress rules is the equivalent.
+Step 1's wall, built and proven before any move. The mechanics — two internal
+Docker networks, tooling installed before egress is cut, and the inversion
+probes that prove it holds — live in [`sandbox-recipe.md`](sandbox-recipe.md).
+Two things from it drive the rest of this skill.
 
-**Build an egress-blocked box on the app's own network.** A Docker network
-created `--internal` has no route off itself: containers on it reach each other
-and nothing else — not the internet, not the host's other containers, not the
-host disk.
-
-```bash
-docker network create --internal rb-jail
-docker network connect rb-jail <app-container>          # app reachable from the jail
-# build the attacker box WITH tooling, THEN cut its egress — order matters:
-docker run -d --name rb-attacker alpine sleep infinity  # starts with egress
-docker exec rb-attacker apk add --no-cache curl python3 # install while it still has the internet
-docker network connect rb-jail rb-attacker
-docker network disconnect bridge rb-attacker            # remove every egress-capable network
-```
-
-Install tooling *before* cutting egress — once jailed, the box cannot fetch a
-package. The app stays dual-homed: still on its own network for its
-dependencies (a broker, a DB), now also on `rb-jail` for the attacker.
-
-**Verify the wall by inversion, before any move.** This is a referee check, not
-an assumption. Run the same probe from inside the jail and confirm it reaches
-the app and fails everything else:
-
-```bash
-docker exec rb-attacker curl -sm6 -o/dev/null -w'%{http_code}\n' http://<app-container>:<port>/health  # expect 200
-docker exec rb-attacker curl -sm6 https://1.1.1.1                                                       # expect connect failure
-docker exec rb-attacker curl -sm6 http://<another-host-container>:<port>                                # expect DNS/connect failure
-docker exec rb-attacker sh -c 'test -r <a-real-host-secret> && echo LEAK || echo walled'               # expect walled
-```
-
-App reachable **and** internet, the host's other containers, and host secrets
-all unreachable → the wall holds. Any "expect fail" line that succeeds → stop,
+**The app is walled too, not just the attacker.** Both the attacker box and the
+app run with no internet egress; the app reaches only its seeded deps. This is
+what contains an SSRF finding — red's exploit makes the *app* fetch a URL, so an
+app that keeps egress leaks through the very pivot the game hunts for. The gate
+probes the app's egress, not only the attacker's; until that is proven closed,
 you do not have a sandbox.
 
-**Who runs the attacks.** The jail confines commands run *inside* it, not the
-agent that decides them. A red subagent dispatched with a full shell runs in the
-harness, beside the app — not inside the jail — so telling it to "only use the
-jail" is a rule, not a wall, and one misfire reaches everything the probe above
-reached. Two honest configurations:
+**Who runs the attacks — jailing the exec context is not jailing the agent.** A
+red subagent with a full shell runs in the harness, beside the app, not inside
+the jail; "only use the jail" is then a rule, not a wall. Two honest configs,
+and you state which you used in the report:
 
-- **Harness can network-confine the agent** (its own egress-blocked sandbox, a jailed exec context): dispatch red and blue inside it. This is the ideal — independent agents behind an enforced wall.
-- **Harness cannot** (subagents inherit host reach, as most do today): the orchestrator drives the seats itself and routes every attack through the jailed box (`docker exec rb-attacker …`). The wall is then enforced on execution even though the deciding agent is not jailed. You lose independent adversarial agents; you keep reproducible exploits, verified fixes, the ratchet, and a real boundary. State which configuration you used in the report.
+- **Config A — the harness can network-confine the agent** (its own egress-blocked sandbox or jailed exec context): dispatch red and blue inside it. Independent adversarial agents behind an enforced wall. The ideal.
+- **Config B — it cannot** (subagents inherit host reach, as most do today): you, the orchestrator, play the seats yourself and route every app-facing command through the jailed box (`docker exec rb-attacker …`). You lose independent agents; you keep reproducible exploits, verified fixes, the ratchet, and a real boundary.
 
-Only the seats that touch the app *as an attacker would* route through the
-jail — do not assume all three do. **Red**'s exploits go through it, and so does
-the **referee**'s rerun of them and its functional smoke check, since those are
-app-facing requests too; author each repro as `docker exec rb-attacker …` so the
-attack and its adjudication are the same jailed command. **Blue** does not and
-cannot: it edits code and rebuilds the app, which needs the toolchain and
-package registry the jail deliberately denies. Blue's containment is the
-worktree plus the fence rule that it commits only to the branch and never pushes
-or deploys — enforced by the referee inspecting the commit before applying it.
-Building and restarting the app between rounds is a host operation, not a jailed
-one, for the same reason.
+Only the app-facing seats route through the jail. **Red**'s exploits and the
+**referee**'s rerun of them and the smoke check are app-facing — in config B
+author each as `docker exec rb-attacker …` so the attack and its adjudication
+are one jailed command. **Blue** does not and cannot: it edits code and rebuilds
+the app, needing the toolchain and registry the jail denies; its containment is
+the worktree plus the fence rule that it commits only to the branch and never
+pushes — enforced by the referee inspecting the commit before applying it.
+Building and restarting the app between rounds is a host operation for the same
+reason.
 
 ## The fence
 
@@ -164,8 +137,10 @@ Plus two running sections at the top, updated as the game goes:
 
 ## Red's turn
 
-Dispatch a red subagent (`general-purpose`, or whatever runs commands and
-drives a browser). Give it the board and the app's address. Instruct it:
+In **config A**, dispatch a red subagent (`general-purpose`, or whatever runs
+commands and drives a browser) with the board and the app's address. In **config
+B**, you play red yourself, routing every attack through the jailed box. Either
+way the brief is the same:
 
 > You are red team. Break this application. Read the whole board first — you may
 > not resubmit a break already marked CLOSED, and any break blue has fixed you
@@ -182,8 +157,10 @@ drives a browser). Give it the board and the app's address. Instruct it:
 > green from the baseline with no manual prep: include every setup step — the
 > injection, the seeding, the login — inside it, because the referee rebuilds
 > the data between moves and a repro that assumes leftover state will be scored
-> wrong. A claim without a repro the referee can run does not count. Append your
-> move to the board and add any further ideas to red's backlog.
+> wrong. In config B, write the repro as a `docker exec rb-attacker …` command,
+> so your attack and the referee's rerun are the same jailed line. A claim
+> without a repro the referee can run does not count. Append your move to the
+> board and add any further ideas to red's backlog.
 
 Then **adjudicate**: run the repro yourself.
 
