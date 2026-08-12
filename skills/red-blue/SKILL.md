@@ -32,7 +32,9 @@ proof the app is secure.
    reachable: a container with egress blocked, a disposable VM, or the
    equivalent this harness offers. If you cannot establish that isolation, stop
    and say so; do not run. The fence below is the rules of the game — the
-   sandbox is the wall that enforces them.
+   sandbox is the wall that enforces them. **Build it and prove it holds before
+   any move — see [Building the sandbox](#building-the-sandbox) for a tested
+   recipe and the verification gate.**
 2. **Isolate the code.** Create a git worktree on a fresh branch
    (`redblue/<app>`), or whatever this harness calls an isolated checkout. The
    app runs here and blue commits fixes here; the user's working tree is never
@@ -67,6 +69,56 @@ proof the app is secure.
    both teams read all of it before moving and append their move to it. Between
    turns, only the board and blue's committed fixes carry over — the datastore
    rebuilds to the baseline.
+
+## Building the sandbox
+
+The skill names the wall — "a container with egress blocked" — but a wall you
+did not test is a wall you are guessing at. This is how to build one and, more
+importantly, how to prove it holds. The recipe is for a containerised app; a
+disposable VM with egress rules is the equivalent.
+
+**Build an egress-blocked box on the app's own network.** A Docker network
+created `--internal` has no route off itself: containers on it reach each other
+and nothing else — not the internet, not the host's other containers, not the
+host disk.
+
+```bash
+docker network create --internal rb-jail
+docker network connect rb-jail <app-container>          # app reachable from the jail
+# build the attacker box WITH tooling, THEN cut its egress — order matters:
+docker run -d --name rb-attacker alpine sleep infinity  # starts with egress
+docker exec rb-attacker apk add --no-cache curl python3 # install while it still has the internet
+docker network connect rb-jail rb-attacker
+docker network disconnect bridge rb-attacker            # remove every egress-capable network
+```
+
+Install tooling *before* cutting egress — once jailed, the box cannot fetch a
+package. The app stays dual-homed: still on its own network for its
+dependencies (a broker, a DB), now also on `rb-jail` for the attacker.
+
+**Verify the wall by inversion, before any move.** This is a referee check, not
+an assumption. Run the same probe from inside the jail and confirm it reaches
+the app and fails everything else:
+
+```bash
+docker exec rb-attacker curl -sm6 -o/dev/null -w'%{http_code}\n' http://<app-container>:<port>/health  # expect 200
+docker exec rb-attacker curl -sm6 https://1.1.1.1                                                       # expect connect failure
+docker exec rb-attacker curl -sm6 http://<another-host-container>:<port>                                # expect DNS/connect failure
+docker exec rb-attacker sh -c 'test -r <a-real-host-secret> && echo LEAK || echo walled'               # expect walled
+```
+
+App reachable **and** internet, the host's other containers, and host secrets
+all unreachable → the wall holds. Any "expect fail" line that succeeds → stop,
+you do not have a sandbox.
+
+**Who runs the attacks.** The jail confines commands run *inside* it, not the
+agent that decides them. A red subagent dispatched with a full shell runs in the
+harness, beside the app — not inside the jail — so telling it to "only use the
+jail" is a rule, not a wall, and one misfire reaches everything the probe above
+reached. Two honest configurations:
+
+- **Harness can network-confine the agent** (its own egress-blocked sandbox, a jailed exec context): dispatch red and blue inside it. This is the ideal — independent agents behind an enforced wall.
+- **Harness cannot** (subagents inherit host reach, as most do today): the orchestrator drives the seats itself and routes every attack through the jailed box (`docker exec rb-attacker …`). The wall is then enforced on execution even though the deciding agent is not jailed. You lose independent adversarial agents; you keep reproducible exploits, verified fixes, the ratchet, and a real boundary. State which configuration you used in the report.
 
 ## The fence
 
