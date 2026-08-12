@@ -24,8 +24,15 @@ when the inference was right — because the next person guesses differently.
 A cold start in a warm directory proves nothing. Clone to a temp directory:
 
 ```
-git clone <repo-path> <tmpdir>/coldstart
+git clone --no-hardlinks <repo-path> <tmpdir>/coldstart
+git -C <tmpdir>/coldstart remote remove origin
 ```
+
+Sever the remote. A clone's origin points straight back at the working
+repository, so a runner that decides to push writes into the very thing it is
+supposed to be observing. Telling it not to push is a wish; a clone with nowhere
+to push cannot. `--no-hardlinks` does the same job for the object store, which a
+local clone otherwise shares with the original.
 
 A local clone carries committed files only. Everything uncommitted — the `.env`
 that makes it work on your machine, the built assets, the installed
@@ -48,7 +55,8 @@ after. Identify and name as forbidden:
 
 - Migrations, seeds, or resets against any database that is not created fresh by the run itself.
 - Anything carrying production or staging credentials.
-- Deploys, publishes, pushes, and releases.
+- Deploys, releases, and publishing to any registry.
+- Writes to the developer's real configuration — home-directory dotfiles, agent config, global tool state. Where a documented step installs into one, redirect `HOME` into the temp directory.
 - Destructive cleanup of shared machine state — pruning images, wiping caches other projects use.
 - Writes to shared third-party services: sending real email, charging real cards, posting to real channels.
 
