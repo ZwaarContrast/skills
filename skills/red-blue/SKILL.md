@@ -197,7 +197,7 @@ to distrust both equally. It rules on what a rerun cannot, and settles every
 existence question by handing a repro to the referee, never by decree. Called at
 two points:
 
-- **After a red PASS** — the referee has shown the exploit fires. The judge rules whether it is a real flaw in the app or an artifact of the test setup or a fence breach, and rates its severity. An invalid break is struck; a valid one enters **Open breaks** at that severity.
+- **After a red PASS** — the referee has shown the exploit fires. The judge rules whether it is a real flaw in the app or an artifact of the setup, and rates its severity. **Rule the sandbox out first:** a "break" that is really the app failing to reach a dependency the wall blocks — a cut egress, a missing external service — is the wall talking, not a vulnerability, and blue can never close it. The tell is whether it would still happen with egress restored; if the behaviour vanishes once the blocked dependency is reachable, strike it as a sandbox artifact and note it untestable in this harness, rather than sending blue in circles after an unfixable finding. A break that survives that check enters **Open breaks** at its severity; any other invalid or fence-breaching break is struck.
 - **After a blue PASS** — the referee has shown red's repro now fails and the app still works. The judge writes **two or three variants** aimed at the same underlying flaw — a mutated payload, a sibling endpoint, an encoding trick — and hands each to the referee to run. This is the whack-a-mole check. If none fires, the break is `CLOSED-this-round`, which means no variant defeated the fix this round — not that the class is proven shut. The report says exactly that.
 
 ## Stop
