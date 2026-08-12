@@ -14,8 +14,9 @@ npx skills add ZwaarContrast/skills --skill clean-room # just one
 
 - **clean-room** — rethink existing functionality: trace it, restate it as a problem brief, redesign it behind a context wall (a subagent that never sees the code), then verdict the current implementation as replace / graft / keep.
 - **cold-start** — test whether your setup docs actually work: clone to a temp dir so only committed files exist, send a fresh-context agent in to boot / verify / change the project, and report every guess it had to make.
+- **red-blue** — turn-based red-team/blue-team game against a running app: red demonstrates a break, blue mitigates it, and the orchestrator re-runs every exploit so only reproducible attacks and verified fixes count. Ends with a pentest-style report and a branch of proposed fixes.
 
-Both work the same way — a real context boundary as the measuring instrument, rather than asking an agent to pretend it doesn't know something.
+They all work the same way — a real boundary as the measuring instrument (a context wall, a cold clone, a re-run exploit), rather than asking an agent to pretend something.
 
 ## Developing a skill in this repo
 
