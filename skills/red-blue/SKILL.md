@@ -120,6 +120,18 @@ reached. Two honest configurations:
 - **Harness can network-confine the agent** (its own egress-blocked sandbox, a jailed exec context): dispatch red and blue inside it. This is the ideal — independent agents behind an enforced wall.
 - **Harness cannot** (subagents inherit host reach, as most do today): the orchestrator drives the seats itself and routes every attack through the jailed box (`docker exec rb-attacker …`). The wall is then enforced on execution even though the deciding agent is not jailed. You lose independent adversarial agents; you keep reproducible exploits, verified fixes, the ratchet, and a real boundary. State which configuration you used in the report.
 
+Only the seats that touch the app *as an attacker would* route through the
+jail — do not assume all three do. **Red**'s exploits go through it, and so does
+the **referee**'s rerun of them and its functional smoke check, since those are
+app-facing requests too; author each repro as `docker exec rb-attacker …` so the
+attack and its adjudication are the same jailed command. **Blue** does not and
+cannot: it edits code and rebuilds the app, which needs the toolchain and
+package registry the jail deliberately denies. Blue's containment is the
+worktree plus the fence rule that it commits only to the branch and never pushes
+or deploys — enforced by the referee inspecting the commit before applying it.
+Building and restarting the app between rounds is a host operation, not a jailed
+one, for the same reason.
+
 ## The fence
 
 The rules both teams play by inside the sandbox. Red attacks **the
