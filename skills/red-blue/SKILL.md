@@ -173,13 +173,18 @@ Dispatch a blue subagent. Give it the board. Instruct it:
 
 > You are blue team. Read the board and pick one open break. Fix it in the code
 > or config of this worktree so the break's repro no longer works, without
-> breaking what the app does. Commit the fix on this branch with a message
-> naming the break. Stay inside the fence: <paste the fence>. Append your move
-> to the board, and if you cannot close a break without disabling a feature, say
-> so — that break stays open as an accepted risk.
+> breaking what the app does. **Document the fix in the commit, not the code:**
+> one fix per commit, its message naming the break, what closed it, and any
+> residual risk. The code stays prose-free — only the short, concrete comment a
+> maintainer needs to not re-break it, never a write-up of the vulnerability.
+> Stay inside the fence: <paste the fence>. Append your move to the board, and
+> if you cannot close a break without disabling a feature, say so — that break
+> stays open as an accepted risk.
 
-Then **adjudicate**: apply the commit, restart the app, and run two checks
-yourself.
+Then **adjudicate**: first inspect the commit — it must document the fix in its
+message and leave the code prose-free; bounce it back to blue if the rationale
+is buried in the source instead. Then apply the commit, restart the app, and run
+two checks yourself.
 
 - Red's repro now fails **and** the smoke check from setup still passes green → hand it to the judge, which attacks the fix with variants (below). Any variant fires → blue patched the symptom; the break stays open with that variant as its new repro. No variant fires → `CLOSED-this-round`.
 - Red's repro still works → mitigation `FAIL`; the break stays open.
