@@ -30,7 +30,8 @@ proof the app is secure.
    tooling; the only safe place for that is one it cannot escape. Run everything
    — the app and both agents — where nothing but the app under test is
    reachable, and the app itself reaches nothing but its own seeded deps: no
-   internet egress on either side. If you cannot establish that isolation, stop
+   internet egress on either side, so an SSRF finding cannot pivot through the
+   app to the internet. If you cannot establish that isolation, stop
    and say so; do not run. The fence below is the rules of the game — the
    sandbox is the wall that enforces them. Create the jail networks now; connect
    the app and prove the wall holds once it is booted (step 5), following
@@ -52,7 +53,9 @@ proof the app is secure.
    turns; note the restart command — blue will need it. If the app calls an
    external service for its core job, stand up an in-sandbox mock of it in
    **benign** mode now — see [`sandbox-recipe.md`](sandbox-recipe.md) — so the
-   back half runs and step 5's smoke check can exercise it.
+   back half runs and step 5's smoke check can exercise it. A mock is a seeded
+   dep, so the wall's invariant holds; red attacks it in its hostile mode
+   (Red's turn).
 5. **Prove the wall, then capture the baselines.** With the app up and
    untouched, first run the sandbox verification gate from
    [`sandbox-recipe.md`](sandbox-recipe.md): the attacker box must reach only the
@@ -78,29 +81,11 @@ proof the app is secure.
 
 ## The sandbox
 
-Step 1's wall, built and proven before any move. The mechanics — two internal
-Docker networks, tooling installed before egress is cut, and the inversion
-probes that prove it holds — live in [`sandbox-recipe.md`](sandbox-recipe.md).
-Three things from it drive the rest of this skill.
-
-**The app is walled too, not just the attacker.** Both the attacker box and the
-app run with no internet egress; the app reaches only its seeded deps. This is
-what contains an SSRF finding — red's exploit makes the *app* fetch a URL, so an
-app that keeps egress leaks through the very pivot the game hunts for. The gate
-probes the app's egress, not only the attacker's; until that is proven closed,
-you do not have a sandbox.
-
-**A dependency the app's function needs is mocked, not reached.** When the app
-calls an external service for its core job — an OCR/LLM API, a payment gateway,
-an email or storage backend — the wall makes it unreachable and the fence forbids
-the real one, so the app's back half goes dark. Setup stands one up in the
-sandbox in benign mode (step 4), answering in the real contract's shape, so the
-back half runs and the smoke check can exercise it. It is a seeded dep, so "the
-app reaches only its deps" stays true. It is also an attack surface the front
-half cannot reach — the app trusts what its upstream returns — which red
-exercises through the mock's hostile modes; see **Red's turn** below.
-Contract-fidelity and endpoint-validation gotchas, and the mode switch that arms
-them, are in [`sandbox-recipe.md`](sandbox-recipe.md).
+Step 1's wall, built and proven before any move; the mechanics — two internal
+Docker networks, tooling installed before egress is cut, the inversion probes
+that prove it holds, and the mock that lights the app's back half — live in
+[`sandbox-recipe.md`](sandbox-recipe.md). One thing about it belongs here,
+because it shapes every turn.
 
 **Who runs the attacks — jailing the exec context is not jailing the agent.** A
 red subagent with a full shell runs in the harness, beside the app, not inside
