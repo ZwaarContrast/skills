@@ -194,22 +194,59 @@ Dispatch a blue subagent. Give it the board. Instruct it:
 
 > You are blue team. Read the board and pick one open break. Fix it in the code
 > or config of this worktree so the break's repro no longer works, without
-> breaking what the app does. **Document the fix in the commit, not the code:**
-> one fix per commit, its message naming the break, what closed it, and any
-> residual risk. The code stays prose-free — only the short, concrete comment a
-> maintainer needs to not re-break it, never a write-up of the vulnerability.
+> breaking what the app does. Where the judge cited a spec or best practice for
+> this break, fix the app to conform to that standard — its current version —
+> not merely to defeat the repro, and have the regression test assert what the
+> standard requires.
+>
+> Find the **right fix, not a bandaid.** The standard the judge cited says what
+> correct behaviour is; now find how it is canonically achieved. Check how this
+> class of bug is properly resolved — the library's own docs and security
+> advisories, a patched release to upgrade to, how others fixed the same issue —
+> and apply that production-grade remediation (often the upgrade itself), not a
+> hand-rolled workaround around a fix that already exists. Cite a source that
+> resolves — an advisory ID, release notes, a commit — not a plausible-looking
+> reference; an unresolvable citation counts as no citation.
+>
+> Where no canonical fix exists, or the fix exists but you cannot reach it
+> (offline, no registry), a hand-rolled fix is the right answer — the rule is
+> against reinventing a worse version of a fix you could have used, not against
+> writing one where none is available. A sound hand-rolled fix survives the
+> judge's variants, passes its regression test, and conforms to the cited
+> standard; flag an unreachable-but-known fix as "upgrade to X once online". No
+> web reach at all? Do your best from first principles and say the remediation
+> is unverified against prior art.
+>
+> **Document the fix in the commit, not the code:** its
+> message names the break, what closed it, and any residual risk. The code stays
+> prose-free — only the short, concrete comment a maintainer needs to not
+> re-break it, never a write-up of the vulnerability.
+>
+> If the app has a test suite, land the break as **two commits**: first the
+> **regression test** — the test that would have caught this break, failing
+> (red) on the code as it stands; then the fix that turns it green. It asserts
+> the condition the vulnerability violated, not just red's one payload, so the
+> hole cannot silently reopen. Keep the rest of the suite green; where your fix
+> legitimately changes behaviour and a test now fails, update that test to
+> assert the new correct behaviour — never weaken or delete an assertion just to
+> make it pass. If the app has no test suite, say so — red's repro is promoted
+> into the smoke check as the standing guard instead.
+>
 > Stay inside the fence: <paste the fence>. Append your move to the board, and
 > if you cannot close a break without disabling a feature, say so — that break
 > stays open as an accepted risk.
 
-Then **adjudicate**: first inspect the commit — it must document the fix in its
-message and leave the code prose-free; bounce it back to blue if the rationale
-is buried in the source instead. Then apply the commit, restart the app, and run
-two checks yourself.
+Then **adjudicate**: first inspect the commits — the fix is documented in its
+message, the code is prose-free, and (if the app has a suite) a regression test
+lands first. Bounce it back if the rationale is buried in the source, if the
+regression test is missing where a suite exists, or if it made an existing test
+pass by gutting an assertion rather than matching legitimately-changed behaviour.
+Then apply the commits, restart the app, and run the checks yourself.
 
-- Red's repro now fails **and** the smoke check from setup still passes green → hand it to the judge, which attacks the fix with variants (below). Any variant fires → blue patched the symptom; the break stays open with that variant as its new repro. No variant fires → `CLOSED-this-round`.
+- The regression test must go **red→green** across the two commits: genuinely red at the test commit — a real assertion exhibiting the bug, not an import or collection error from referencing code the fix adds later — and green at the fix commit. Run the suite at each; the split makes this one command, no surgery. Any other outcome bounces: green at both is theater (it guards nothing), red at both means the fix does not satisfy it, green→red means the test is inverted. A green test is evidence, not proof — only a test that bites when the fix is gone proves the fix is real.
+- Red's repro now fails **and** the smoke check from setup still passes green (the app's test suite included, with blue's regression test now part of it) → hand it to the judge, which attacks the fix with variants (below). Any variant fires → blue patched the symptom; the break stays open with that variant as its new repro. No variant fires → `CLOSED-this-round`.
 - Red's repro still works → mitigation `FAIL`; the break stays open.
-- The smoke check fails → own-goal; reject the commit, the break stays open.
+- The smoke check fails → own-goal; reject the commit, the break stays open. (A dependency upgrade that legitimately changes behaviour is not an own-goal if blue updated the affected tests and the smoke check's intent still holds.)
 
 ## The judge
 
@@ -218,8 +255,12 @@ to distrust both equally. It rules on what a rerun cannot, and settles every
 existence question by handing a repro to the referee, never by decree. Called at
 two points:
 
-- **After a red PASS** — the referee has shown the exploit fires. The judge rules whether it is a real flaw in the app or an artifact of the setup, and rates its severity. **Rule the sandbox out first:** a "break" that is really the app failing to reach a dependency the wall blocks — a cut egress, a missing external service — is the wall talking, not a vulnerability, and blue can never close it. The tell is whether it would still happen with egress restored; if the behaviour vanishes once the blocked dependency is reachable, strike it as a sandbox artifact and note it untestable in this harness, rather than sending blue in circles after an unfixable finding. A break that survives that check enters **Open breaks** at its severity; any other invalid or fence-breaching break is struck.
-- **After a blue PASS** — the referee has shown red's repro now fails and the app still works. The judge writes **two or three variants** aimed at the same underlying flaw — a mutated payload, a sibling endpoint, an encoding trick — and hands each to the referee to run. This is the whack-a-mole check. If none fires, the break is `CLOSED-this-round`, which means no variant defeated the fix this round — not that the class is proven shut. The report says exactly that.
+- **After a red PASS** — the referee has shown the exploit fires. The judge rules whether it is a real flaw and how bad, running two checks before it opens anything:
+  - **Rule the sandbox out.** A "break" that is really the app failing to reach a dependency the wall blocks — a cut egress, a missing external service — is the wall talking, not a vulnerability, and blue can never close it. The tell is whether it would still happen with egress restored; if the behaviour vanishes once the blocked dependency is reachable, strike it as a sandbox artifact and note it untestable in this harness, rather than sending blue in circles after an unfixable finding.
+  - **Judge against the standard, not red's expectation.** Where a spec or an established best practice governs the behaviour — an API contract, an RFC the app implements, current hardening guidance like OWASP, or the app's own documented behaviour — validate the finding against the *current* version of it (look it up — a reference lookup outside the wall; a superseded recommendation is the wrong bar). No web reach? Fall back to the app's own documented spec and label the finding's currency unverified, rather than asserting a standard from memory. Conforms and is sound → not a break, but a design question for the user, not one to hand blue. Violates it — or conforms only to the app's own outdated spec while failing current best practice → confirmed; cite the clause or guidance and its version on the board, which sets the bar blue's fix must meet.
+
+  A break that survives both enters **Open breaks** at its severity; any invalid or fence-breaching break is struck.
+- **After a blue PASS** — the referee has shown red's repro now fails and the app still works. The judge writes **two or three variants** aimed at the same underlying flaw — a mutated payload, a sibling endpoint, an encoding trick — and hands each to the referee to run. This is the whack-a-mole check. Aim one variant at blue's regression test as well: if a variant slips past it, the test guards red's one payload, not the condition — bounce it back to widen. Then weigh the fix as a fix: confirm blue's cited source resolves to a real advisory or release — an unresolvable citation counts as none — and check it against what the library actually documents. A bandaid that survives the variants is still a bandaid: if a production-grade fix was **reachable and ignored** (a patched release blue could have installed, the library's secure-usage pattern) and blue hand-rolled around it, bounce it back for the real one. Where no fix is documented, or one exists but was out of reach, a hand-rolled fix stands as long as it survives the variants and its regression test. If none fires and the fix is either the documented remediation or a sound hand-rolled one, the break is `CLOSED-this-round`, which means no variant defeated the fix this round — not that the class is proven shut. The report says exactly that.
 
 ## Stop
 
@@ -235,6 +276,9 @@ open. Then, ranked by the judge's severity, every demonstrated break:
 - What it was, and its repro — this is a reproducible exploit, not a claim.
 - Whether it is `CLOSED-this-round`, and if so the fix commit and how many variants it survived. Say plainly that this is not a proof the class is shut.
 - If open: why, and what an attacker gets.
+
+Then the **spec/design questions** the judge surfaced — behaviour that conforms
+to spec but that you should rule on — listed for the user, not scored as breaks.
 
 State the game's reach honestly: the round budget spent, and that no finding
 here means the app is secure — only that this much effort did not break it
