@@ -60,3 +60,38 @@ Any "expect fail" that instead succeeds → stop, you do not have a sandbox. **T
 app-side probes are the ones that matter most:** an SSRF finding makes the *app*
 fetch a URL, so if the app keeps egress the wall leaks through the exact pivot
 the game is built to hunt. Walling only the attacker box is not enough.
+
+## Mock a required external dependency
+
+If the app calls an external service to do its core job, the walled app can no
+longer reach it, and every request that needs it fails at that boundary — you can
+only test the front half. Stand up a mock on `rb-appnet` that answers in the real
+service's contract, and point the app at it.
+
+```bash
+# a lean mock server (match the real response shape EXACTLY, or you test the reject path)
+docker run -d --name rb-mock --network rb-appnet -v "$PWD/mock.py:/app.py:ro" python:3-alpine python /app.py
+# point the app at it and restart the app
+#   SERVICE_ENDPOINT=http://rb-mock:<port>   (reached by container name on rb-appnet)
+```
+
+Two things bite here:
+
+- **Contract fidelity.** The mock's status, content-type and body must be what the
+  app expects. A near-miss makes the app take its error path, so you end up
+  testing error handling instead of the feature you meant to unlock. Read the
+  client code for the exact shape (required fields included) before writing the mock.
+- **The app may validate the endpoint.** Some clients refuse a plaintext URL
+  unless the host is loopback, or pin TLS — the same guard that protects a real
+  credential. A DNS-named mock is then rejected at startup. Two ways through:
+  share the app's network namespace so the mock answers on loopback
+  (`docker run --network container:<app-container> …`, app calls
+  `http://127.0.0.1:<port>`), or give the mock a TLS cert the app will trust.
+
+Make the mock's payload swappable at runtime (an env var it reads per request, no
+rebuild) — that turns it into a red instrument: the same mock serves a benign
+response to unlock the path, then a hostile one (a body far past any sane size, a
+truncated JSON, an unexpected content-type, markup aimed at whatever renders the
+result) to test the app's trust in its upstream. Verify by inversion as always:
+the mock is a seeded dep, so it must sit behind the wall with the app — reachable
+by the app, not from the internet.

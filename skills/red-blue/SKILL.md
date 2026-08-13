@@ -78,7 +78,7 @@ proof the app is secure.
 Step 1's wall, built and proven before any move. The mechanics — two internal
 Docker networks, tooling installed before egress is cut, and the inversion
 probes that prove it holds — live in [`sandbox-recipe.md`](sandbox-recipe.md).
-Two things from it drive the rest of this skill.
+Three things from it drive the rest of this skill.
 
 **The app is walled too, not just the attacker.** Both the attacker box and the
 app run with no internet egress; the app reaches only its seeded deps. This is
@@ -86,6 +86,18 @@ what contains an SSRF finding — red's exploit makes the *app* fetch a URL, so 
 app that keeps egress leaks through the very pivot the game hunts for. The gate
 probes the app's egress, not only the attacker's; until that is proven closed,
 you do not have a sandbox.
+
+**A dependency the app's function needs is mocked, not reached.** When the app
+calls an external service to do its core job — an OCR/LLM API, a payment gateway,
+an email or storage backend — the wall makes it unreachable and the fence forbids
+the real one anyway, so the app's back half stays dark and the smoke check cannot
+exercise it. Stand up a mock of that dependency inside the sandbox, on the
+app-net, answering in the real contract's shape. It is a seeded dep, so "the app
+reaches only its deps" stays true — and it is an attack surface the front half
+cannot reach: the app trusts what its upstream returns, so serve hostile
+responses (oversized, malformed, wrong content-type, injected markup, slow-drip)
+and watch how it parses, stores and serves untrusted upstream data. Mechanics,
+and the endpoint-validation gotcha, in [`sandbox-recipe.md`](sandbox-recipe.md).
 
 **Who runs the attacks — jailing the exec context is not jailing the agent.** A
 red subagent with a full shell runs in the harness, beside the app, not inside
