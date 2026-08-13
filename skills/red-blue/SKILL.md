@@ -154,6 +154,17 @@ way the brief is the same:
 > the app's trust in it: how it parses, stores and re-serves a hostile upstream
 > response (oversized, malformed, wrong content-type, injected markup, slow-drip).
 >
+> A secret that should never be in the codebase — a committed `.env`, a hardcoded
+> password, an API key or token in the source, the git history, or the built
+> image — is a confirmed vulnerability the moment you see it. Report it on sight:
+> its repro is the one-line inspection that surfaces it (`git show …`, `grep …`),
+> not an exploit, and you never use the credential — it may be live. You cannot
+> prove it live without using it, so judge by heuristic: a known key shape
+> (`AKIA…`, `sk_live_…`), high entropy, and whether it is the app's live config
+> rather than an `.env.example` or a test fixture. Report it as a
+> credential-shaped secret with your confidence, name what it would unlock, and
+> move on; its presence is the proof.
+>
 > Stay inside the fence: <paste the fence>. Produce one break and a **repro** —
 > the exact runnable command or script that demonstrates it. The repro must run
 > green from the baseline with no manual prep: include every setup step — the
@@ -175,6 +186,7 @@ Then **adjudicate**: run the repro yourself.
 
 - It breaks the app → `PASS`. Hand it to the judge; a break the judge rules valid enters **Open breaks** at the judge's severity.
 - It does not → log `FAIL`. The move does not count; red may try again next red turn.
+- It is a committed or baked-in secret → the repro is an inspection, not an exploit. Re-run the `git show`/`grep`, confirm a credential-shaped value is really there (not an `.env.example` or a test fixture), and enter it in **Open breaks** at a severity set by what it unlocks — a live payment key is critical, a throwaway CI token is not, so it skips the exploit rerun but still takes the judge's severity call. Closing it means removing the secret *and* rotating it; the game can verify removal by re-inspecting, not rotation, so the report flags rotation as required follow-up.
 
 ## Blue's turn
 
