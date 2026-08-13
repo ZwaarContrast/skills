@@ -15,6 +15,10 @@ yarn-error.log*
 # Local agent config
 .claude/settings.local.json
 
+# playwright-cli session artifacts, dropped in whatever directory it runs from
+.playwright-cli/
+.playwright
+
 # skills CLI install artifacts
 .agents/
 agent/

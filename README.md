@@ -23,10 +23,14 @@ npx skills add ZwaarContrast/skills --skill clean-room # just one
 - **red-blue** — turn-based red-team/blue-team game against a running app: red
   demonstrates a break, blue mitigates it, and the orchestrator re-runs every
   exploit so only reproducible attacks and verified fixes count.
+- **crash-test** — profile a frontend by using it the way an impatient user
+  does, while Chromium's own instruments record the cost: repeated requests,
+  layout thrash, leaked listeners, timers nobody stops, each with the source
+  line that caused it. A fix must move the number without moving the pixels.
 
 They all use real boundaries as measuring instruments rather than asking an
-agent to pretend: an enforced context wall, a committed-only clone, or a rerun
-exploit.
+agent to pretend: an enforced context wall, a committed-only clone, a rerun
+exploit, or the browser's own counters.
 
 ### `clean-room` compatibility and safety
 
