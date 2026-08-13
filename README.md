@@ -2,6 +2,8 @@
 
 Agent skills, installable with [`skills`](https://github.com/vercel-labs/skills).
 
+Licensed under the [MIT License](LICENSE).
+
 ## Install
 
 ```bash
@@ -12,11 +14,33 @@ npx skills add ZwaarContrast/skills --skill clean-room # just one
 
 ## Skills
 
-- **clean-room** — rethink existing functionality: trace it, restate it as a problem brief, redesign it behind a context wall (a subagent that never sees the code), then verdict the current implementation as replace / graft / keep.
-- **cold-start** — test whether your setup docs actually work: clone to a temp dir so only committed files exist, send a fresh-context agent in to boot / verify / change the project, and report every guess it had to make.
-- **red-blue** — turn-based red-team/blue-team game against a running app: red demonstrates a break, blue mitigates it, and the orchestrator re-runs every exploit so only reproducible attacks and verified fixes count. Ends with a pentest-style report and a branch of proposed fixes.
+- **clean-room** — rethink existing functionality: trace it, restate it as a
+  sanitized problem brief, redesign it with an isolated worker that cannot read
+  the source, then compare the designs as replace / graft / keep.
+- **cold-start** — test whether setup docs actually work: clone to a temp
+  directory, send in a fresh-context agent to boot / verify / change the project,
+  and report every guess it had to make.
+- **red-blue** — turn-based red-team/blue-team game against a running app: red
+  demonstrates a break, blue mitigates it, and the orchestrator re-runs every
+  exploit so only reproducible attacks and verified fixes count.
 
-They all work the same way — a real boundary as the measuring instrument (a context wall, a cold clone, a re-run exploit), rather than asking an agent to pretend something.
+They all use real boundaries as measuring instruments rather than asking an
+agent to pretend: an enforced context wall, a committed-only clone, or a rerun
+exploit.
+
+### `clean-room` compatibility and safety
+
+The skill requires an agent harness that can start a fresh worker without
+inherited conversation history and prevent that worker from reading the target
+repository. If either form of isolation is unavailable, the skill stops instead
+of presenting an ordinary second opinion as a clean-room result. Internet access
+is needed for verified ecosystem research; without it, the skill labels the run
+offline and does not recommend new dependencies without evidence.
+
+This is a cognitive de-anchoring workflow, not a legal clean-room engineering
+process or evidence of non-infringement. Review the brief before delegation when
+working with confidential code; proprietary identifiers and secrets must not be
+sent to another worker or used in web searches.
 
 ## Developing a skill in this repo
 
