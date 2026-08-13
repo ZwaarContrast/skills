@@ -49,7 +49,10 @@ proof the app is secure.
 4. **Boot the app** from the worktree, local instance only, pointed at a
    throwaway store seeded with test data — never a real or shared one. Work out
    the launch from the repo the way any newcomer would. Keep it running across
-   turns; note the restart command — blue will need it.
+   turns; note the restart command — blue will need it. If the app calls an
+   external service for its core job, stand up an in-sandbox mock of it in
+   **benign** mode now — see [`sandbox-recipe.md`](sandbox-recipe.md) — so the
+   back half runs and step 5's smoke check can exercise it.
 5. **Prove the wall, then capture the baselines.** With the app up and
    untouched, first run the sandbox verification gate from
    [`sandbox-recipe.md`](sandbox-recipe.md): the attacker box must reach only the
@@ -71,7 +74,7 @@ proof the app is secure.
 6. **Open the board** at `<tmpdir>/redblue/board.md`. This is the comms channel:
    both teams read all of it before moving and append their move to it. Between
    turns, only the board and blue's committed fixes carry over — the datastore
-   rebuilds to the baseline.
+   rebuilds to the baseline and the mock returns to its benign mode.
 
 ## The sandbox
 
@@ -88,16 +91,16 @@ probes the app's egress, not only the attacker's; until that is proven closed,
 you do not have a sandbox.
 
 **A dependency the app's function needs is mocked, not reached.** When the app
-calls an external service to do its core job — an OCR/LLM API, a payment gateway,
+calls an external service for its core job — an OCR/LLM API, a payment gateway,
 an email or storage backend — the wall makes it unreachable and the fence forbids
-the real one anyway, so the app's back half stays dark and the smoke check cannot
-exercise it. Stand up a mock of that dependency inside the sandbox, on the
-app-net, answering in the real contract's shape. It is a seeded dep, so "the app
-reaches only its deps" stays true — and it is an attack surface the front half
-cannot reach: the app trusts what its upstream returns, so serve hostile
-responses (oversized, malformed, wrong content-type, injected markup, slow-drip)
-and watch how it parses, stores and serves untrusted upstream data. Mechanics,
-and the endpoint-validation gotcha, in [`sandbox-recipe.md`](sandbox-recipe.md).
+the real one, so the app's back half goes dark. Setup stands one up in the
+sandbox in benign mode (step 4), answering in the real contract's shape, so the
+back half runs and the smoke check can exercise it. It is a seeded dep, so "the
+app reaches only its deps" stays true. It is also an attack surface the front
+half cannot reach — the app trusts what its upstream returns — which red
+exercises through the mock's hostile modes; see **Red's turn** below.
+Contract-fidelity and endpoint-validation gotchas, and the mode switch that arms
+them, are in [`sandbox-recipe.md`](sandbox-recipe.md).
 
 **Who runs the attacks — jailing the exec context is not jailing the agent.** A
 red subagent with a full shell runs in the harness, beside the app, not inside
@@ -162,7 +165,9 @@ way the brief is the same:
 > Playwright or a browser against a web UI, direct invocation of a CLI. Look for
 > the usual doors — injection, broken auth and access control, IDOR, SSRF,
 > secrets in responses, unsafe deserialization, missing rate limits, logic flaws
-> in whatever this app is actually for.
+> in whatever this app is actually for. If a core-job dependency is mocked, test
+> the app's trust in it: how it parses, stores and re-serves a hostile upstream
+> response (oversized, malformed, wrong content-type, injected markup, slow-drip).
 >
 > Stay inside the fence: <paste the fence>. Produce one break and a **repro** —
 > the exact runnable command or script that demonstrates it. The repro must run
@@ -173,6 +178,12 @@ way the brief is the same:
 > so your attack and the referee's rerun are the same jailed line. A claim
 > without a repro the referee can run does not count. Append your move to the
 > board and add any further ideas to red's backlog.
+
+An upstream-hostile break is the one exception to the single jailed line: red
+cannot reach the mock — it is walled on the app-net — so the referee drives it.
+Author the repro as two steps run together: flip the mock to its hostile mode
+(`docker exec rb-mock …`), then the jailed app-facing trigger. The referee
+reruns both, and the mock returns to benign with the baseline.
 
 Then **adjudicate**: run the repro yourself.
 

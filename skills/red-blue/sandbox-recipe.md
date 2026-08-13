@@ -68,11 +68,35 @@ longer reach it, and every request that needs it fails at that boundary — you 
 only test the front half. Stand up a mock on `rb-appnet` that answers in the real
 service's contract, and point the app at it.
 
+Write `mock.py` first — the service contract, with the response mode read per
+request from a one-line file so the orchestrator can flip it with no rebuild:
+
+```python
+# mock.py — stdlib only. Mode read per request from /tmp/mode (default benign).
+from http.server import BaseHTTPRequestHandler, HTTPServer
+def mode():
+    try: return open("/tmp/mode").read().strip()
+    except FileNotFoundError: return "benign"
+class H(BaseHTTPRequestHandler):
+    def do_GET(self):  self.reply()
+    def do_POST(self): self.reply()
+    def reply(self):
+        if mode() == "benign":               # match the real contract EXACTLY
+            body, ct = b'{"ok":true,"text":"seeded result"}', "application/json"
+        else:                                 # one hostile mode shown; add others as needed
+            body, ct = b"A" * (50 << 20), "application/json"   # oversized body
+        self.send_response(200); self.send_header("Content-Type", ct)
+        self.send_header("Content-Length", str(len(body))); self.end_headers()
+        self.wfile.write(body)
+HTTPServer(("0.0.0.0", 8080), H).serve_forever()
+```
+
 ```bash
-# a lean mock server (match the real response shape EXACTLY, or you test the reject path)
 docker run -d --name rb-mock --network rb-appnet -v "$PWD/mock.py:/app.py:ro" python:3-alpine python /app.py
-# point the app at it and restart the app
-#   SERVICE_ENDPOINT=http://rb-mock:<port>   (reached by container name on rb-appnet)
+# point the app at it and restart:  SERVICE_ENDPOINT=http://rb-mock:8080
+# flip the mode from the host (orchestrator), never from jailed red:
+docker exec rb-mock sh -c 'echo hostile > /tmp/mode'   # arm a hostile response
+docker exec rb-mock sh -c 'echo benign  > /tmp/mode'   # baseline — reset each move
 ```
 
 Two things bite here:
@@ -83,15 +107,20 @@ Two things bite here:
   client code for the exact shape (required fields included) before writing the mock.
 - **The app may validate the endpoint.** Some clients refuse a plaintext URL
   unless the host is loopback, or pin TLS — the same guard that protects a real
-  credential. A DNS-named mock is then rejected at startup. Two ways through:
-  share the app's network namespace so the mock answers on loopback
-  (`docker run --network container:<app-container> …`, app calls
-  `http://127.0.0.1:<port>`), or give the mock a TLS cert the app will trust.
+  credential. A DNS-named mock is then rejected at startup. Prefer giving the
+  mock a TLS cert the app will trust. The alternative — sharing the app's network
+  namespace so the mock answers on loopback (`docker run --network
+  container:<app-container> …`, app calls `http://127.0.0.1:<port>`) — works but
+  drags the mock into the app's whole netns: its port must not collide with any
+  app port, and it becomes reachable wherever the app is, including from the
+  jail. Use it only if the TLS route is closed.
 
-Make the mock's payload swappable at runtime (an env var it reads per request, no
-rebuild) — that turns it into a red instrument: the same mock serves a benign
-response to unlock the path, then a hostile one (a body far past any sane size, a
+The per-request mode file turns the mock into a red instrument: benign unlocks
+the path for the smoke check, a hostile mode (a body far past any sane size,
 truncated JSON, an unexpected content-type, markup aimed at whatever renders the
-result) to test the app's trust in its upstream. Verify by inversion as always:
-the mock is a seeded dep, so it must sit behind the wall with the app — reachable
-by the app, not from the internet.
+result) tests the app's trust in its upstream. Only the orchestrator flips it
+(`docker exec rb-mock …`); red, jailed on rb-jail, cannot reach the mock, so
+upstream-hostile repros are referee-driven — set the mode, then run the
+app-facing trigger. Benign is the baseline; reset to it each move. Verify by
+inversion as always: the mock is a seeded dep, reachable by the app, not from the
+internet.
