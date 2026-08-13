@@ -108,12 +108,12 @@ the jail; "only use the jail" is then a rule, not a wall. Two honest configs,
 and you state which you used in the report:
 
 - **Config A — the harness can network-confine the agent** (its own egress-blocked sandbox or jailed exec context): dispatch red and blue inside it. Independent adversarial agents behind an enforced wall. The ideal.
-- **Config B — it cannot** (subagents inherit host reach, as most do today): you, the orchestrator, play the seats yourself and route every app-facing command through the jailed box (`docker exec rb-attacker …`). You lose independent agents; you keep reproducible exploits, verified fixes, the ratchet, and a real boundary.
+- **Config B — it cannot** (subagents inherit host reach, as most do today): you, the orchestrator, play the seats yourself and route every app-facing command through the jailed attacker box the recipe builds. You lose independent agents; you keep reproducible exploits, verified fixes, the ratchet, and a real boundary.
 
 Only the app-facing seats route through the jail. **Red**'s exploits and the
 **referee**'s rerun of them and the smoke check are app-facing — in config B
-author each as `docker exec rb-attacker …` so the attack and its adjudication
-are one jailed command. **Blue** does not and cannot: it edits code and rebuilds
+author each to run inside the jailed attacker box, so the attack and its
+adjudication are one jailed command. **Blue** does not and cannot: it edits code and rebuilds
 the app, needing the toolchain and registry the jail denies; its containment is
 the worktree plus the fence rule that it commits only to the branch and never
 pushes — enforced by the referee inspecting the commit before applying it.
@@ -174,16 +174,17 @@ way the brief is the same:
 > green from the baseline with no manual prep: include every setup step — the
 > injection, the seeding, the login — inside it, because the referee rebuilds
 > the data between moves and a repro that assumes leftover state will be scored
-> wrong. In config B, write the repro as a `docker exec rb-attacker …` command,
-> so your attack and the referee's rerun are the same jailed line. A claim
+> wrong. In config B, write the repro to run inside the jailed attacker box, so
+> your attack and the referee's rerun are the same jailed line. A claim
 > without a repro the referee can run does not count. Append your move to the
 > board and add any further ideas to red's backlog.
 
 An upstream-hostile break is the one exception to the single jailed line: red
-cannot reach the mock — it is walled on the app-net — so the referee drives it.
-Author the repro as two steps run together: flip the mock to its hostile mode
-(`docker exec rb-mock …`), then the jailed app-facing trigger. The referee
-reruns both, and the mock returns to benign with the baseline.
+cannot reach the mock — it sits on the app's own network, which the jail does
+not reach — so the referee drives it. Author the repro as two steps run
+together: flip the mock's mode switch to hostile, then the jailed app-facing
+trigger. The referee reruns both, and the mock returns to benign with the
+baseline.
 
 Then **adjudicate**: run the repro yourself.
 
