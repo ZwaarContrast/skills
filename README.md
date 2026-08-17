@@ -27,10 +27,14 @@ npx skills add ZwaarContrast/skills --skill clean-room # just one
   does, while Chromium's own instruments record the cost: repeated requests,
   layout thrash, leaked listeners, timers nobody stops, each with the source
   line that caused it. A fix must move the number without moving the pixels.
+- **first-contact** — usability test with an agent that has never seen the
+  product: read the code to learn what it does, turn that into goals stated in
+  a user's words, then send in a worker that gets only the goal and the URL.
+  The browser's trace records what it really did, not what it says it did.
 
 They all use real boundaries as measuring instruments rather than asking an
 agent to pretend: an enforced context wall, a committed-only clone, a rerun
-exploit, or the browser's own counters.
+exploit, the browser's own counters, or a tester who has never seen the code.
 
 ### `clean-room` compatibility and safety
 
