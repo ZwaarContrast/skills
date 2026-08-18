@@ -210,6 +210,13 @@ playwright-cli -s=$S tracing-stop
 playwright-cli -s=$S close          # next goal opens a fresh session, not a cleared one
 ```
 
+Close every goal's session, including the goals that ended badly — a tester that
+gave up halfway leaks the same as one that finished. Each open session is a
+background daemon holding a Chromium tree and a profile directory, reparented to
+init and outliving the run indefinitely; eight goals × three runs is twenty-four
+of them. `playwright-cli list` shows what is still alive, from any run, and
+`close` clears it.
+
 ## 6. Keep the ledger
 
 Two records, and only one of them is evidence.
