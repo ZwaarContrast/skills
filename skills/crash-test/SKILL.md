@@ -111,6 +111,28 @@ playwright-cli -s=$SESSION run-code "async page => {
 }"
 ```
 
+That session outlives the command that made it. `open` starts a background
+daemon holding a Chromium tree and a profile directory; it reparents to init and
+survives the shell, the run, and every run after it. Thirteen abandoned sessions
+on one laptop came to ~90 processes and 205 MB of profiles, one of them spinning
+at 78% CPU for five days. Closing releases all three, and costs nothing:
+
+```bash
+playwright-cli -s=$SESSION close     # daemon, browser and profile dir
+playwright-cli list                  # what is still alive, from any run, ever
+```
+
+Close when the run ends — and go back and close when it aborts, because a run
+that died at scenario 3 leaks exactly as much as one that finished. Sweep strays
+with `close`. Reach for `kill-all` only when a daemon is unresponsive: it kills
+the daemons and orphans their browsers, which then ignore SIGTERM and have to be
+cleared by hand — and that sweep takes every session on the machine with it,
+including someone else's live run, so read `list` before you fire it.
+
+```bash
+pkill -9 -f playwright_chromiumdev_profile && rm -rf $TMPDIR/playwright_chromiumdev_profile-*
+```
+
 [`probe.js`](probe.js) wraps `fetch`, `XMLHttpRequest`, `setInterval` and
 `requestAnimationFrame`, and observes long tasks, layout shifts, event timing and
 LCP. Read it whenever you like, and reset it between scenarios:
