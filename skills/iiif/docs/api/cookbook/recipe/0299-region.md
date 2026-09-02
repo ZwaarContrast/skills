@@ -33,9 +33,6 @@ In this example we use an ImageApiSelector on the `body` of the Manifest’s sol
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0299-region/)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Simple Image Manifest](0001-mvm-image.md "Simplest Manifest - Image")

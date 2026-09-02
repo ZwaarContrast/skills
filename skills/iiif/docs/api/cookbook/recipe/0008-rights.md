@@ -29,9 +29,6 @@ None known.
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0008-rights/)
 
-``` line-numbers
-```
-
 # Related recipes
 
 - [Simplest Manifest - Single Image File](0001-mvm-image.md "Simplest Manifest - Image")

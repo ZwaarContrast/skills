@@ -71,7 +71,7 @@ Frames for the main resources defined by the IIIF Presentation API.
 
 The following code uses the Python [PyLD implementation](https://pypi.python.org/pypi/PyLD) of JSON-LD to read in example manifest data, parse it and then re-serialize using the manifest frame.
 
-``` highlight
+``` python
 
 from pyld.jsonld import compact, frame
 import urllib, json, pprint

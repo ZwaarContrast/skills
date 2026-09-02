@@ -20,26 +20,26 @@ In the tables below ![required](https://iiif.io/api/assets/images/icons/metadata
 
 ### 3.1 Region
 
-| Syntax | Feature Name | Level 0 | Level 1 | Level 2 |
-|:---|:---|:--:|:--:|:--:|
-| `full` |   | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
-| *`x,y,w,h`* | `regionByPx` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
-| *`pct:x,y,w,h`* | `regionByPct` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
-| `square` | `regionSquare` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
+| Syntax          | Feature Name   | Level 0  | Level 1  | Level 2  |
+|:----------------|:---------------|:--------:|:--------:|:--------:|
+| `full`          |                | REQUIRED | REQUIRED | REQUIRED |
+| *`x,y,w,h`*     | `regionByPx`   | OPTIONAL | REQUIRED | REQUIRED |
+| *`pct:x,y,w,h`* | `regionByPct`  | OPTIONAL | OPTIONAL | REQUIRED |
+| `square`        | `regionSquare` | OPTIONAL | REQUIRED | REQUIRED |
 
 See also the note under [Size](../3.0.md#42-size "4.2. Size") about combinations of Size and Region that may not be supported.
 
 ### 3.2 Size
 
-| Syntax | Feature Name | Level 0 | Level 1 | Level 2 |
-|:---|:---|:--:|:--:|:--:|
-| `max` |   | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
-| *`w,`* | `sizeByW` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
-| *`,h`* | `sizeByH` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
-| *`pct:n`* | `sizeByPct` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
-| *`!w,h`* | `sizeByConfinedWh` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
-| *`w,h`* | `sizeByWh` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
-| *`^size`* | `sizeUpscaling` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") |
+| Syntax    | Feature Name       | Level 0  | Level 1  | Level 2  |
+|:----------|:-------------------|:--------:|:--------:|:--------:|
+| `max`     |                    | REQUIRED | REQUIRED | REQUIRED |
+| *`w,`*    | `sizeByW`          | OPTIONAL | REQUIRED | REQUIRED |
+| *`,h`*    | `sizeByH`          | OPTIONAL | REQUIRED | REQUIRED |
+| *`pct:n`* | `sizeByPct`        | OPTIONAL | OPTIONAL | REQUIRED |
+| *`!w,h`*  | `sizeByConfinedWh` | OPTIONAL | OPTIONAL | REQUIRED |
+| *`w,h`*   | `sizeByWh`         | OPTIONAL | OPTIONAL | REQUIRED |
+| *`^size`* | `sizeUpscaling`    | OPTIONAL | OPTIONAL | OPTIONAL |
 
 At any level of compliance, an image service whose Image Information response includes the `sizes` property must support requests for the sizes listed, and a service whose Image Information response includes the `tiles` property must support requests for the sizes implicit in the `width`, `height` and `scaleFactors` values given for tiles.
 
@@ -47,43 +47,43 @@ Note that servers may express limits on the sizes available for an image with th
 
 ### 3.3 Rotation
 
-| Syntax | Feature Name | Level 0 | Level 1 | Level 2 |
-|:---|:---|:--:|:--:|:--:|
-| `0` |   | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
-| `90`,`180`,`270` | `rotationBy90s` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
-| *arbitrary* | `rotationArbitrary` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") |
-| *`!n`* | `mirroring` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") |
+| Syntax           | Feature Name        | Level 0  | Level 1  | Level 2  |
+|:-----------------|:--------------------|:--------:|:--------:|:--------:|
+| `0`              |                     | REQUIRED | REQUIRED | REQUIRED |
+| `90`,`180`,`270` | `rotationBy90s`     | OPTIONAL | OPTIONAL | REQUIRED |
+| *arbitrary*      | `rotationArbitrary` | OPTIONAL | OPTIONAL | OPTIONAL |
+| *`!n`*           | `mirroring`         | OPTIONAL | OPTIONAL | OPTIONAL |
 
 ### 3.4 Quality
 
-| Syntax | Level 0 | Level 1 | Level 2 |
-|:---|:--:|:--:|:--:|
-| `default` | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
-| `color` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") (if applicable) |
-| `gray` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") (if applicable) |
-| `bitonal` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") |
+| Syntax    | Level 0  | Level 1  |         Level 2          |
+|:----------|:--------:|:--------:|:------------------------:|
+| `default` | REQUIRED | REQUIRED |         REQUIRED         |
+| `color`   | OPTIONAL | OPTIONAL | REQUIRED (if applicable) |
+| `gray`    | OPTIONAL | OPTIONAL | REQUIRED (if applicable) |
+| `bitonal` | OPTIONAL | OPTIONAL |         OPTIONAL         |
 
 ### 3.5 Format
 
-| Syntax | Level 0 | Level 1 | Level 2 |
-|:---|:--:|:--:|:--:|
-| `jpg` | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
-| `png` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
-| `tif` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") |
-| `gif` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") |
-| `pdf` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") |
-| `jp2` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") |
-| `webp` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") |
+| Syntax | Level 0  | Level 1  | Level 2  |
+|:-------|:--------:|:--------:|:--------:|
+| `jpg`  | REQUIRED | REQUIRED | REQUIRED |
+| `png`  | OPTIONAL | OPTIONAL | REQUIRED |
+| `tif`  | OPTIONAL | OPTIONAL | OPTIONAL |
+| `gif`  | OPTIONAL | OPTIONAL | OPTIONAL |
+| `pdf`  | OPTIONAL | OPTIONAL | OPTIONAL |
+| `jp2`  | OPTIONAL | OPTIONAL | OPTIONAL |
+| `webp` | OPTIONAL | OPTIONAL | OPTIONAL |
 
 ## 4. HTTP Features
 
 | HTTP Feature | Feature Name | Level 0 | Level 1 | Level 2 |
 |:---|:---|:--:|:--:|:--:|
-| base URI redirects | `baseUriRedirect` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
-| CORS | `cors` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
-| json-ld media type | `jsonldMediaType` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") | ![required](https://iiif.io/api/assets/images/icons/metadata-api/required.png "Required") |
-| profile link header | `profileLinkHeader` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") |
-| canonical link header | `canonicalLinkHeader` | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") |
+| base URI redirects | `baseUriRedirect` | OPTIONAL | REQUIRED | REQUIRED |
+| CORS | `cors` | OPTIONAL | REQUIRED | REQUIRED |
+| json-ld media type | `jsonldMediaType` | OPTIONAL | REQUIRED | REQUIRED |
+| profile link header | `profileLinkHeader` | OPTIONAL | OPTIONAL | OPTIONAL |
+| canonical link header | `canonicalLinkHeader` | OPTIONAL | OPTIONAL | OPTIONAL |
 
 ## 5. Level 0 Compliance
 

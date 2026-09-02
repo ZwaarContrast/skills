@@ -22,9 +22,6 @@ This recipe is not for large images or deep zoom functionality. For this, see th
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0001-mvm-image/)
 
-``` line-numbers
-```
-
 # Related Recipes
 
 - [Simplest Manifest - Audio](0002-mvm-audio.md "Simplest Manifest - Audio") and [Simplest Manifest - Video](0003-mvm-video.md "Simplest Manifest - Video") are equivalent to this example but for other media.
@@ -51,9 +48,6 @@ This recipe is not for large images or deep zoom functionality. For this, see th
 ## Example
 
 [JSON-LD](0001-mvm-image/v4/manifest.json)
-
-``` line-numbers
-```
 
 # Related Recipes
 

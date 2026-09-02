@@ -26,9 +26,6 @@ In Ramp, the transcript file is made available to download on the right of the p
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0017-transcription-av/)
 
-``` line-numbers
-```
-
 # Related recipes
 
 - [Simplest Manifest - Video](0003-mvm-video.md "Simplest Manifest - Video")

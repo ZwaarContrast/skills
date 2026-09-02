@@ -28,26 +28,17 @@ This recipe presents an imaginary Collection containing 2 instances from the run
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0230-navdate/)
 
-``` line-numbers
-```
-
 ### 1986 Map
 
 [JSON-LD](0230-navdate/navdate_map_2-manifest.json)
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0230-navdate/)
 
-``` line-numbers
-```
-
 ### 1987 Map
 
 [JSON-LD](0230-navdate/navdate_map_1-manifest.json)
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0230-navdate/)
-
-``` line-numbers
-```
 
 ## Related Recipes
 

@@ -26,9 +26,6 @@ The opera covers the whole length of the Canvas and is divided into two Ranges f
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0026-toc-opera/)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Simplest Manifest - Video](0003-mvm-video.md "Simplest Manifest - Video")

@@ -24,9 +24,6 @@ Because the statue is not the sole or dominant element of the photo, we’ve tar
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0021-tagging/)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - \[Fragment Selectors\]\[0020\]

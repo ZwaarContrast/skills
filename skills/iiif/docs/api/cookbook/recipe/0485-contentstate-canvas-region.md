@@ -20,22 +20,20 @@ We want to open the viewport to a specific Canvas region using a viewer availabl
 
 First, we create an Annotation:
 
-``` json
-{
-  "@context": "http://iiif.io/api/presentation/3/context.json",
-  "id": "https://iiif.io/api/cookbook/recipe/0485-contentstate-canvas-region/annotation.json",
-  "type": "Annotation",
-  "motivation": ["contentState"],
-  "target": {
-     "id": "https://iiif.io/api/cookbook/recipe/0009-book-1/canvas/p2#xywh=1528,3024,344,408",
-     "type": "Canvas",
-     "partOf": [{
-        "id": "https://iiif.io/api/cookbook/recipe/0009-book-1/manifest.json",
-        "type": "Manifest"
- }]
- }
-}
-```
+    {
+      "@context": "http://iiif.io/api/presentation/3/context.json",
+      "id": "https://iiif.io/api/cookbook/recipe/0485-contentstate-canvas-region/annotation.json",
+      "type": "Annotation",
+      "motivation": ["contentState"],
+      "target": {
+         "id": "https://iiif.io/api/cookbook/recipe/0009-book-1/canvas/p2#xywh=1528,3024,344,408",
+         "type": "Canvas",
+         "partOf": [{
+            "id": "https://iiif.io/api/cookbook/recipe/0009-book-1/manifest.json",
+            "type": "Manifest"
+     }]
+     }
+    }
 
 We can create an Annotation with `motivation` set to `contentState` and a target `type` set to Canvas. The `id` of the target will contain a fragment selector (`#xywh=1528,3024,344,408`) with the coordinates of the Canvas we want to share, while the `partOf` element has the `id` of the Manifest containing the Canvas.
 
@@ -45,9 +43,7 @@ We can pass the encoded value, using the `iiif-content` query parameter of the v
 
 We can also create an anchor tag with the link as the `href` attribute for use in a web page:
 
-``` html
-<a href="https://example.org/viewer?iiif-content=JTdCJTIyJTQwY29udGV4dCUyMiUzQSUyMmh0dHAlM0ElMkYlMkZpaWlmLmlvJTJGYXBpJTJGcHJlc2VudGF0aW9uJTJGMyUyRmNvbnRleHQuanNvbiUyMiUyQyUyMmlkJTIyJTNBJTIyaHR0cHMlM0ElMkYlMkZpaWlmLmlvJTJGYXBpJTJGY29va2Jvb2slMkZyZWNpcGUlMkYwNDg1LWNvbnRlbnRzdGF0ZS1jYW52YXMtcmVnaW9uJTJGYW5ub3RhdGlvbi5qc29uJTIyJTJDJTIydHlwZSUyMiUzQSUyMkFubm90YXRpb24lMjIlMkMlMjJtb3RpdmF0aW9uJTIyJTNBJTVCJTIyY29udGVudFN0YXRlJTIyJTVEJTJDJTIydGFyZ2V0JTIyJTNBJTdCJTIyaWQlMjIlM0ElMjJodHRwcyUzQSUyRiUyRmlpaWYuaW8lMkZhcGklMkZjb29rYm9vayUyRnJlY2lwZSUyRjAwMDktYm9vay0xJTJGY2FudmFzJTJGcDIlMjN4eXdoJTNEMTUyOCUyQzMwMjQlMkMzNDQlMkM0MDglMjIlMkMlMjJ0eXBlJTIyJTNBJTIyQ2FudmFzJTIyJTJDJTIycGFydE9mJTIyJTNBJTVCJTdCJTIyaWQlMjIlM0ElMjJodHRwcyUzQSUyRiUyRmlpaWYuaW8lMkZhcGklMkZjb29rYm9vayUyRnJlY2lwZSUyRjAwMDktYm9vay0xJTJGbWFuaWZlc3QuanNvbiUyMiUyQyUyMnR5cGUlMjIlM0ElMjJNYW5pZmVzdCUyMiU3RCU1RCU3RCU3RA">Link for visualizing the region of a Canvas using a viewer.</a>
-```
+    [Link for visualizing the region of a Canvas using a viewer.](https://example.org/viewer?iiif-content=JTdCJTIyJTQwY29udGV4dCUyMiUzQSUyMmh0dHAlM0ElMkYlMkZpaWlmLmlvJTJGYXBpJTJGcHJlc2VudGF0aW9uJTJGMyUyRmNvbnRleHQuanNvbiUyMiUyQyUyMmlkJTIyJTNBJTIyaHR0cHMlM0ElMkYlMkZpaWlmLmlvJTJGYXBpJTJGY29va2Jvb2slMkZyZWNpcGUlMkYwNDg1LWNvbnRlbnRzdGF0ZS1jYW52YXMtcmVnaW9uJTJGYW5ub3RhdGlvbi5qc29uJTIyJTJDJTIydHlwZSUyMiUzQSUyMkFubm90YXRpb24lMjIlMkMlMjJtb3RpdmF0aW9uJTIyJTNBJTVCJTIyY29udGVudFN0YXRlJTIyJTVEJTJDJTIydGFyZ2V0JTIyJTNBJTdCJTIyaWQlMjIlM0ElMjJodHRwcyUzQSUyRiUyRmlpaWYuaW8lMkZhcGklMkZjb29rYm9vayUyRnJlY2lwZSUyRjAwMDktYm9vay0xJTJGY2FudmFzJTJGcDIlMjN4eXdoJTNEMTUyOCUyQzMwMjQlMkMzNDQlMkM0MDglMjIlMkMlMjJ0eXBlJTIyJTNBJTIyQ2FudmFzJTIyJTJDJTIycGFydE9mJTIyJTNBJTVCJTdCJTIyaWQlMjIlM0ElMjJodHRwcyUzQSUyRiUyRmlpaWYuaW8lMkZhcGklMkZjb29rYm9vayUyRnJlY2lwZSUyRjAwMDktYm9vay0xJTJGbWFuaWZlc3QuanNvbiUyMiUyQyUyMnR5cGUlMjIlM0ElMjJNYW5pZmVzdCUyMiU3RCU1RCU3RCU3RA)
 
 An alternative way of sharing a region of an image is to use the [Image API](../../image/3.0.md#41-region). However, the context from which the region is extracted is not easily accessible. Instead, sharing a link to open the specific region with a viewer allows the users to explore another part of the image or related content and metadata in the Manifest.
 
@@ -70,9 +66,6 @@ and this is located in the following region of the second image:
 ![Location of the region to be highlighted.](https://iiif.io/api/cookbook/recipe/0485-contentstate-canvas-region/page.jpg)
 
 [JSON-LD](0485-contentstate-canvas-region/annotation.json)
-
-``` line-numbers
-```
 
 ## Related Recipes
 

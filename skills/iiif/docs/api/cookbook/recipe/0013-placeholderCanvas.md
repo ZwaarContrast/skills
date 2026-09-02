@@ -24,9 +24,6 @@ In the example, the main content is a video of a performance of Donizetti’s *L
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0013-placeholderCanvas/)
 
-``` line-numbers
-```
-
 # Related recipes
 
 - [Simplest Manifest - Video](0003-mvm-video.md "Simplest Manifest - Video")

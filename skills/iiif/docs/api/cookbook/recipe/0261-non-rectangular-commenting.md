@@ -50,9 +50,6 @@ In this Manifest, we are highlighting a fountain with a statue on top of it and 
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0261-non-rectangular-commenting/)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Simple Annotation - Tagging](0021-tagging.md "Simple Annotation — Tagging")

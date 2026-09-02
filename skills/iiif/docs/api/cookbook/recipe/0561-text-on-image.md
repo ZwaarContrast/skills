@@ -30,9 +30,6 @@ In this example, we have a base image showing people in the countryside, one of 
 
 [JSON-LD](0561-text-on-image/manifest.json)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [HTML in Annotations](0019-html-in-annotations.md "HTML in Annotations") for further discussion on markup in an Annotation

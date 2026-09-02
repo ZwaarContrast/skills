@@ -22,31 +22,29 @@ The `behavior` property can also be applied to Ranges. For more information on h
 
 This example uses the seven volumes of [*Gottesdienstliche Ceremonien, Oder H. Kirchen-Gebräuche Und Religions-Pflichten Der Christen*](https://digital.library.ucla.edu/catalog/ark:/21198/zz001hd85r) which have been bound into a single physical volume (truncated to only a few pages of each of the first 2 volumes here for brevity). The Manifest contains a Range to represent the top-level structure (the physical codex) and additional embedded Ranges to represent each of the discrete textual volumes as well as the front matter.
 
-``` json
-"structures": [
-  {
-    "id": "…range/r0", // “Gottesdienstliche Ceremonien…”
-    "type": "Range",
-    "items": [
-      { // “Front Matter”
-          "id": "…range/r1",
-          "type": "Range",
-          "items": [ {"…canvas/p1"}, {"…canvas/p2"} ]
-      },
-      { // “Erste Ausgabe”
-          "id": "…range/r2",
-          "type": "Range",
-          "items": [ {"…canvas/p1"}, {"…canvas/p2"} ]
-      },
-      { // “Zweyte Ausgabe”
-          "id": "…range/r3",
-          "type": "Range",
-          "items": [ {"…canvas/p1"}, {"…canvas/p2"} ]
+    "structures": [
+      {
+        "id": "…range/r0", // “Gottesdienstliche Ceremonien…”
+        "type": "Range",
+        "items": [
+          { // “Front Matter”
+              "id": "…range/r1",
+              "type": "Range",
+              "items": [ {"…canvas/p1"}, {"…canvas/p2"} ]
+          },
+          { // “Erste Ausgabe”
+              "id": "…range/r2",
+              "type": "Range",
+              "items": [ {"…canvas/p1"}, {"…canvas/p2"} ]
+          },
+          { // “Zweyte Ausgabe”
+              "id": "…range/r3",
+              "type": "Range",
+              "items": [ {"…canvas/p1"}, {"…canvas/p2"} ]
+          }
+        ]
       }
     ]
-  }
-]
-```
 
 This will produce an index of the constituent volumes like so:
 
@@ -55,9 +53,6 @@ This will produce an index of the constituent volumes like so:
 - Zweyte Ausgabe… (Vol. 2)
 
 [JSON-LD](0031-bound-multivolume/manifest.json)
-
-``` line-numbers
-```
 
 ## Related Recipes
 

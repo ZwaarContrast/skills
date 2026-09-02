@@ -43,15 +43,9 @@ The rendering of this referenced Annotation should be virtually indistiguishable
 
 [JSON-LD](0269-embedded-or-referenced-annotations/manifest.json)
 
-``` line-numbers
-```
-
 ### Annotation Page file
 
 [JSON-LD](0269-embedded-or-referenced-annotations/annotationpage.json)
-
-``` line-numbers
-```
 
 ## Related Recipes
 

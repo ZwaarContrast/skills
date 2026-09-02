@@ -39,22 +39,13 @@ Note: Each supporting viewer has a distinct method for toggling between Collecti
 
 [JSON-LD](0032-collection/collection.json)
 
-``` line-numbers
-```
-
 **Example Manifest for *The Gulf Stream***
 
 [JSON-LD](0032-collection/manifest-01.json)
 
-``` line-numbers
-```
-
 **Example Manifest for *Northeaster***
 
 [JSON-LD](0032-collection/manifest-02.json)
-
-``` line-numbers
-```
 
 # Related recipes
 

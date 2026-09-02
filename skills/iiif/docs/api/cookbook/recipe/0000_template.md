@@ -20,9 +20,6 @@ Describe the solution in prose and provide an example. The example json document
 
 [JSON-LD](0000_template/manifest.json) \| [Unknown Viewer type ‘Glycerine’](https://iiif.io/api/cookbook/recipe/0000_template/manifest.json)
 
-``` line-numbers
-```
-
 The direct link to the fixture is a useful convenience.
 
 ## Related Recipes

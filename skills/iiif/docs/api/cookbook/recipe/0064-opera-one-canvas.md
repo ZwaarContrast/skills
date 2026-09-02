@@ -18,9 +18,6 @@ Metadata and thumbnail properties have been added for more context. Implementati
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0064-opera-one-canvas/)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Text in Multiple Languages](0006-text-language.md "Internationalization and Multi-language Values") - Recipe explaining the use of multiple languages in text like in the label for this opera.

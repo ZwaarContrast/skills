@@ -16,9 +16,6 @@ This example shows a Manifest with a single Canvas that lasts for 572 seconds, o
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0003-mvm-video/)
 
-``` line-numbers
-```
-
 # Related Recipes
 
 - [Simplest Manifest - Image](0001-mvm-image.md "Simplest Manifest - Image") and [Simplest Manifest - Audio](0002-mvm-audio.md "Simplest Manifest - Audio") are equivalent to this example.
@@ -42,9 +39,6 @@ The duration of the video file, in seconds, is given and here matches the Canvas
 This example shows a Manifest with a single Canvas that lasts for 572 seconds, or just under 10 minutes. It has a single video file associated with it. The mp4 also has a duration of 572 seconds.
 
 [JSON-LD](0003-mvm-video/v4/manifest.json)
-
-``` line-numbers
-```
 
 # Related Recipes
 

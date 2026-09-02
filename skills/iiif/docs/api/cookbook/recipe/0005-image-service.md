@@ -24,9 +24,6 @@ Though a version 3 Manifest may specify a service using the version 2 `@id` and 
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0005-image-service/)
 
-``` line-numbers
-```
-
 # Related recipes
 
 - [Simplest Manifest - Image](0001-mvm-image.md "Simplest Manifest - Image") demonstrates use of an image without a IIIF Image API service.

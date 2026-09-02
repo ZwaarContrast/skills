@@ -32,9 +32,6 @@ This Manifest represents an Ethiopic accordion book with a continuous layout run
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0011-book-3-behavior/)
 
-``` line-numbers
-```
-
 ### Use case 2: Book imaged as 2-page spreads (`individuals`)
 
 This Manifest represents a book imaged as 2-page spreads (two facing pages in a single image). When using the `"behavior": "individuals"` property, the presentation client will force a one-at-a-time view and remove the “book view” option.
@@ -42,9 +39,6 @@ This Manifest represents a book imaged as 2-page spreads (two facing pages in a 
 [JSON-LD](0011-book-3-behavior/manifest-individuals.json)
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0011-book-3-behavior/)
-
-``` line-numbers
-```
 
 # Related recipes
 

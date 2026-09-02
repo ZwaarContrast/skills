@@ -49,7 +49,7 @@ The key words *must*, *must not*, *required*, *shall*, *shall not*, *should*, *s
 
 The `navPlace` property identifies a single or multiple geographic areas pertinent to a resource using a GeoJSON Feature Collection containing one or more Features. These areas *should* be bounded discrete areas of the map akin to extents. These areas do not imply any level of accuracy, temporality, or state of existence.
 
-``` highlight
+``` json
 {
    "navPlace":{
       "id": "http://example.com/feature-collection/1",
@@ -90,7 +90,7 @@ The `navPlace` property’s value follows a specific pattern.
 - The value of the property *must* be a JSON object that follows the requirements for a GeoJSON Feature Collection as described in [Section 2.2.2](#222-feature-collection).
 - The value *should* be an embedded Feature Collection. However, the value *may* be a referenced Feature Collection. Feature Collections referenced in the `navPlace` property *must* have the `id` and `type` properties. Referenced Feature Collections *must not* have the `features` property, such that clients are able to recognize that it should be retrieved in order to be processed.\
 
-``` highlight
+``` json
 {"navPlace":{"id": "https://example.org/iiif/1/feature-collection", "type": "FeatureCollection"}}
 ```
 
@@ -102,7 +102,7 @@ This extension utilizes the technical terms described in the published [GeoJSON 
 
 [GeoJSON-LD](https://geojson.org/geojson-ld/) is a publicly available vocabulary and linked data context for the GeoJSON specification. The `navPlace` extension context file refers to this context which ensures the geographic data values are well described. The example below shows how to set the `@context` property for IIIF resources with the `navPlace` property. [Section 3](#3-linked-data) has more detail on linked data compatibility.
 
-``` highlight
+``` json
 {
     "@context":[
        "http://iiif.io/api/extension/navplace/context.json",
@@ -167,7 +167,7 @@ The value of `properties` can be any JSON object and is used to supply additiona
 
 Here you can see an example of a IIIF Manifest with the `navPlace` property. It is made JSON-LD 1.1 compatible by including multiple linked data contexts to cover all the terms used within the web resource. Review the Manifest below in the [JSON-LD playground](https://json-ld.org/playground/) for an example of Linked Data processing.
 
-``` highlight
+``` json
 {
    "@context":[
       "http://iiif.io/api/extension/navplace/context.json",

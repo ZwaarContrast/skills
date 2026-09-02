@@ -34,7 +34,7 @@ Services *should* have a `profile` URI which can be used to determine the type o
 
 Services *may* be included either by reference or embedded within the response. The decision as to whether to embed or reference is left up to the implementer, however embedded descriptions should be kept as short as possible. If the only properties of the object are `@context`, `@id`, `profile` and/or `label`, then the client *should* retrieve the resource from the URI given in `@id`.
 
-``` highlight
+``` json
 {
   "service": {
     "@context": "http://example.org/ns/jsonld/context.json",
@@ -74,7 +74,7 @@ The following names have been added as of version 3.0 of the Image and Presentat
 
 The Image Information service allows the [Presentation API](https://iiif.io/api/presentation/ "IIIF Presentation API"), and potentially other APIs, to reference content to be displayed via the [Image API](../image/3.0.md "Image API"). The JSON-LD content to be referenced or embedded is the Image Information document, also known as `info.json`. The service *must* have the `@context`, `@id` and `profile` keys, pointing to the context document, service base URI and compliance level profile respectively.
 
-``` highlight
+``` json
 {
   "service": {
     "@context" : "http://iiif.io/api/image/2/context.json",
@@ -86,7 +86,7 @@ The Image Information service allows the [Presentation API](https://iiif.io/api/
 
 The service *may* have additional information embedded from the Image Information document to avoid the need to retrieve and parse it separately. In this case, the profile *may* also point to the profile of what functionality is supported, as described in the Image API.
 
-``` highlight
+``` json
 {
   "service": {
     "@context" : "http://iiif.io/api/image/2/context.json",
@@ -118,7 +118,7 @@ The service *may* have additional information embedded from the Image Informatio
 
 With the `logo` property added to the Image Information description in version 2.1 of the Image API, it is possible and reasonable for one `info.json` response to embed another using this pattern. In this case, the second service is related to the icon that should be displayed when a client renders the image described by the main response.
 
-``` highlight
+``` json
 {
   "@context" : "http://iiif.io/api/image/2/context.json",
   "@id" : "http://www.example.org/image-service/baseImage",
@@ -146,7 +146,7 @@ The [JSON-LD representation](http://geojson.org/geojson-ld/ "GeoJSON-LD") of Geo
 
 An external reference example for tagging a place, where the URI would return a GeoJSON description of the city of Paris, France:
 
-``` highlight
+``` json
 {
   "service": {
     "@context" : "http://geojson.org/geojson-ld/geojson-context.jsonld",
@@ -157,7 +157,7 @@ An external reference example for tagging a place, where the URI would return a 
 
 Or embedding the content:
 
-``` highlight
+``` json
 {
   "service": {
     "@context" : "http://geojson.org/geojson-ld/geojson-context.jsonld",
@@ -199,7 +199,7 @@ The physical dimensions description includes the following properties:
 
 The following example demonstrates the resulting structure, as embedded within the [Presentation API](https://iiif.io/api/presentation/ "IIIF Presentation API") response:
 
-``` highlight
+``` json
 {
   "service": {
     "@context": "http://iiif.io/api/annex/services/physdim/1/context.json",

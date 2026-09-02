@@ -28,9 +28,6 @@ We define a top-level Range that serves as the structural index for the entire n
 
 [JSON-LD](0025-newspaper-article-index/manifest.json)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Basic Newspaper](0068-newspaper.md "Basic Newspaper")

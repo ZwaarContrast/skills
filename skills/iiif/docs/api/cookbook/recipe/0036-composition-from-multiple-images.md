@@ -50,9 +50,6 @@ A manifest with a single canvas that has two images painted on it. One is of the
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0036-composition-from-multiple-images/)
 
-``` line-numbers
-```
-
 # Related recipes
 
 - [Multiple choice of images in a single view](0033-choice.md "Multiple choice of images in a single view")

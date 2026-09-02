@@ -18,9 +18,6 @@ This example uses a leaflet with a map and a guide supplied by the Library of Co
 
 [JSON-LD](0135-annotating-point-in-canvas/manifest.json)
 
-``` line-numbers
-```
-
 # Related recipes
 
 - [Begin playback at a specific point - Time-based media](0015-start.md "Begin playback at a specific point - Time-based media") uses a Point Selector for selecting for starting the playback at a specific time.

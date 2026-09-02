@@ -60,7 +60,7 @@ Keys in JSON objects are [case sensitive](https://www.w3.org/TR/json-ld11/#the-c
 
 Any of the properties in the API that can have multiple values *must* always be given as an array of values, even if there is only a single item in that array.
 
-``` highlight
+``` json
 {
   "thumbnail": [
     {
@@ -78,7 +78,7 @@ Language *should* be associated with strings that are intended to be displayed t
 
 The values of these properties *must* be JSON objects, with the keys being the [BCP 47](https://tools.ietf.org/html/bcp47 "Tags for Identifying Languages") language code for the language, or if the language is either not known or the string does not have a language, then the key *must* be the string `none`. The locale, script and other subtags *may* be included. Clients *should* process subtags when comparing the values with the user’s provided preferences, however they *may* simply reduce all tags down to just the language, discarding everything after the first hyphen, and display all matching values. The associated values *must* be arrays of strings, where each item is the content in the given language.
 
-``` highlight
+``` json
 {
   "label": {
     "en": [
@@ -120,7 +120,7 @@ In order to avoid HTML or script injection attacks, clients *must* remove:
 
 Clients *should* allow only `a`, `b`, `br`, `div`, `i`, `img`, `p`, `small`, `span`, `sub` and `sup` tags. Clients *may* choose to remove any and all tags, therefore it *should not* be assumed that the formatting will always be rendered. Note that publishers *may* include arbitrary HTML content for processing using customized or experimental applications, and the requirements for clients assume an untrusted or unknown publisher.
 
-``` highlight
+``` json
 { "summary": { "en": [ "<p>Short <b>summary</b> of the resource.</p>" ] } }
 ```
 
@@ -128,7 +128,7 @@ Clients *should* allow only `a`, `b`, `br`, `div`, `i`, `img`, `p`, `small`, `sp
 
 JSON descriptions *should* be embedded within the JSON of parent resources, and *may* also be available via separate requests from the HTTP(S) URI given in the resource’s `id` property. Links to Content Resources *must* be given as a JSON object with the `id` and `type` properties and *should* have `format` or `profile` to give a hint as to what sort of resource is being referred to.
 
-``` highlight
+``` json
 {
   "rendering": [
     {
@@ -456,7 +456,7 @@ For 3D content resources painted into a Scene that have a local coordinate space
 A Point Selector *must* have the following properties: [type](#type)\
 A Point Selector *may* have the following properties: [id](#id), [x](#x), [y](#y), [z](#z), [instant](#instant).
 
-``` highlight
+``` json
 {
   "id": "https://example.org/selectors/1",
   "type": "PointSelector",
@@ -479,7 +479,7 @@ The text representation is given in the `value` property of the selector.
 A WKT Selector *must* have the following properties: [type](#type), [value](#value).\
 A WKT Selector *may* have the following properties: [id](#id)
 
-``` highlight
+``` json
 {
   "id": "https://example.org/selectors/2",
   "type": "WktSelector",
@@ -497,7 +497,7 @@ Video content resources consist of both visual and audio content within the same
 An Audio Content Selector *must* have the following properties: [type](#type).\
 An Audio Content Selector *may* have the following properties: [id](#id)
 
-``` highlight
+``` json
 {
   "id": "https://example.org/selectors/3",
   "type": "AudioContentSelector"
@@ -514,7 +514,7 @@ Similar to Audio Content Selectors, Visual Content Selectors select the visual a
 A Visual Content Selector *must* have the following properties: [type](#type).\
 A Visual Content Selector *may* have the following properties: [id](#id)
 
-``` highlight
+``` json
 {
   "id": "https://example.org/selectors/4",
   "type": "VisualContentSelector"
@@ -530,7 +530,7 @@ More interactive content resources, such as 3D models, may have animations or si
 **Properties**\
 An Animation Selector *must* have the following properties: [type](#type), [value](#value). An Animation Selector *may* have the following properties: [id](#id)
 
-``` highlight
+``` json
 {
   "id": "https://example.org/selectors/5",
   "type": "AnimationSelector",
@@ -559,7 +559,7 @@ The Image API Selector has properties following the parameters from the API, and
 A IIIF Image API Selector *must* have the following properties: [type](#type).\
 A IIIF Image API Selector *may* have the following properties: [id](#id), [region](#region), [size](#size), [rotation](#rotation), [quality](#quality), [format](#format), [version](#version).
 
-``` highlight
+``` json
 {
   "id": "https://example.org/selectors/6",
   "type": "ImageApiSelector",
@@ -608,7 +608,7 @@ An Orthographic Camera removes visual perspective, resulting in object size rema
 **Properties**\
 An Orthographic Camera *should* have the following additional properties: [viewHeight](#viewHeight).
 
-``` highlight
+``` json
 {
   "id": "https://example.org/iiif/camera/1",
   "type": "OrthographicCamera",
@@ -631,7 +631,7 @@ The region of the Scene’s space that is observable by the camera is bounded by
 **Properties**\
 A Perspective Camera *should* have the following additional properties: [fieldOfView](#fieldOfView).
 
-``` highlight
+``` json
 {
   "id": "https://example.org/iiif/camera/2",
   "type": "PerspectiveCamera",
@@ -663,7 +663,7 @@ Ambient Light evenly illuminates all objects in the Scene, and does not have a d
 **Properties**\
 An Ambient Light *should* have the following additional properties: [color](#color).\
 
-``` highlight
+``` json
 {
   "id": "https://example.org/iiif/light/1",
   "type": "AmbientLight",
@@ -683,7 +683,7 @@ The light is emitted in the negative Y direction by default, thus straight down,
 A Directional Light *should* have the following additional properties: [color](#color).\
 A Directional Light *may* have the following additional properties: [lookAt](#lookAt).\
 
-``` highlight
+``` json
 {
   "id": "https://example.org/iiif/light/2",
   "type": "DirectionalLight",
@@ -701,7 +701,7 @@ Image-Based Lights illuminate objects in a Scene using lighting information deri
 **Properties**\
 An Image-Based Light *must* have the following additional properties: [environmentMap](#environmentMap).\
 
-``` highlight
+``` json
 {
   "id": "https://example.org/iiif/light/3",
   "type": "ImageBasedLight",
@@ -728,7 +728,7 @@ Point Lights emit in all directions from a single point within the Scene.
 **Properties**\
 A Point Light *should* have the following additional properties: [color](#color).\
 
-``` highlight
+``` json
 {
   "id": "https://example.org/iiif/light/4",
   "type": "PointLight",
@@ -750,7 +750,7 @@ A Spot Light emits in the negative Y direction by default, but the orientation o
 Spot Lights *should* have the following additional properties: [color](#color), [angle](#angle).\
 Spot Lights *may* have the following additional properties: [lookAt](#lookAt).\
 
-``` highlight
+``` json
 {
   "id": "https://example.org/iiif/light/5",
   "type": "SpotLight",
@@ -783,7 +783,7 @@ All Audio Emitters *may* have the following properties: [id](#id), [label](#labe
 
 Ambient Audio emits equally throughout the Scene, and does not have a position or direction.
 
-``` highlight
+``` json
 {
   "id": "https://example.org/iiif/audio/1",
   "type": "AmbientAudio",
@@ -801,7 +801,7 @@ Ambient Audio emits equally throughout the Scene, and does not have a position o
 
 Point Audio emits in all directions from a single point in the Scene.
 
-``` highlight
+``` json
 {
   "id": "https://example.org/iiif/audio/2",
   "type": "PointAudio",
@@ -825,7 +825,7 @@ The Spot Audio emits in the negative Y direction by default, but the orientation
 Spot Audio Emitters *should* have the following additional properties: [angle](#angle)\
 Spot Audio Emitters *may* have the following additional properties: [lookAt](#lookAt)
 
-``` highlight
+``` json
 {
   "id": "https://example.org/iiif/audio/3",
   "type": "SpotAudio",
@@ -857,7 +857,7 @@ All Transforms *may* have the following properties: [id](#id), [label](#label), 
 
 A Rotate Transform rotates the resource around one or more axes. If present, the values of properties `x`, `y`, and `z` *must* be angular values in degrees that specify the extent of rotation around each axis. Positive angular values indicate counter-clockwise rotation around the axis due to coordinate right-handedness. Axis rotation is performed with a pivot point at the origin of the local coordinate space. As an example, for a point at (1, 1, 0) in local coordinate space, rotating 90 degrees around the x axis would transform the point to be at (1, 0, 1). If any property `x`, `y`, or `z` is not specified or is specified to be 0.0, rotation around that axis does not occur. When more than one axis rotation is specified through multiple non-zero values for `x`, `y`, and `z`, rotations comprise a Euler angle with ordering x-y-z, and rotation *must* be carried out first around the x axis, second around the y axis, and third around the z axis.
 
-``` highlight
+``` json
 {
   "id": "https://example.org/iiif/transform/1",
   "type": "RotateTransform",
@@ -873,7 +873,7 @@ A Rotate Transform rotates the resource around one or more axes. If present, the
 
 A Scale Transform scales the resource along one or more axes. If present, the values of properties `x`, `y`, and `z` *must* be multiplicative scale factors that specify the extent of scaling along each axis. As an example, for a point at 3.5 along the x axis in local coordinate space, scaling along the x axis by 2.0 would result in the point being at 7.0. If any property `x`, `y`, or `z` is not specified or is specified to be 1.0, scaling does not occur along that axis. Negative scale factor values indicate reflection as well as scaling along that axis.
 
-``` highlight
+``` json
 {
   "id": "https://example.org/iiif/transform/2",
   "type": "ScaleTransform",
@@ -889,7 +889,7 @@ A Scale Transform scales the resource along one or more axes. If present, the va
 
 A Translate Transform translates or moves the resource along one or more axes. If present, the values of properties `x`, `y`, and `z` *must* be coordinate unit distances that specify the distance across each axis to translate the resource. As an example, for a point at 1.0 on the x axis, translating across the x axis by 3.0 would result in the point being at 4.0. If any property `x`, `y`, or `z` is not present or is specified to be 0.0, translation does not occur along that axis.
 
-``` highlight
+``` json
 {
   "id": "https://example.org/iiif/transform/3",
   "type": "TranslateTransform",
@@ -914,7 +914,7 @@ An Agent *must* have the following properties: [type](#type), [label](#label).\
 An Agent *should* have the following properties: [homepage](#homepage), [logo](#logo).\
 An Agent *may* have the following properties: [id](#id), [seeAlso](#seeAlso), [summary](#summary).
 
-``` highlight
+``` json
 {
   "id": "https://example.org/iiif/agent/1",
   "type": "Agent",
@@ -950,7 +950,7 @@ A Quantity expresses a quantity through a numerical value and associated unit of
 A Quantity *must* have the following properties: [type](#type), [quantityValue](#quantityValue), [unit](#unit).\
 A Quantity *may* have the following properties: [id](#id), [label](#label).
 
-``` highlight
+``` json
 {
   "type": "Quantity",
   "quantityValue": 1.0,
@@ -984,7 +984,7 @@ A Service *should* have the following properties: [label](#label), [profile](#pr
 A Service *may* have the following properties: [service](#service), `@id`, `@type`.\
 Services will also have specific requirements as to additional properties based on the type of service.
 
-``` highlight
+``` json
 {
   "id": "https://example.org/iiif/image3/image1",
   "type": "ImageService3",
@@ -1014,7 +1014,7 @@ The value of `accompanyingContainer` *must* be a JSON object with the `id` and `
 - A Range *may* have the `accompanyingContainer` property.\
   Clients *may* render `accompanyingContainer` on a Range.
 
-``` highlight
+``` json
 {
   "accompanyingContainer": {
     "id": "https://example.org/iiif/1/timeline/accompany",
@@ -1046,7 +1046,7 @@ The value of `action` *must* be an array of strings, where each item in the arra
 - A Specific Resource *may* have the `action` property.\
   Clients *should* process the `action` property on Specific Resources.
 
-``` highlight
+``` json
   { "action": ["show", "enable"] }
 ```
 
@@ -1061,7 +1061,7 @@ The value *must* be a floating point number greater than 0.0 and less than or eq
 - A Spot Audio Emitter *should* have the `angle` property.\
   Clients *should* process the `angle` property on Spot Audio Emitters.
 
-``` highlight
+``` json
 { "angle": 15.0 }
 ```
 
@@ -1082,7 +1082,7 @@ The value *must* be an array of JSON objects. Each item *must* have at least the
 - A content resource *may* have the `annotations` property with at least one item.\
   Clients *should* process `annotations` on a content resource.
 
-``` highlight
+``` json
 {
   "annotations": [
     {
@@ -1105,7 +1105,7 @@ The value *must* be a string which defines an RGB color. It *should* be a hex va
 - A Scene *may* have the `backgroundColor` property.\
   Clients *should* render `backgroundColor` on a Scene.
 
-``` highlight
+``` json
 { "backgroundColor": "#FFFFFF" }
 ```
 
@@ -1153,7 +1153,7 @@ The value *must* be an array of strings.
 |   | **Miscellaneous Behaviors** |
 | `hidden` | Valid on Annotation Collections, Annotation Pages, Annotations, Specific Resources, Lights, Cameras and Choices. If this behavior is provided, then the client *should not* render the resource by default, but allow the user to turn it on and off. This behavior does not inherit, as it is not valid on Collections, Manifests, Ranges or Canvases. See the section on Dynamic Content for more information. |
 
-``` highlight
+``` json
 { "behavior": [ "auto-advance", "individuals" ] }
 ```
 
@@ -1170,7 +1170,7 @@ The value *must* be a JSON object. Each item *must* have the `type` property. Re
 - An Annotation *should* have the `body` property.\
   Clients *must* process the `body` property on Annotations.
 
-``` highlight
+``` json
 { "body": 
   {"type": "TextualBody", "value": "Great!"} 
 }
@@ -1187,7 +1187,7 @@ The value *must* be a string, and the value *must* be an absolute HTTP(S) URI.
 - Any resource *may* have the `canonical` property.\
   Clients *may* process the `canonical` property on any resource.
 
-``` highlight
+``` json
 { "canonical": "https://example.org/annotations/123569" }
 ```
 
@@ -1206,7 +1206,7 @@ The value *must* be a string, which defines an RGB color. It *should* be a hex v
 - A Spot Light *should* have the `color` property.\
   Clients *should* render `color` on a Spot Light.
 
-``` highlight
+``` json
 { "color": "#FFA0A0" }
 ```
 
@@ -1221,7 +1221,7 @@ The value *must* be a string, and *must* be an absolute URI.
 - A Fragment Selector *may* have the `conformsTo` property.\
   Clients *should* process `conformsTo` on a Fragment Selector.
 
-``` highlight
+``` json
 { "conformsTo": "http://www.w3.org/TR/media-frags/" }
 ```
 
@@ -1238,7 +1238,7 @@ The value *must* be a positive floating point number.
 - Content resources *should* have the `duration` property, if appropriate for the type of resource.\
   Clients *should* process `duration` on content resources.
 
-``` highlight
+``` json
 { "duration": 125.0 }
 ```
 
@@ -1251,7 +1251,7 @@ The value *must* be a JSON object representing an Image which *must* have the `i
 - An Image-Based Light *must* have the `environmentMap` property.\
   Clients *should* process `environmentMap` on an Image-Based Light.
 
-``` highlight
+``` json
 "environmentMap": {
   "id": "https://example.org/iiif/light/3/environment.hdr",
   "type": "Image",
@@ -1276,7 +1276,7 @@ The value of `exclude` *must* be an array of strings, each of which is one of th
 - An Annotation *may* have the `exclude` property.\
   Clients *should* process the `exclude` property.
 
-``` highlight
+``` json
 { "exclude": [ "audio", "lights", "cameras", "animations" ] }
 ```
 
@@ -1289,7 +1289,7 @@ The value *must* be a non-negative floating point number in the units of the coo
 - A Camera *may* have the `far` property.\
   Clients *should* process the `far` property on Cameras.
 
-``` highlight
+``` json
 { "far": 200.0 }
 ```
 
@@ -1302,7 +1302,7 @@ The value *must* be a floating point number greater than 0.0 and less than 180.0
 - A Perspective Camera *should* have the `fieldOfView` property.\
   Clients *should* process the `fieldOfView` property on a Perspective Camera.
 
-``` highlight
+``` json
 { "fieldOfView": 50.0 }
 ```
 
@@ -1315,7 +1315,7 @@ The value *must* be a positive integer.
 - Any Content Resource *may* have the `fileSize` property.\
   Clients *should* process the `fileSize` property on a Content Resource.
 
-``` highlight
+``` json
 { "fileSize": 132465987 }
 ```
 
@@ -1330,7 +1330,7 @@ The value *must* be a JSON object with `id` and `type` properties. The `id` *mus
 - A non-empty Collection with pages *must* have the `first` property.\
   Clients *must* process the `first` property on a paged Collection.
 
-``` highlight
+``` json
 {
   "first": {
      "id": "https://example.org/iiif/annotationPage/1",
@@ -1356,13 +1356,13 @@ The value *must* be a string, and *should* either be a valid media type or an im
 
 For a Content Resource:
 
-``` highlight
+``` json
 { "format": "application/xml" }
 ```
 
 For a IIIF Image API Selector:
 
-``` highlight
+``` json
 { "format": "jpg" }
 ```
 
@@ -1377,7 +1377,7 @@ The value *must* be a positive integer.
 - Content Resources *should* have the `height` property, with the value given in pixels, if appropriate to the resource type.\
   Clients *should* process `height` on content resources.
 
-``` highlight
+``` json
 { "height": 1800 }
 ```
 
@@ -1395,7 +1395,7 @@ The value of this property *must* be an array of JSON objects, each of which *mu
 **Model Alignment**\
 Please note that this specification has stricter requirements about the JSON pattern used for the `homepage` property than the [Web Annotation Data Model](http://w3.org/TR/annotation-model/ "Web Annotation Model"). The IIIF requirements are compatible, but the home page of an Agent found might have only a URI, or might be a JSON object with other properties. See the section on [collisions between contexts](model.md#term-collisions-between-contexts) for more information.
 
-``` highlight
+``` json
 {
   "homepage": [
     {
@@ -1424,7 +1424,7 @@ If a publisher wishes for a resource to be able to be referenced, such as in an 
 - All other resources *may* have the `id` property.\
   Clients *may* render `id` on any resource type.
 
-``` highlight
+``` json
 { "id": "https://example.org/iiif/1/manifest" }
 ```
 
@@ -1437,7 +1437,7 @@ The value *must* be a non-negative floating point number.
 - Point Selector *may* have the `instant` property.\
   Clients *should* process the `instant` property on a Point Selector.
 
-``` highlight
+``` json
 { "instant": 4.5 }
 ```
 
@@ -1450,7 +1450,7 @@ The value of this property *must* be a Quantity. The value of the `unit` propert
 - A Light *should* have the `intensity` property.\
   Clients *should* process the `intensity` property on a Light.
 
-``` highlight
+``` json
 {
  "intensity": {
     "type": "Quantity",
@@ -1485,7 +1485,7 @@ The value *must* be an array of strings.
 | `free` | Camera mimics a first-person perspective. User interaction pans or tilts Camera perspective, trucks Camera position, and/or dollies or zooms Camera. |
 | `free-direction` | Camera mimics a first-person perspective, but Camera position is fixed. User interaction pans or tilts Camera perspective. |
 
-``` highlight
+``` json
 { "interactionMode": [ "hemisphere-orbit", "orbit" ] }
 ```
 
@@ -1514,7 +1514,7 @@ The value *must* be an array of JSON objects. Each item *must* have the `id` and
 - A Choice, Composite, List or Independents *must* have the `items` property with at least one item. There are no restrictions on the item type.\
   Clients *must* process `items` on a Choice, Composite, List or Independents.
 
-``` highlight
+``` json
 {
   "items": [
     {
@@ -1551,7 +1551,7 @@ The value of the property *must* be a JSON object, as described in the [language
 - Other types of resource *may* have the `label` property with at least one entry.\
   Clients *may* render `label` on other types of resource.
 
-``` highlight
+``` json
 { "label": { "en": [ "Example Object Title" ] } }
 ```
 
@@ -1564,7 +1564,7 @@ The value *must* be an array of strings. Each item in the array *must* be a vali
 - An external resource *should* have the `language` property with at least one item.\
   Clients *should* process the `language` of external resources.
 
-``` highlight
+``` json
 { "language": [ "en" ] }
 ```
 
@@ -1579,7 +1579,7 @@ The value *must* be a JSON object with `id` and `type` properties. The `id` *mus
 - A non-empty Collection *may* have the `last` property.\
   Clients *may* process the `last` property on a Collection.
 
-``` highlight
+``` json
 {
   "last": {
      "id": "https://example.org/iiif/annotationPage/17",
@@ -1599,7 +1599,7 @@ The value of this property *must* be an array of JSON objects, each of which *mu
 - Agent resources *should* have the `logo` property.\
   Clients *must* render `logo` on Agent resources.
 
-``` highlight
+``` json
 {
   "logo": [
     {
@@ -1630,7 +1630,7 @@ The value *must* be a JSON object, conforming to either a reference to an Annota
 - A Spot Audio *may* have the `lookAt` property.\
   Clients *should* process the `lookAt` property on Spot Audio.
 
-``` highlight
+``` json
 "lookAt": {
     "type": "PointSelector",
     "x": 3,
@@ -1656,7 +1656,7 @@ The value of the `metadata` property *must* be an array of JSON objects, where e
 
 Clients *should* display the entries in the order provided. Clients *should* expect to encounter long texts in the `value` property, and render them appropriately, such as with an expand button, or in a tabbed interface.
 
-``` highlight
+``` json
 {
   "metadata": [
     {
@@ -1678,7 +1678,7 @@ The value *must* be an array. Each item in the array *must* be a string, drawn f
 - An Annotation *must* have the `motivation` property with at least one item.\
   Clients *must* process the `motivation` property on Annotations.
 
-``` highlight
+``` json
 {
   "motivation": [ "painting" ]
 }
@@ -1707,7 +1707,7 @@ The value *must* be an [XSD dateTime literal](https://www.w3.org/TR/xmlschema11-
 - Annotations *may* have the `navDate` property.\
   Clients *may* render `navDate` on Annotations.
 
-``` highlight
+``` json
 { "navDate": "2010-01-01T00:00:00Z" }
 ```
 
@@ -1728,7 +1728,7 @@ The value of the property *must* be a [GeoJSON](https://datatracker.ietf.org/doc
 - Annotations *may* have the `navPlace` property.\
   Clients *may* render `navPlace` on Annotations.
 
-``` highlight
+``` json
 {
    "navPlace":{
       "id": "https://example.com/feature-collection/1",
@@ -1760,7 +1760,7 @@ The value *must* be a non-negative floating point number, in the units of the co
 - A Camera *may* have the `near` property.\
   Clients *should* process the `near` property on Cameras.
 
-``` highlight
+``` json
 { "near": 1.5 }
 ```
 
@@ -1773,7 +1773,7 @@ The value *must* be a JSON object, with the `id` and `type` properties. The valu
 - An Annotation Page *must* have the `next` property, unless it is the last page in the Annotation Collection or Collection.\
   Clients *must* process the `next` property on an Annotation Page or Collection Page.
 
-``` highlight
+``` json
 {
   "next": {
      "id": "https://example.org/iiif/annotationPage/3",
@@ -1795,7 +1795,7 @@ The value *must* be an array of JSON objects. Each item *must* have the `id` and
 - Any resource type *may* have the `partOf` property with at least one item.\
   Clients *may* render `partOf` on any resource type.
 
-``` highlight
+``` json
 { "partOf": [ { "id": "https://example.org/iiif/1", "type": "Manifest" } ] }
 ```
 
@@ -1818,7 +1818,7 @@ The value of `placeholderContainer` *must* be a JSON object with the `id` and `t
 - A Range *may* have the `placeholderContainer` property.\
   Clients *may* render `placeholderContainer` on a Range.
 
-``` highlight
+``` json
 {
   "placeholderContainer": {
     "id": "https://example.org/iiif/1/canvas/placeholder",
@@ -1840,7 +1840,7 @@ The value of this property *must* be a JSON object conforming to the Specific Re
 - A Specific Resource *may* have the `position` property.\
   Clients *should* process the `position` property on Specific Resource instances.
 
-``` highlight
+``` json
 { "position": {
     "type": "SpecificResource",
       "source": {
@@ -1870,7 +1870,7 @@ The value *must* be a JSON object, with the `id` and `type` properties. The valu
 - A Collection Page *should* have the `prev` property, unless it is the first page in the Collection.\
   Clients *should* process the `prev` property on a Collection Page.
 
-``` highlight
+``` json
 {
   "prev": {
      "id": "https://example.org/iiif/annotationPage/1",
@@ -1899,7 +1899,7 @@ The value *must* be a string, either taken from the [profiles registry](../../re
 | `equirectangular` | For environment map, the image uses equirectangular projection, mapping a full spherical environment onto a 2:1 rectangular image. |
 | `cubic` | For environment map, the image uses cube map projection, representing the environment as six square faces of a cube. |
 
-``` highlight
+``` json
 { "profile": "https://example.org/profile/statuary" }
 ```
 
@@ -1925,7 +1925,7 @@ The value *must* be an array of JSON objects, where each item in the array confo
 - Other types of resource *may* have the `provider` property with at least one item.\
   Clients *should* render `provider` on other types of resource.
 
-``` highlight
+``` json
 {
   "provider": [
     {
@@ -1983,7 +1983,7 @@ Note that the majority of the values align with the [W3C accessibility features 
 | `transcript` | A transcript of the audio content, as opposed to closed captions which might include other descriptions such as music or sound effects |
 | `translation` | A translation of the content into another language, defined on the content resource |
 
-``` highlight
+``` json
 { "provides": [ "closedCaptions" ] }
 ```
 
@@ -1996,7 +1996,7 @@ The value of `quality` *must* be a string, drawn from the list of acceptable qua
 - The IIIF Image API Selector *may* have the `quality` property with exactly one value.\
   Clients *must* process the `quality` property on a IIIF Image API Selector.
 
-``` highlight
+``` json
 { "quality": "default" }
 ```
 
@@ -2009,7 +2009,7 @@ The value of `quantityValue` *must* be a floating point number.
 - A Quantity *must* have the `quantityValue` property.\
   Clients *must* process the `quantityValue` property on a Quantity.
 
-``` highlight
+``` json
 { "quantityValue": 0.1234123 }
 ```
 
@@ -2024,7 +2024,7 @@ The value of the `refinedBy` property *must* be a JSON Object, which *must* desc
 - A Selector *may* have the `refinedBy` property with exactly one value.\
   Clients *should* process the `refinedBy` property on Selectors.
 
-``` highlight
+``` json
 { "refinedBy": { "type": "WktSelector", "wktLiteral": "POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0))" } }
 ```
 
@@ -2037,7 +2037,7 @@ The value of `region` *must* be a string, and *must* conform to the requirements
 - The IIIF Image API Selector *may* have the `region` property with exactly one value.\
   Clients *must* process the `region` property on a IIIF Image API Selector.
 
-``` highlight
+``` json
 { "region": "full" }
 ```
 
@@ -2050,7 +2050,7 @@ The value *must* be an array of JSON objects. Each item *must* have the `id`, `t
 - Any resource type *may* have the `rendering` property with at least one item.\
   Clients *should* render `rendering` on a Collection, Manifest or Canvas, and *may* render `rendering` on other types of resource.
 
-``` highlight
+``` json
 {
   "rendering": [
     {
@@ -2072,7 +2072,7 @@ The value of the property *must* be a JSON object, that has the `label` and `val
 - Any resource type *may* have the `requiredStatement` property.\
   Clients *must* render `requiredStatement` on every resource type.
 
-``` highlight
+``` json
 {
   "requiredStatement": {
     "label": { "en": [ "Attribution" ] },
@@ -2092,7 +2092,7 @@ The value *must* be a string. If the value is drawn from Creative Commons or Rig
 - Any resource type *may* have the `rights` property.\
   Clients *may* render `rights` on any resource type.
 
-``` highlight
+``` json
 { "rights": "http://creativecommons.org/licenses/by/4.0/" }
 ```
 
@@ -2108,7 +2108,7 @@ The value *must* be a string, not a number, in order to allow for the “!” ch
 - The IIIF Image API Selector *may* have the `rotation` property with exactly one value.\
   Clients *must* process the `rotation` property on a IIIF Image API Selector.
 
-``` highlight
+``` json
 { "rotation": "0" }
 ```
 
@@ -2127,7 +2127,7 @@ The value *must* be an array of JSON objects.
 - An Annotation *may* have the `scope` property with at least one item.\
   Clients *should* process `scope` on Annotations.
 
-``` highlight
+``` json
 { 
   "scope": [
     {
@@ -2147,7 +2147,7 @@ The value *must* be an array of JSON objects. Each item *must* have the `id` and
 - Any resource type *may* have the `seeAlso` property with at least one item.\
   Clients *may* process `seeAlso` on any resource type.
 
-``` highlight
+``` json
 {
   "seeAlso": [
     {
@@ -2172,7 +2172,7 @@ The value of `selector` *must* be an array of JSON objects. Each item *must* hav
 - A Specific Resource *may* have the `selector` property with at least one item.\
   Clients *should* process `selector` on a Specific Resource.
 
-``` highlight
+``` json
 {
   "selector": [
     {
@@ -2191,7 +2191,7 @@ The value *must* be an array of JSON objects. Each object will have properties d
 - Any resource type *may* have the `service` property with at least one item.\
   Clients *may* process `service` on any resource type, and *should* process the IIIF Image API service.
 
-``` highlight
+``` json
 {
   "service": [
     {
@@ -2205,7 +2205,7 @@ The value *must* be an array of JSON objects. Each object will have properties d
 
 Implementations *should* be prepared to recognize the `@id` and `@type` property names used by older specifications, as well as `id` and `type`. Note that the `@context` key *should not* be present within the `service`, but instead included at the beginning of the document. The example below includes both version 2 and version 3 IIIF Image API services.
 
-``` highlight
+``` json
 {
   "service": [
     {
@@ -2235,7 +2235,7 @@ The value *must* be an array of JSON objects. Each object *must* be a service re
 - A Manifest *may* have the `services` property.\
   Clients *should* process `services` on a Manifest.
 
-``` highlight
+``` json
 {
   "services": [
     {
@@ -2264,7 +2264,7 @@ The value of `size` *must* be a string, and conform to the size parameter defini
 - A IIIF Image API Selector *may* have the `size` property with exactly one value.\
   Clients *must* process the `size` property on a IIIF Image API Selector.
 
-``` highlight
+``` json
 { "size": "max" }
 ```
 
@@ -2279,7 +2279,7 @@ The value *must* be a JSON Object with the `id` and `type` properties. The value
 - A Specific Resource *must* have the `source` property with exactly one value.\
   Clients *must* process the `source` property on a Specific Resource.
 
-``` highlight
+``` json
 { "source": "https://example.org/museum/images/1" }
 ```
 
@@ -2294,7 +2294,7 @@ To assert a `spatialScale` for a Content Resource, the resource *must* first be 
 - A Scene *may* have the `spatialScale` property.\
   Clients *should* process `spatialScale` on a Scene.
 
-``` highlight
+``` json
 {
   "type": "Canvas",
   "spatialScale": {
@@ -2320,11 +2320,11 @@ The value *must* be a JSON object, which *must* have the `id` and `type` propert
 - A Range *may* have the `start` property.\
   Clients *should* process `start` on a Range.
 
-``` highlight
+``` json
 { "start": { "id": "https://example.org/iiif/1/canvas/1", "type": "Canvas" } }
 ```
 
-``` highlight
+``` json
 {
   "start": {
     "id": "https://example.org/iiif/1/canvas-segment/1",
@@ -2354,7 +2354,7 @@ The value of `startIndex` *must* be an integer greater than -1.
 - A Collection Page *may* have the `startIndex` property.\
   Clients *may* process `startIndex` on a Collection Page.
 
-``` highlight
+``` json
 { "startIndex": 0 }
 ```
 
@@ -2367,7 +2367,7 @@ The value *must* be an array of JSON objects. Each item *must* have the `id` and
 - A Manifest *may* have the `structures` property.\
   Clients *should* process `structures` on a Manifest. The first hierarchy *should* be presented to the user by default, and further hierarchies *should* be able to be selected as alternative structures by the user.
 
-``` highlight
+``` json
 {
   "structures": [
     {
@@ -2390,7 +2390,7 @@ For more information about `styleClass`, see the [Web Annotation Data Model](htt
 - A Specific Resource *may* have the `styleClass` property.\
   Clients *should* process the `styleClass` property.
 
-``` highlight
+``` json
 { "styleClass": "red" }
 ```
 
@@ -2405,7 +2405,7 @@ For more information about `stylesheet`, see the [Web Annotation Data Model](htt
 - An Annotation *may* have the `stylesheet` property.\
   Clients *should* process the `stylesheet` property on Annotations.
 
-``` highlight
+``` json
 { "stylesheet":
   {
     "type": "CssStylesheet",
@@ -2429,7 +2429,7 @@ The value of the property *must* be a JSON object, as described in the [language
 - Other types of resource *may* have the `summary` property with at least one entry.\
   Clients *may* render `summary` on other types of resource.
 
-``` highlight
+``` json
 { "summary": { "en": [ "This is a summary of the object." ] } }
 ```
 
@@ -2442,7 +2442,7 @@ The value *must* be a JSON object, which *must* have the `id` and `type` propert
 - A Range *may* have the `supplementary` property.\
   Clients *may* process `supplementary` on a Range.
 
-``` highlight
+``` json
 { "supplementary": { "id": "https://example.org/iiif/1/annos/1", "type": "AnnotationCollection" } }
 ```
 
@@ -2457,7 +2457,7 @@ The value *must* be a JSON Object. It *must* have the `type` property. Reference
 - An Annotation *must* have the `target` property.\
   Clients *must* process the `target` property on Annotations.
 
-``` highlight
+``` json
 { "target": 
   { "id": "https://example.org/iiif/1/canvas/1", "type": "Canvas" }
 }
@@ -2476,7 +2476,7 @@ To assert a `temporalScale` for a Content Resource, the resource *must* first be
 - A Scene *may* have the `temporalScale` property.\
   Clients *may* process `temporalScale` on a Scene.
 
-``` highlight
+``` json
 {
   "type": "Canvas",
   "temporalScale": {
@@ -2504,7 +2504,7 @@ The value *must* be an array of JSON objects, each of which *must* have the `id`
 - Other types of resource *may* have the `thumbnail` property with at least one item.\
   Clients *may* render `thumbnail` on other types of resource.
 
-``` highlight
+``` json
 {
   "thumbnail": [
     {
@@ -2533,7 +2533,7 @@ The value *must* be a string.
 | `scale` | Fit the duration of content resource to the duration of the portion of the Canvas it is associated with by scaling. For example, a video of 120 seconds annotated to a Canvas with a duration of 60 seconds would be played at double-speed. |
 | `loop` | If the content resource is shorter than the `duration` of the Canvas, it *must* be repeated to fill the entire duration. Resources longer than the `duration` *must* be trimmed as described above. For example, if a 20 second duration audio stream is annotated onto a Canvas with a duration of 30 seconds, it will be played one and a half times. |
 
-``` highlight
+``` json
 { "timeMode": "trim" }
 ```
 
@@ -2550,7 +2550,7 @@ The value of this property *must* be a non-negative integer.
 - A Collection *should* have the `total` property.\
   Clients *should* process the `total` property on a Collection.
 
-``` highlight
+``` json
 { "total": 1701 }
 ```
 
@@ -2563,7 +2563,7 @@ The value of this property *must* be array of JSON objects, each of which *must*
 - A Specific Resource *may* have the `transform` property.\
   Clients *should* process the `transform` property on Specific Resources.
 
-``` highlight
+``` json
 {
   "transform": [
     {
@@ -2600,7 +2600,7 @@ The value *must* be a string.
 
 > For compatibility with previous versions, clients *should* accept `Sound` as a synonym for `Audio`.
 
-``` highlight
+``` json
 { "type": "Image" }
 ```
 
@@ -2619,7 +2619,7 @@ The value *must* be a string value. This specification defines the values in the
 - A Quantity *must* have the `unit` property.\
   Clients *should* process the `unit` property on Quantity instances.
 
-``` highlight
+``` json
 { "unit": "m" }
 ```
 
@@ -2633,13 +2633,13 @@ Many selector classes use `value` to convey a string representation of the selec
 
 Language Map `value`:
 
-``` highlight
+``` json
 {"value": { "en": [ "Example Description" ]}}
 ```
 
 Embedded CSS Stylesheet, Selector or Textual Body `value`:
 
-``` highlight
+``` json
 { "value": "Example Textual Body" }
 ```
 
@@ -2654,7 +2654,7 @@ The value of the `version` property *must* be a string, and *should* be of the f
 - Other resources *may* have the `version` property.\
   Clients *may* process `version` on other resources.
 
-``` highlight
+``` json
 { "version": "2.1" }
 ```
 
@@ -2667,7 +2667,7 @@ The value of the `via` property *must* be an array of strings, and each string *
 - Any resource *may* have the `via` property.\
   Clients *should* process `via` on any resource.
 
-``` highlight
+``` json
 { "via": [ "https://example.com/manifests/6" ] }
 ```
 
@@ -2680,7 +2680,7 @@ The value *must* be a positive floating point number in the coordinate space of 
 - An Orthographic Camera *should* have the `viewHeight` property.\
   Clients *should* process the `viewHeight` property on Orthographic Cameras.
 
-``` highlight
+``` json
 { "viewHeight": 40.0 }
 ```
 
@@ -2704,7 +2704,7 @@ The value *must* be a string.
 | `top-to-bottom` | The object is displayed from the top to the bottom. |
 | `bottom-to-top` | The object is displayed from the bottom to the top. |
 
-``` highlight
+``` json
 { "viewingDirection": "left-to-right" }
 ```
 
@@ -2717,7 +2717,7 @@ The value of this property *must* be a Quantity. The `unit` property of the Quan
 - An Audio Emitter *should* have the `volume` property.\
   Clients *should* process the `volume` property on an Audio Emitter.
 
-``` highlight
+``` json
 {
   "volume": {
     "type": "Quantity",
@@ -2738,7 +2738,7 @@ The value *must* be a positive integer.
 - Content resources *should* have the `width` property, with the value given in pixels, if appropriate to the resource type.\
   Clients *should* process `width` on content resources.
 
-``` highlight
+``` json
 { "width": 1200 }
 ```
 
@@ -2753,7 +2753,7 @@ The value *must* be a number (floating point or integer).
 - A Transform *may* have the `x` property.\
   Clients *must* process `x` on a Transform.
 
-``` highlight
+``` json
 { "x": 100.0 }
 ```
 
@@ -2768,7 +2768,7 @@ The value *must* be a number (floating point or integer).
 - A Transform *may* have the `y` property.\
   Clients *must* process `y` on a Transform.
 
-``` highlight
+``` json
 { "y": 100.0 }
 ```
 
@@ -2783,7 +2783,7 @@ The value *must* be a number (floating point or integer).
 - A Transform *may* have the `z` property.\
   Clients *must* process `z` on a Transform.
 
-``` highlight
+``` json
 { "z": 100.0 }
 ```
 
@@ -2831,7 +2831,7 @@ The top level resource in the response *must* have the `@context` property, and 
 
 The value of the `@context` property *must* be either the URI `http://iiif.io/api/presentation/4/context.json` or a JSON array with the URI `http://iiif.io/api/presentation/4/context.json` as the last item. Further contexts, such as those for local or [registered extensions](../../registry.md "IIIF Extension Registry"), *must* be added at the beginning of the array.
 
-``` highlight
+``` json
 {
   "@context": "http://iiif.io/api/presentation/4/context.json"
 }
@@ -2839,7 +2839,7 @@ The value of the `@context` property *must* be either the URI `http://iiif.io/ap
 
 Any additional properties beyond those defined in this specification *should* be mapped to RDF predicates using further context documents. These extensions *should* be added to the top level `@context` property, and *must* be added before the above context. The JSON-LD 1.1 functionality of predicate-specific context definitions, known as [scoped contexts](https://json-ld.org/spec/latest/json-ld/#scoped-contexts "JSON-LD Scoped Contexts"), *must* be used to minimize cross-extension collisions. Extensions intended for community use *should* be [registered in the extensions registry](../../registry.md "IIIF Extension Registry"), but registration is not mandatory.
 
-``` highlight
+``` json
 {
   "@context": [
     "http://example.org/extension/context.json",
@@ -2902,13 +2902,13 @@ If the server receives a request with an `Accept` header, it *should* respond fo
 
 If the request does not include an `Accept` header, the HTTP `Content-Type` header of the response *should* have the value `application/ld+json` (JSON-LD) with the [`profile`](model.md#profile) parameter given as the context document: `http://iiif.io/api/presentation/4/context.json`.
 
-``` highlight
+``` plaintext
 Content-Type: application/ld+json;profile="http://iiif.io/api/presentation/4/context.json"
 ```
 
 If the `Content-Type` header `application/ld+json` cannot be generated due to server configuration details, then the `Content-Type` header *should* instead be `application/json` (regular JSON), without a [`profile`](model.md#profile) parameter.
 
-``` highlight
+``` plaintext
 Content-Type: application/json
 ```
 

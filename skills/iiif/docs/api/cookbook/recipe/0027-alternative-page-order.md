@@ -22,9 +22,6 @@ Images provided by permission of Biblioteca Civica Bertoliana.
 
 [JSON-LD](0027-alternative-page-order/manifest.json)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Simple Manifest - Book](0009-book-1.md "Simple Manifest - Book") shows an example where the order of the pages follows the order in the `items` property.

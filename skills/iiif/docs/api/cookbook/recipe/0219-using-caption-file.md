@@ -28,9 +28,6 @@ In this example we use a caption file in the WebVTT format, but other options in
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0219-using-caption-file/)
 
-``` line-numbers
-```
-
 # Related recipes
 
 - [Simplest Manifest - Video](0003-mvm-video.md "Simplest Manifest - Video")

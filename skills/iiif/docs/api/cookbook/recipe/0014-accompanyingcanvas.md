@@ -24,9 +24,6 @@ In the example, the main Canvas contains audio of a performance of Gustav Mahler
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0014-accompanyingcanvas/)
 
-``` line-numbers
-```
-
 # Related recipes
 
 - [Simplest Manifest - Video](0003-mvm-video.md "Simplest Manifest - Video")

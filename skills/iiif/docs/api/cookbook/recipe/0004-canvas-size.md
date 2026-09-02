@@ -30,9 +30,6 @@ This example shows a Manifest with a single Canvas that has height and width dim
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0004-canvas-size/)
 
-``` line-numbers
-```
-
 # Related recipes
 
 - [Simple Image Manifest](0001-mvm-image.md "Simplest Manifest - Image")

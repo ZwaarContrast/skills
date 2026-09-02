@@ -28,9 +28,6 @@ This example shows a Manifest with a single Canvas with a duration of 1801.055 s
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0015-start/)
 
-``` line-numbers
-```
-
 # Related recipes
 
 - [Simplest Manifest - Video](0003-mvm-video.md "Simplest Manifest - Video") shows a manifest for a simple video resource.

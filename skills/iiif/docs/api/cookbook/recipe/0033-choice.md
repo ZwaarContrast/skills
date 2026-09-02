@@ -58,9 +58,6 @@ Credit: *John Dee performing an experiment before Queen Elizabeth I*. Oil painti
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0033-choice/)
 
-``` line-numbers
-```
-
 ## Related recipes
 
 - [Foldouts, Flaps, and Maps](0035-foldouts.md "Foldouts, Flaps, and Maps")

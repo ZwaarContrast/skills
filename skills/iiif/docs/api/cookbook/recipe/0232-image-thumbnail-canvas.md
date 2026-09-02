@@ -22,17 +22,15 @@ One option for mitigating some of these performance issues is to configure the `
 
 At a minimum, the `thumbnail` property requires the `id` and `type` properties. It is highly recommended to include `format`, `height`, and `width` properties as well.
 
-``` json
-"thumbnail": [
-  {
-    "id": "https://fixtures.iiif.io/video/indiana/donizetti-elixir/act1-thumbnail.png",
-    "type": "Image",
-    "format": "image/png",
-    "width": 640,
-    "height": 360
-  }
-]
-```
+    "thumbnail": [
+      {
+        "id": "https://fixtures.iiif.io/video/indiana/donizetti-elixir/act1-thumbnail.png",
+        "type": "Image",
+        "format": "image/png",
+        "width": 640,
+        "height": 360
+      }
+    ]
 
 This configuration is not ideal in most cases as it offers the client no size choice. If the sizes provided are too small to meet the client’s thumbnail requirements, resizing may introduce artifacts and look pixelated. In this configuration, it is preferable to downsize an image than to request the perfect size.
 
@@ -48,38 +46,36 @@ This approach might be a good option for Collection or Manifest thumbnails, but 
 
 Since adding a service alone doesn’t gain us anything, we can take it a step further by including all or a selection of pre-cached sizes from the [JSON image response](../../image/3.0.md#51-image-information-request) and setting the profile to level 0. Advertising the appropriate pre-cached sizes provides the viewing client with a list of available size options that it can retrieve instead of using the image service, thereby optimizing thumbnail generation and delivery.
 
-``` json
-"thumbnail": [
-  {
-    "id": "https://fixtures.iiif.io/other/level0/Glen/photos/gottingen/full/max/0/default.jpg",
-    "type": "Image",
-    "format": "image/jpeg",
-    "width":252,
-    "height":189,
-    "service": [
+    "thumbnail": [
       {
-        "id":"https://fixtures.iiif.io/other/level0/Glen/photos/gottingen",
-        "profile": "level0",
-        "type": "ImageService3",
-        "sizes":[
+        "id": "https://fixtures.iiif.io/other/level0/Glen/photos/gottingen/full/max/0/default.jpg",
+        "type": "Image",
+        "format": "image/jpeg",
+        "width":252,
+        "height":189,
+        "service": [
           {
-            "width": 126,
-            "height": 95
-          },
-          {
-            "width": 252,
-            "height": 189
-          },
-          {
-            "width": 504,
-            "height": 378
+            "id":"https://fixtures.iiif.io/other/level0/Glen/photos/gottingen",
+            "profile": "level0",
+            "type": "ImageService3",
+            "sizes":[
+              {
+                "width": 126,
+                "height": 95
+              },
+              {
+                "width": 252,
+                "height": 189
+              },
+              {
+                "width": 504,
+                "height": 378
+              }
+            ]
           }
         ]
       }
     ]
-  }
-]
-```
 
 In this configuration, we might expect the client to first try the given thumbnail size (252x189), then if too small, use one of the pre-cached images from the image service (252x189 or 504x378). Since we are using level 0, the client ideally would choose the most appropriate size, probably something just larger, then downsize the image as needed to best fit the view.
 
@@ -95,13 +91,7 @@ The two Manifests below demonstrate the use of the `thumbnail` property on Canva
 
 [JSON-LD](0232-image-thumbnail-canvas/manifest-av.json)
 
-``` line-numbers
-```
-
 [JSON-LD](0232-image-thumbnail-canvas/manifest-image.json)
-
-``` line-numbers
-```
 
 ## Related Recipes
 

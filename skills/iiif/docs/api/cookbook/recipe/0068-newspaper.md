@@ -87,9 +87,6 @@ Similarly, the quality of the OCR as well as the formatting and positioning data
 
 [JSON-LD](0068-newspaper/newspaper_title-collection.json)
 
-``` line-numbers
-```
-
 ## Related recipes
 
 - [Simplest Collection](0032-collection.md "Simple Collection") for a focused view of the Collection structure basics

@@ -49,7 +49,7 @@ One use of this is within the [IIIF Presentation API](https://iiif.io/api/presen
 
 For example, to rotate the top left hand 10% of the image clockwise by 90 degrees would use this configuration of the Selector:
 
-``` highlight
+``` json
 {
   "type" : "ImageApiSelector",
   "region" : "pct:0,0,10,10",
@@ -59,7 +59,7 @@ For example, to rotate the top left hand 10% of the image clockwise by 90 degree
 
 And would result in this SpecificResource, when applied to an image service at `https://example.org/iiif/image1`:
 
-``` highlight
+``` json
 {
   "type": "SpecificResource",
   "source": "https://example.org/iiif/image1",
@@ -90,7 +90,7 @@ It is not possible to select a point using URI Fragments with the Media Fragment
 
 For example, to select a point in a video that is 10 pixels in from the top left hand corner of the visual content, and 14.5 seconds into the duration:
 
-``` highlight
+``` json
 {
   "type": "PointSelector",
   "x": 10,
@@ -105,11 +105,11 @@ Video content resources consist of both visual and audio content within the same
 
 This specification defines two Selectors, `AudioContentSelector` that selects the audio content and a second `VisualContentSelector` for the visual content. Neither selector has any additional properties.
 
-``` highlight
+``` json
 { "type": "AudioContentSelector" }
 ```
 
-``` highlight
+``` json
 { "type": "VisualContentSelector" }
 ```
 

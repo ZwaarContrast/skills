@@ -32,9 +32,6 @@ Soundfile from [UCLA Library Archives of Sound and Vision, Institute of African 
 
 [JSON-LD](0434-choice-av/manifest.json)
 
-``` line-numbers
-```
-
 The direct link to the fixture is a useful convenience.
 
 ## Related Recipes

@@ -28,26 +28,17 @@ Following the Collection resource are the two Manifests for vol. 1 and vol. 2 th
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0030-multi-volume/)
 
-``` line-numbers
-```
-
 **Example Manifest for vol. 1 of *青楼絵本年中行事 \[Seirō ehon nenjū gyōji\]*:**
 
 [JSON-LD](0030-multi-volume/manifest_v1.json)
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0030-multi-volume/)
 
-``` line-numbers
-```
-
 **Example Manifest for vol. 2 of *青楼絵本年中行事 \[Seirō ehon nenjū gyōji\]*:**
 
 [JSON-LD](0030-multi-volume/manifest_v2.json)
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0030-multi-volume/)
-
-``` line-numbers
-```
 
 # Related recipes
 

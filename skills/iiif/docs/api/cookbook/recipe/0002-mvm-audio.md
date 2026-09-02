@@ -16,9 +16,6 @@ This example shows a Manifest with a single Canvas that lasts for 1985.024 secon
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0002-mvm-audio/)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Simplest Manifest - Image](0001-mvm-image.md "Simplest Manifest - Image") for the most minimal image Manifest
@@ -43,9 +40,6 @@ The `type` of the resource is “Audio” but viewers should accept “Sound” 
 This example shows a Manifest with a single Timeline that lasts for 1985.024 seconds. It has a single audio file associated with it. The mp4 also has a duration of 1985.024 seconds.
 
 [JSON-LD](0002-mvm-audio/v4/manifest.json)
-
-``` line-numbers
-```
 
 ## Related Recipes
 

@@ -30,9 +30,6 @@ In a more limited way, the Collection can be displayed in the Navplace viewer us
 
 [JSON-LD](0318-navPlace-navDate/collection.json)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Locate a Manifest on a Web Map](0154-geo-extension.md "Locate a Manifest on a Web Map")

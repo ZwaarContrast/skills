@@ -65,17 +65,11 @@ This Manifest shows how to rotate the image using an Image Service.
 
 [JSON-LD](0040-image-rotation-service/manifest-service.json)
 
-``` line-numbers
-```
-
 ## Example 2: CSS
 
 This Manifest shows how to rotate the image using CSS. For clarity, we are using embedded CSS. Note the declaration of the CSS class in the `value` property of the AnnotationPage’s `stylesheet` and the application of that class to the `styleClass` property on the `body`. The `stylesheet` property may instead point to an external stylesheet using a URI in a string or an id and value in a JSON object. See [the W3C Web Annotation Data Model’s Styles section](https://www.w3.org/TR/annotation-model/#styles) for more.
 
 [JSON-LD](0040-image-rotation-service/manifest-css.json)
-
-``` line-numbers
-```
 
 ## Related Recipes
 

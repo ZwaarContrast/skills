@@ -26,9 +26,6 @@ A manifest for a poetry reading by Canadian poet Daphne Marlatt in 2018 that inc
 
 [JSON-LD](0103-poetry-reading-annotations/manifest.json)
 
-``` line-numbers
-```
-
 # Related recipes
 
 - [Simple Manifest - Audio](0002-mvm-audio.md "Simplest Manifest - Audio")

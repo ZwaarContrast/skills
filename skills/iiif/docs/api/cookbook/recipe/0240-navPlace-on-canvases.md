@@ -26,9 +26,6 @@ The Manifest contains images of the bronze by Giovanni Battista Foggini and the 
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0240-navPlace-on-canvases/)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Represent Canvas Fragment as a Geographic Area in a Web Mapping Client](0139-geolocate-canvas-fragment.md "Represent Canvas Fragment as a Geographic Area on a Web Map")

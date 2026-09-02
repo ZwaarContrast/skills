@@ -28,9 +28,6 @@ A person using a viewer that supports this recipe is presented first with the in
 
 [JSON-LD](0489-multimedia-canvas/manifest.json)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Image and Canvas with Differing Dimensions](0004-canvas-size.md "Image and Canvas with Differing Dimensions") for relative dimensioning of a resource and a Canvas

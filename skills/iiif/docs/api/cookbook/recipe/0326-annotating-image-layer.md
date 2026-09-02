@@ -34,9 +34,6 @@ Credit: John Dee performing an experiment before Queen Elizabeth I. Oil painting
 
 [JSON-LD](0326-annotating-image-layer/manifest.json)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Multiple Choice of Images in a Single View (Canvas)](0033-choice.md "Multiple choice of images in a single view") for the original example without annotations.

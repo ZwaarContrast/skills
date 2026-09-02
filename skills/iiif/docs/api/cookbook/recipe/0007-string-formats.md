@@ -20,9 +20,6 @@ For security reasons, clients are expected to allow only `a`, `b`, `br`, `i`, `i
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0007-string-formats/)
 
-``` line-numbers
-```
-
 # Related recipes
 
 - [Simplest Manifest - Single Image File](0001-mvm-image.md "Simplest Manifest - Image")

@@ -38,9 +38,6 @@ The image in this example was sourced via Wikimedia Commons and is public domain
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0006-text-language/)
 
-``` line-numbers
-```
-
 # Related recipes
 
 - [Rights](0008-rights.md "Rights")

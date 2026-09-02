@@ -105,7 +105,7 @@ Sometimes the targeted resource exists within a parent resource, such as a targe
 
 Example of a Georeference Annotation `target` that is an entire Canvas:
 
-``` highlight
+``` json
 "target": {
   "id" : "http://www.example.org/canvas1.json"
   "type": "Canvas",
@@ -121,7 +121,7 @@ When a [Specific Resource](https://www.w3.org/TR/annotation-model/#specific-reso
 
 Example of a Georeference Annotation `target` with a [SVG Selector](https://www.w3.org/TR/annotation-model/#svg-selector) on a Canvas:
 
-``` highlight
+``` json
 "target": {
   "id": "http://www.example.org/canvas-specific-resource.json",
   "type": "SpecificResource",
@@ -179,7 +179,7 @@ Still, a Georeference Annotation that contains less than three GCPs is valid. Su
 
 An example of the Georeference Annotation `body`:
 
-``` highlight
+``` json
 {
   "body": {
     "id": "http://www.example.org/feature-collection.json",
@@ -200,7 +200,7 @@ The `resourceCoords` property is defined by this document in order to supply the
 
 An example of a Feature with the `resourceCoords` property:
 
-``` highlight
+``` json
 {
   "type": "Feature",
   "properties": {
@@ -243,7 +243,7 @@ Other properties within `options`, including other transformation types not defi
 
 Example of a `transformation` JSON object:
 
-``` highlight
+``` json
 {
   "transformation": {
     "type": "polynomial",
@@ -258,7 +258,7 @@ Example of a `transformation` JSON object:
 
 ### 4.1 Full Canvas Example
 
-``` highlight
+``` json
 {
   "@context": [
     "http://iiif.io/api/extension/georef/1/context.json",
@@ -364,7 +364,7 @@ Example of a `transformation` JSON object:
 
 ### 4.2 Full Georeference Annotation Example
 
-``` highlight
+``` json
 {
   "@context": [
     "http://iiif.io/api/extension/georef/1/context.json",

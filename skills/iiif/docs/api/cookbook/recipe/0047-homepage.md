@@ -28,9 +28,6 @@ In this example we have a Manifest representing an object housed at the Getty Mu
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0047-homepage/)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Acknowledge Content Contributors](0234-provider.md "Acknowledge Content Contributors") for demonstrating the use of `homepage` for a `provider`

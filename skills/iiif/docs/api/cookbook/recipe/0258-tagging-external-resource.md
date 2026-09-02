@@ -26,9 +26,6 @@ Using multiple `body` properties, as shown here, does not have any predictable c
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0258-tagging-external-resource/)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Simplest Annotation](0266-full-canvas-annotation.md "Simplest Annotation")

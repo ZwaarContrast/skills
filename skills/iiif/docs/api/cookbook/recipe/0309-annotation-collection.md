@@ -32,9 +32,6 @@ The Annotation Collection is in the file “anno_coll.json”. It has a `label` 
 
 The Annotation Collection referencing the Annotation Pages:
 
-``` line-numbers
-```
-
 The first AnnotationPage with Annotations on the first Canvas: [anno_p1.json](0309-annotation-collection/anno_p1.json)
 
 The second AnnotationPage with Annotations on the second Canvas: [anno_p2.json](0309-annotation-collection/anno_p2.json)
@@ -42,9 +39,6 @@ The second AnnotationPage with Annotations on the second Canvas: [anno_p2.json](
 The Manifest containing the two Canvases and referencing the Annotation Pages:
 
 [JSON-LD](0309-annotation-collection/manifest.json)
-
-``` line-numbers
-```
 
 ## Related Recipes
 

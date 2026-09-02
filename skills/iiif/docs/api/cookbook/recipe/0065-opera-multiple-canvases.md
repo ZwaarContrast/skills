@@ -18,9 +18,6 @@ Given the need for the player to switch context when moving from one file to the
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0065-opera-multiple-canvases/)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Simple Manifest - Video](0003-mvm-video.md "Simplest Manifest - Video")

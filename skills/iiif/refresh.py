@@ -15,7 +15,7 @@ Pandoc runs with --sandbox: without it, it fetches every <iframe> src and
 inlines whatever the remote host returns (YouTube's no-JS error page, in its
 own guess at your language) straight into the docs.
 """
-import argparse, os, re, shutil, subprocess, sys, urllib.parse, urllib.request
+import argparse, datetime, hashlib, inspect, json, os, re, shutil, subprocess, sys, urllib.parse, urllib.request
 from html.parser import HTMLParser
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -65,6 +65,58 @@ VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link",
 DROP = {"script", "style", "nav", "noscript"}
 IFRAME = re.compile(r'<iframe\b[^>]*\bsrc=["\']([^"\']+)["\'][^>]*>.*?</iframe>'
                     r'|<iframe\b[^>]*\bsrc=["\']([^"\']+)["\'][^>]*/?>', re.S | re.I)
+LEVELS = {"REQUIRED", "RECOMMENDED", "OPTIONAL", "NOT ALLOWED"}
+TABLE = re.compile(r"<table\b.*?</table>", re.S | re.I)
+BR = re.compile(r"<br\s*/?>", re.I)
+IMG = re.compile(r'<img\b[^>]*?\balt="([^"]*)"[^>]*>|<img\b[^>]*>', re.I)
+PRE = re.compile(r"<pre\b[^>]*>.*?</pre>", re.S | re.I)
+TAG = re.compile(r"<[^>]+>")
+LANG = re.compile(r'language-(\w+)')
+
+
+def plain_code(html):
+    """Strip syntax highlighting back to the code it decorates.
+
+    Rouge marks up every token, and pandoc preserves that as raw HTML rather
+    than a fence. On Presentation 4.0 the spans came to 397K of a 491K file —
+    four fifths of the document was colour information about JSON examples the
+    reader needs as JSON.
+    """
+    def strip(m):
+        # the language lives on a wrapper the <pre> sits inside; carrying it
+        # onto the <code> is what makes pandoc write a fence rather than an
+        # indented block, and write_sections needs fences to tell a JSON
+        # comment from a heading
+        before = html[max(0, m.start() - 300):m.start()]
+        lang = (LANG.findall(before) or [""])[-1]
+        cls = f' class="{lang}"' if lang else ""
+        return f"<pre><code{cls}>" + TAG.sub("", m.group(0)) + "</code></pre>"
+    return PRE.sub(strip, html)
+PARA = re.compile(r"</?p\b[^>]*>", re.I)
+
+
+def flatten_tables(html):
+    """Make table cells inline so pandoc can write a pipe table.
+
+    A GFM cell holds no line break and no block element, and pandoc answers a
+    single <br> or <p> by emitting the whole table as raw HTML — several times
+    the tokens, in exactly the reference tables this corpus exists to serve
+    cheaply. The Image API's parameter grids are images with captions, where
+    the caption is the part worth keeping.
+    """
+    def alt(i):
+        text = i.group(1)
+        if not text:
+            return ""
+        # appendix A states its requirement levels as icons; the alt text is
+        # the whole content of those cells, so it stands in unadorned
+        return text.upper() if text.upper() in LEVELS else f"[{text}]"
+
+    def fix(m):
+        t = BR.sub(" / ", m.group(0))
+        t = IMG.sub(alt, t)
+        return PARA.sub(" ", t)
+    return TABLE.sub(fix, html)
 
 
 class Grab(HTMLParser):
@@ -99,6 +151,8 @@ class Grab(HTMLParser):
 def main_content(html):
     """The page's own content, with the site chrome left behind."""
     html = IFRAME.sub(lambda m: f"<p>[embedded: {m.group(1) or m.group(2)}]</p>", html)
+    html = flatten_tables(html)
+    html = plain_code(html)
     for t in DROP:
         html = re.sub(rf"<{t}\b.*?</{t}>", "", html, flags=re.S | re.I)
     g = Grab(html)
@@ -136,14 +190,27 @@ def sitemap():
     return dict(SITEMAP.findall(get(BASE + "sitemap.xml")))
 
 
-def crawl_log(rows=None):
-    """docs/CRAWL.tsv — the lastmod each held page carried when we fetched it."""
+def rules_id():
+    """A fingerprint of the passes that shape a page. Pages fetched under an
+    older fingerprint were cleaned by older rules, so `--check` can say that a
+    `--fresh` run is due rather than leaving the corpus quietly inconsistent."""
+    src = "".join(inspect.getsource(f) for f in (main_content, flatten_tables, plain_code, clean, relink, repoint))
+    return hashlib.sha256(src.encode()).hexdigest()[:12]
+
+
+def crawl_log(rows=None, stamp=None):
+    """docs/CRAWL.tsv — the lastmod each held page carried when we fetched it,
+    under a header recording when that was and which rules produced it."""
     path = os.path.join(DOCS, "CRAWL.tsv")
     if rows is None:
         if not os.path.exists(path):
-            return {}
-        return dict(l.split("\t") for l in open(path).read().splitlines()[1:] if l)
+            return {}, {}
+        lines = open(path, encoding="utf-8").read().splitlines()
+        meta = dict(re.findall(r"(\w+): (\S+)", lines[0])) if lines[0].startswith("#") else {}
+        return dict(l.split("\t") for l in lines[2:] if l), meta
+    stamp = stamp or datetime.date.today().isoformat()
     with open(path, "w", encoding="utf-8") as f:
+        f.write(f"# crawled: {stamp}  rules: {rules_id()}\n")
         f.write("page\tlastmod\n")
         for page in sorted(rows):
             f.write(f"{page}\t{rows[page]}\n")
@@ -157,74 +224,115 @@ def targets(smap):
 
 
 def survey(smap):
-    """(changed, missing, unlisted) — what a refresh would do, and what needs a human."""
-    held, want = crawl_log(), targets(smap)
+    """(changed, missing, unlisted, meta) — what a refresh would do, and what
+    needs a human."""
+    held, meta = crawl_log()
+    want = targets(smap)
     changed = [p for p in want if p in held and smap.get(p, held[p]) != held[p]]
     missing = [p for p in want if p not in held
                or not os.path.exists(os.path.join(DOCS, (p.strip("/") or "index") + ".md"))]
     unlisted = [p for p in smap if WATCH.match(p) and not IGNORE.match(p) and p not in set(want)]
-    return changed, missing, sorted(unlisted)
+    return changed, missing, sorted(unlisted), meta
 
 
 def check():
     smap = sitemap()
-    changed, missing, unlisted = survey(smap)
+    changed, missing, unlisted, meta = survey(smap)
+    held, _ = crawl_log()
+    print(f"corpus crawled {meta.get('crawled', 'on an unrecorded date')}, "
+          f"{len(held)} pages")
     for label, pages in (("updated upstream", changed), ("not yet fetched", missing)):
         print(f"{len(pages)} {label}" + (":" if pages else ""))
         for p in pages:
-            print(f"  {p}" + (f"  {held}->{smap[p]}" if (held := crawl_log().get(p)) and p in smap else ""))
+            was = held.get(p)
+            print(f"  {p}" + (f"  {was} -> {smap[p]}" if was and p in smap else ""))
     print(f"{len(unlisted)} documentation pages on iiif.io that the corpus does not hold"
           + (" — add to PAGES if wanted:" if unlisted else ""))
     for p in unlisted:
         print(f"  {p}")
-    return 1 if (changed or missing) else 0
+    stale_rules = meta.get("rules") not in (None, rules_id())
+    if stale_rules:
+        print(f"the pages on disk were cleaned by rules {meta.get('rules')}, this copy of "
+              f"refresh.py is {rules_id()} — run `refresh.py --fresh` to make the corpus consistent")
+    return 1 if (changed or missing or stale_rules) else 0
 
 
 def fetch_pages(pages, smap):
-    """Fetch each page and record the lastmod it carried."""
-    log = crawl_log()
-    for page in pages:
-        rel = page.strip("/") or "index"
-        dest = os.path.join(DOCS, rel + ".md")
-        os.makedirs(os.path.dirname(dest), exist_ok=True)
-        md = subprocess.run(
-            ["pandoc", "-f", "html", "-t", "gfm", "--wrap=none", "--sandbox"],
-            input=main_content(get(BASE + page)), capture_output=True, text=True).stdout
-        # site-relative -> absolute; relink() localises them again once we know
-        # which pages we actually hold
-        md = md.replace("](/", "](" + BASE)
-        with open(dest, "w", encoding="utf-8") as f:
-            f.write(f"<!-- source: {BASE}{page} -->\n\n{md}")
-        log[page] = smap.get(page, "")
-    crawl_log(log)
-    print(f"pages: {len(pages)} fetched")
+    """Fetch each page and record the lastmod it carried.
+
+    One unreachable page must not cost the other hundred and thirty-six, so a
+    failure is collected and the log is written whatever happens.
+    """
+    log, _ = crawl_log()
+    failed = []
+    try:
+        for page in pages:
+            rel = page.strip("/") or "index"
+            dest = os.path.join(DOCS, rel + ".md")
+            try:
+                html = get(BASE + page)
+            except Exception as e:
+                failed.append(f"{page} ({e})")
+                continue
+            os.makedirs(os.path.dirname(dest), exist_ok=True)
+            md = subprocess.run(
+                ["pandoc", "-f", "html", "-t", "gfm", "--wrap=none", "--sandbox"],
+                input=main_content(html), capture_output=True, text=True).stdout
+            # site-relative -> absolute; relink() localises them again once we
+            # know which pages we actually hold
+            md = md.replace("](/", "](" + BASE)
+            with open(dest, "w", encoding="utf-8") as f:
+                f.write(f"<!-- source: {BASE}{page} -->\n\n{md}")
+            log[page] = smap.get(page, "")
+    finally:
+        crawl_log(log)
+    print(f"pages: {len(pages) - len(failed)} fetched" +
+          (f", {len(failed)} FAILED: {', '.join(failed)}" if failed else ""))
+    return failed
 
 
 def fetch_recipe_json(fresh):
     """The example JSON each recipe page links to — the worked answers."""
     rec = os.path.join(DOCS, "api/cookbook/recipe")
-    got = 0
+    got, failed = 0, []
     for fn in sorted(os.listdir(rec)):
         if not (fn.endswith(".md") and fn[0].isdigit()):
             continue
         slug = fn[:-3]
         md = open(os.path.join(rec, fn), encoding="utf-8").read()
         for ref in sorted(set(re.findall(r'(?:\]\(|href=")([a-zA-Z0-9_./-]+\.json)', md))):
-            dest = os.path.join(rec, slug, ref)
+            # repoint() rewrites these links to sit beside the recipe folder, so
+            # a second run sees `<slug>/manifest.json`. The remote path is always
+            # relative to the recipe URL, with or without that prefix.
+            remote = ref[len(slug) + 1:] if ref.startswith(slug + "/") else ref
+            dest = os.path.join(rec, slug, remote)
             if os.path.exists(dest) and not fresh:
+                continue
+            url = f"{BASE}api/cookbook/recipe/{slug}/{remote}"
+            try:
+                blob = get(url, binary=True)
+                json.loads(blob)   # iiif.io answers a bad path with a 200 HTML
+            except Exception as e:  # 404 page, so parsing it is the only real check
+                failed.append(f"{remote} ({type(e).__name__})")
                 continue
             os.makedirs(os.path.dirname(dest), exist_ok=True)
             with open(dest, "wb") as f:
-                f.write(get(f"{BASE}api/cookbook/recipe/{slug}/{ref}", binary=True))
+                f.write(blob)
             got += 1
-    print(f"recipe json: {got} fetched")
+    print(f"recipe json: {got} fetched" +
+          (f", {len(failed)} FAILED: {', '.join(failed)}" if failed else ""))
+    return failed
 
 
 def fetch_contexts():
     d = os.path.join(DOCS, "context")
     os.makedirs(d, exist_ok=True)
     for c in CONTEXTS:
-        body = get(f"{BASE}api/{c}/context.json")
+        try:
+            body = get(f"{BASE}api/{c}/context.json")
+        except Exception as e:
+            print(f"context {c}: FAILED ({e})")
+            continue
         if len(body) > 10:  # Presentation 4's is still an empty stub
             open(os.path.join(d, c.replace("/", "-") + ".json"), "w", encoding="utf-8").write(body)
 
@@ -380,6 +488,71 @@ def write_sections():
     print(f"SECTIONS.tsv: {len(rows)} sections")
 
 
+CAPTION = re.compile(r"^\*\*(.+?)\*\*$")
+SEPARATOR = re.compile(r"^\|[-: |]+\|$")
+
+
+def write_requirements():
+    """REQUIREMENTS.tsv, read straight out of the spec's own appendix A.
+
+    `validate.py` checks against this rather than a hand-typed copy, so the
+    requirements cannot drift from the spec the corpus holds. The Behavior
+    Values table is transposed into `behavior:<value>` rows so it keys the
+    same way as the property tables.
+    """
+    spec = os.path.join(DOCS, "api/presentation/3.0.md")
+    lines = open(spec, encoding="utf-8").read().splitlines()
+    start = next(i for i, l in enumerate(lines) if l.startswith("### A. Summary of Property"))
+    end = next(i for i, l in enumerate(lines[start + 1:], start + 1) if l.startswith("### "))
+    block = lines[start:end]
+
+    def cells(line):
+        return [c.strip().replace("\\", "") for c in line.strip().strip("|").split("|")]
+
+    def is_rule(line):
+        return SEPARATOR.match(line.strip())
+
+    rows, caption, header = [], "", None
+    for i, line in enumerate(block):
+        cap = CAPTION.match(line.strip())
+        if cap:
+            caption = cap.group(1)
+            continue
+        if not line.startswith("|"):
+            continue
+        if is_rule(line):
+            continue
+        # a header is the row a separator follows — tables here are not always
+        # introduced by a caption, so the separator is what identifies them
+        if i + 1 < len(block) and is_rule(block[i + 1]):
+            header = cells(line)
+            continue
+        if header is None:
+            continue
+        row = cells(line)
+        label = row[0]
+        if label in LEVELS or not label:              # the icon legend, not data
+            continue
+        for col, value in zip(header[1:], row[1:]):
+            value = value.split("*")[0].strip()
+            if value not in LEVELS or not col:
+                continue
+            if caption == "Behavior Values":
+                rows.append((col.replace(" ", ""), "behavior:" + label, value))
+            else:
+                rows.append((label.replace(" ", ""), col, value))
+
+    assert rows, f"appendix A parsed to nothing in {spec}"
+    clash = {(t, p) for t, p, _ in rows if len({v for a, b, v in rows if (a, b) == (t, p)}) > 1}
+    assert not clash, f"appendix A gave conflicting levels for {sorted(clash)[:5]}"
+    with open(os.path.join(DOCS, "REQUIREMENTS.tsv"), "w", encoding="utf-8") as f:
+        f.write("type\tproperty\trequirement\n")
+        for r in sorted(set(rows)):
+            f.write("\t".join(r) + "\n")
+    req = sum(1 for r in set(rows) if r[2] == "REQUIRED")
+    print(f"REQUIREMENTS.tsv: {len(set(rows))} rules, {req} of them REQUIRED")
+
+
 ITEM = re.compile(r"^- (.+?) \(\[version")
 LINK = re.compile(r"\[version (\d)\]\((?:.*?)recipe/([0-9][\w-]*)\.md")
 
@@ -456,16 +629,23 @@ if __name__ == "__main__":
         sys.exit(check())
 
     smap = sitemap()
-    changed, missing, _ = survey(smap)
-    todo = targets(smap) if args.fresh else sorted(set(changed) | set(missing))
-    if todo:
-        fetch_pages(todo, smap)
-    else:
+    changed, missing, _, meta = survey(smap)
+    stale_rules = meta.get("rules") not in (None, rules_id())
+    if stale_rules and not args.fresh:
+        print(f"pages on disk were cleaned by rules {meta.get('rules')}, this refresh.py is "
+              f"{rules_id()} — re-fetching everything so the corpus is consistent")
+    todo = targets(smap) if (args.fresh or stale_rules) else sorted(set(changed) | set(missing))
+    failed = fetch_pages(todo, smap) if todo else []
+    if not todo:
         print("pages: already current")
-    fetch_recipe_json(args.fresh)
+    failed += fetch_recipe_json(args.fresh)
     fetch_contexts()
     clean()
     relink()
     repoint()
     write_sections()
     write_recipes()
+    write_requirements()
+    if failed:
+        print(f"\n{len(failed)} fetches failed; re-run to retry them")
+        sys.exit(1)

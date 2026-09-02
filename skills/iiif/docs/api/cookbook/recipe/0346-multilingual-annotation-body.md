@@ -30,9 +30,6 @@ Terms of use for this image from the e-Museum of the National Institutes for Cul
 
 [JSON-LD](0346-multilingual-annotation-body/manifest.json)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Multiple Choice of Images in a Single View (Canvas)](0033-choice.md "Multiple choice of images in a single view") to see the Choice structure in an image context

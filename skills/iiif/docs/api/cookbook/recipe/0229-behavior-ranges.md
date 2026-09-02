@@ -29,9 +29,6 @@ This example uses a video (roughly 55 minutes long) of a live opera performance.
 
 [JSON-LD](0229-behavior-ranges/manifest.json)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Simple book](0009-book-1.md "Simple Manifest - Book") gives an example of a basic paging interface

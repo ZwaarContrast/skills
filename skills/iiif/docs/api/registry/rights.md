@@ -40,36 +40,10 @@ The process for having a new entry added to this registry is [described here](ht
 
 This table summarizes the known rights statements and licenses available for use with the IIIF APIs.
 
-<table class="api-table">
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr>
-<th>Source</th>
-<th>URIs</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Creative Commons</td>
-<td><code class="language-plaintext highlighter-rouge">http://creativecommons.org/licenses/by-nc-sa/4.0/</code><br />
-<code class="language-plaintext highlighter-rouge">http://creativecommons.org/licenses/by/4.0/</code><br />
-For the full list of licenses, see [About CC Licenses](http://creativecommons.org/licenses/).</td>
-<td>For usage, see the [Presentation 3.0 Rights](../presentation/3.0.md#rights) section</td>
-</tr>
-<tr>
-<td>Rights Statements</td>
-<td><code class="language-plaintext highlighter-rouge">http://rightsstatements.org/vocab/InC/1.0/</code><br />
-<code class="language-plaintext highlighter-rouge">http://rightsstatements.org/vocab/InC-NC/1.0/</code><br />
-For the full list of statements, see [Rights Statements](http://rightsstatements.org/page/1.0/).</td>
-<td>For usage, see the [Presentation 3.0 Rights](../presentation/3.0.md#rights) section</td>
-</tr>
-</tbody>
-</table>
+| Source | URIs | Notes |
+|----|----|----|
+| Creative Commons | `http://creativecommons.org/licenses/by-nc-sa/4.0/` / `http://creativecommons.org/licenses/by/4.0/` / For the full list of licenses, see [About CC Licenses](http://creativecommons.org/licenses/). | For usage, see the [Presentation 3.0 Rights](../presentation/3.0.md#rights) section |
+| Rights Statements | `http://rightsstatements.org/vocab/InC/1.0/` / `http://rightsstatements.org/vocab/InC-NC/1.0/` / For the full list of statements, see [Rights Statements](http://rightsstatements.org/page/1.0/). | For usage, see the [Presentation 3.0 Rights](../presentation/3.0.md#rights) section |
 
 ## Appendices
 

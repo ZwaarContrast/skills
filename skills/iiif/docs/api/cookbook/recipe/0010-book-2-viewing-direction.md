@@ -28,9 +28,6 @@ This Manifest shows the playbill for “Akiba gongen kaisen-banashi,” “Futat
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0010-book-2-viewing-direction/)
 
-``` line-numbers
-```
-
 ## Example 2: `viewingDirection` `top-to-bottom`
 
 This Manifest represents a portion of the diary of William Lewis Sachtleben, an American long-distance cyclist who rode across Asia from Istanbul to Peking in 1891 to 1892 with Thomas Gaskell Allen Jr., his classmate from Washington University.
@@ -38,9 +35,6 @@ This Manifest represents a portion of the diary of William Lewis Sachtleben, an 
 [JSON-LD](0010-book-2-viewing-direction/manifest-ttb.json)
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0010-book-2-viewing-direction/)
-
-``` line-numbers
-```
 
 # Related recipes
 

@@ -83,10 +83,10 @@ Clients should expect to deal with image services that offer nothing at all to u
 
 A client might attempt to deal with the response like this:
 
-``` highlight
+``` javascript
 switch(myXhr.statusCode){
     case 200:
-        // process Content Resource for rendering          
+        // process Content Resource for rendering           
     case 302:
         // process Content Resource for rendering
         // notify user that image is degraded, encourage user to click "log in"     
@@ -151,7 +151,7 @@ A IIIF client application that loads a manifest would need to load each referenc
 
 If a server could convey this information in the manifest the client would have what it needs in the initial load. There’s nothing stopping a manifest publisher of the manifest including the full authentication services:
 
-``` highlight
+``` json
 {
   "@context": "http://iiif.io/api/presentation/2/context.json",
   "@id": "http://example.org/iiif/book1/annotation/p0001-image",
@@ -196,7 +196,7 @@ If a server could convey this information in the manifest the client would have 
 
 However, this would result in a very large manifest if there are a large number of images, and there is a lot of repetition of information. As a JSON-LD document, the login service does not have to be stated in full every time - if the above example provided the full service on the first canvas, then the next canvas could state the same information using the service URL alone:
 
-``` highlight
+``` json
 {
   "@context": "http://iiif.io/api/presentation/2/context.json",
   "@id": "http://example.org/iiif/book1/annotation/p0002-image",

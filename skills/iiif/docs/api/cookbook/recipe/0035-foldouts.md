@@ -45,9 +45,6 @@ The “non-paged” behavior on Canvases is not yet supported by viewers making 
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0035-foldouts/)
 
-``` line-numbers
-```
-
 ## Related recipes
 
 - [Multiple choice of images in a single view](0033-choice.md "Multiple choice of images in a single view")

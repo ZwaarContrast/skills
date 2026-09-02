@@ -29,9 +29,6 @@ In this example, an Ethiopic manuscript contains multiple works, one of which co
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0024-book-4-toc/)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Book (simplest)](0009-book-1.md "Simple Manifest - Book")

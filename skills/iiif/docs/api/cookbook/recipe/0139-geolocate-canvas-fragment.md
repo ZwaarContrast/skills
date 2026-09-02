@@ -26,9 +26,6 @@ The Manifest has one Canvas with one Image, and the Canvas has the same size dim
 
 [JSON-LD](0139-geolocate-canvas-fragment/manifest.json)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - \[Fragment Selectors\]\[0020\]

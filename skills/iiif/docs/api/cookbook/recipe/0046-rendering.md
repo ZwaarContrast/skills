@@ -32,9 +32,6 @@ To see the property in action in Mirador, toggle the sidebar by activating the t
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0046-rendering/)
 
-``` line-numbers
-```
-
 # Related recipes
 
 - [Audio Presentation with Accompanying Image](0014-accompanyingcanvas.md "Audio Presentation with Accompanying Image"), using `accompanyingCanvas` to present one IIIF resource simultaneously with another

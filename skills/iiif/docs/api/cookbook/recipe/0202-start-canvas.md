@@ -18,9 +18,6 @@ This example shows a Manifest with multiple Canvases for a book object. The `sta
 
 [JSON-LD](0202-start-canvas/manifest.json)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Begin playback at a specific point - Time-based media](0015-start.md "Begin playback at a specific point - Time-based media")

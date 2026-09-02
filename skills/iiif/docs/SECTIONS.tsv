@@ -163,10 +163,10 @@ api/extension/text-granularity.md	15	24	3	1.2 Motivating Use Cases
 api/extension/text-granularity.md	25	41	2	2. Text Granularity Levels and the `textGranularity` Property
 api/extension/text-granularity.md	42	100	2	3. Use of the `textGranularity` Property with Annotations
 api/extension/text-granularity.md	101	113	2	4. Linked Data Context
-api/extension/text-granularity.md	114	183	2	5. Implementation Note
-api/extension/text-granularity.md	184	195	2	Appendices
-api/extension/text-granularity.md	186	189	3	A. Acknowledgements
-api/extension/text-granularity.md	190	195	3	B. Change Log
+api/extension/text-granularity.md	114	126	2	5. Implementation Note
+api/extension/text-granularity.md	127	138	2	Appendices
+api/extension/text-granularity.md	129	132	3	A. Acknowledgements
+api/extension/text-granularity.md	133	138	3	B. Change Log
 api/extension/georef/vocab/georef-terms.md	3	35	1	New terms introduced in the Georeference Extension
 api/extension/georef/vocab/georef-terms.md	5	8	2	`georeferencing`
 api/extension/georef/vocab/georef-terms.md	9	12	2	`resourceCoords`
@@ -204,86 +204,86 @@ api/auth/1.0.md	477	521	3	2.4. Example Description Resource with Authentication 
 api/auth/1.0.md	522	541	2	3. Interaction with Access-Controlled Resources
 api/auth/1.0.md	528	533	3	3.1. All or Nothing Access
 api/auth/1.0.md	534	541	3	3.2. Tiered Access
-api/auth/1.0.md	542	582	2	4. Workflow from the Browser Client Perspective
-api/auth/1.0.md	583	608	2	Appendices
-api/auth/1.0.md	585	588	3	A. Implementation Notes
-api/auth/1.0.md	589	592	3	B. Versioning
-api/auth/1.0.md	593	598	3	C. Acknowledgments
-api/auth/1.0.md	599	608	3	D. Change Log
+api/auth/1.0.md	542	574	2	4. Workflow from the Browser Client Perspective
+api/auth/1.0.md	575	600	2	Appendices
+api/auth/1.0.md	577	580	3	A. Implementation Notes
+api/auth/1.0.md	581	584	3	B. Versioning
+api/auth/1.0.md	585	590	3	C. Acknowledgments
+api/auth/1.0.md	591	600	3	D. Change Log
 api/auth/2.0.md	3	28	2	Status of this Document
 api/auth/2.0.md	29	75	2	1. Introduction
 api/auth/2.0.md	56	71	3	1.1. Terminology
 api/auth/2.0.md	72	75	3	1.2. Common Specification Features
-api/auth/2.0.md	76	153	2	2. Authorization Flow Services
+api/auth/2.0.md	76	145	2	2. Authorization Flow Services
 api/auth/2.0.md	89	130	3	2.1. Declaring Services
-api/auth/2.0.md	131	153	3	2.2. Simple Authorization Flow
-api/auth/2.0.md	154	390	2	3. Access Service
-api/auth/2.0.md	164	226	3	3.1. Access Service Description
-api/auth/2.0.md	175	184	4	id
-api/auth/2.0.md	185	192	4	type
-api/auth/2.0.md	193	208	4	profile
-api/auth/2.0.md	209	226	4	service
-api/auth/2.0.md	227	242	3	3.2. Client Interaction with Access Services
-api/auth/2.0.md	243	390	3	3.3. Interaction Patterns
-api/auth/2.0.md	247	263	4	3.3.1 Active Interaction Pattern
-api/auth/2.0.md	264	271	4	label
-api/auth/2.0.md	272	279	4	confirmLabel
-api/auth/2.0.md	280	287	4	heading
-api/auth/2.0.md	288	295	4	note
-api/auth/2.0.md	296	327	4	Complete Service Description
-api/auth/2.0.md	318	327	5	3.3.1.1. Active Pattern Interaction
-api/auth/2.0.md	328	358	4	3.3.2. Kiosk Interaction Pattern
-api/auth/2.0.md	359	390	4	3.3.3. External Interaction Pattern
-api/auth/2.0.md	391	631	2	4. Access Token Service
-api/auth/2.0.md	397	455	3	4.1. Access Token Service Description
-api/auth/2.0.md	408	411	4	id
-api/auth/2.0.md	412	415	4	type
-api/auth/2.0.md	416	419	4	errorHeading
-api/auth/2.0.md	420	423	4	errorNote
-api/auth/2.0.md	424	455	4	Example Access Token Service Description
-api/auth/2.0.md	456	500	3	4.2. Access Token Service Request
-api/auth/2.0.md	501	527	3	4.3. Access Token Service Response
-api/auth/2.0.md	528	580	3	4.4. Access Token Message Format
-api/auth/2.0.md	540	547	4	messageId
-api/auth/2.0.md	548	560	4	accessToken
-api/auth/2.0.md	561	568	4	expiresIn
-api/auth/2.0.md	569	580	4	Example Access Token Message Body
-api/auth/2.0.md	581	631	3	4.5. Access Token Error Format
-api/auth/2.0.md	594	606	4	profile
-api/auth/2.0.md	607	610	4	messageId
-api/auth/2.0.md	611	614	4	heading
-api/auth/2.0.md	615	618	4	note
-api/auth/2.0.md	619	631	4	Example Access Token Error Response
-api/auth/2.0.md	632	774	2	5. Probe Service
-api/auth/2.0.md	636	665	3	5.1. Probe Service Description
-api/auth/2.0.md	646	649	4	id
-api/auth/2.0.md	650	653	4	type
-api/auth/2.0.md	654	657	4	errorHeading
-api/auth/2.0.md	658	661	4	errorNote
-api/auth/2.0.md	662	665	4	service
-api/auth/2.0.md	666	673	3	5.1. Probe Service Request
-api/auth/2.0.md	674	774	3	5.2. Probe Service Response
-api/auth/2.0.md	688	691	4	type
-api/auth/2.0.md	692	703	4	status
-api/auth/2.0.md	704	732	4	substitute
-api/auth/2.0.md	733	756	4	location
-api/auth/2.0.md	757	770	4	heading
-api/auth/2.0.md	771	774	4	note
-api/auth/2.0.md	775	834	2	6. Logout Service
-api/auth/2.0.md	779	828	3	6.1. Logout Service Description
-api/auth/2.0.md	787	790	4	id
-api/auth/2.0.md	791	794	4	type
-api/auth/2.0.md	795	802	4	label
-api/auth/2.0.md	803	828	4	Example Logout Service Description
-api/auth/2.0.md	829	834	3	6.2. Logout Interaction
-api/auth/2.0.md	835	915	2	7. Workflow from the Browser Client Perspective
-api/auth/2.0.md	849	905	3	7.1. Authorization Flow Algorithm
-api/auth/2.0.md	906	915	3	7.1 Tiered Access
-api/auth/2.0.md	916	946	2	Appendices
-api/auth/2.0.md	918	927	3	A. User Interaction at the Access Service and Third Party Cookies
-api/auth/2.0.md	928	931	3	B. Versioning
-api/auth/2.0.md	932	935	3	C. Acknowledgments
-api/auth/2.0.md	936	946	3	D. Change Log
+api/auth/2.0.md	131	145	3	2.2. Simple Authorization Flow
+api/auth/2.0.md	146	382	2	3. Access Service
+api/auth/2.0.md	156	218	3	3.1. Access Service Description
+api/auth/2.0.md	167	176	4	id
+api/auth/2.0.md	177	184	4	type
+api/auth/2.0.md	185	200	4	profile
+api/auth/2.0.md	201	218	4	service
+api/auth/2.0.md	219	234	3	3.2. Client Interaction with Access Services
+api/auth/2.0.md	235	382	3	3.3. Interaction Patterns
+api/auth/2.0.md	239	255	4	3.3.1 Active Interaction Pattern
+api/auth/2.0.md	256	263	4	label
+api/auth/2.0.md	264	271	4	confirmLabel
+api/auth/2.0.md	272	279	4	heading
+api/auth/2.0.md	280	287	4	note
+api/auth/2.0.md	288	319	4	Complete Service Description
+api/auth/2.0.md	310	319	5	3.3.1.1. Active Pattern Interaction
+api/auth/2.0.md	320	350	4	3.3.2. Kiosk Interaction Pattern
+api/auth/2.0.md	351	382	4	3.3.3. External Interaction Pattern
+api/auth/2.0.md	383	623	2	4. Access Token Service
+api/auth/2.0.md	389	447	3	4.1. Access Token Service Description
+api/auth/2.0.md	400	403	4	id
+api/auth/2.0.md	404	407	4	type
+api/auth/2.0.md	408	411	4	errorHeading
+api/auth/2.0.md	412	415	4	errorNote
+api/auth/2.0.md	416	447	4	Example Access Token Service Description
+api/auth/2.0.md	448	492	3	4.2. Access Token Service Request
+api/auth/2.0.md	493	519	3	4.3. Access Token Service Response
+api/auth/2.0.md	520	572	3	4.4. Access Token Message Format
+api/auth/2.0.md	532	539	4	messageId
+api/auth/2.0.md	540	552	4	accessToken
+api/auth/2.0.md	553	560	4	expiresIn
+api/auth/2.0.md	561	572	4	Example Access Token Message Body
+api/auth/2.0.md	573	623	3	4.5. Access Token Error Format
+api/auth/2.0.md	586	598	4	profile
+api/auth/2.0.md	599	602	4	messageId
+api/auth/2.0.md	603	606	4	heading
+api/auth/2.0.md	607	610	4	note
+api/auth/2.0.md	611	623	4	Example Access Token Error Response
+api/auth/2.0.md	624	766	2	5. Probe Service
+api/auth/2.0.md	628	657	3	5.1. Probe Service Description
+api/auth/2.0.md	638	641	4	id
+api/auth/2.0.md	642	645	4	type
+api/auth/2.0.md	646	649	4	errorHeading
+api/auth/2.0.md	650	653	4	errorNote
+api/auth/2.0.md	654	657	4	service
+api/auth/2.0.md	658	665	3	5.1. Probe Service Request
+api/auth/2.0.md	666	766	3	5.2. Probe Service Response
+api/auth/2.0.md	680	683	4	type
+api/auth/2.0.md	684	695	4	status
+api/auth/2.0.md	696	724	4	substitute
+api/auth/2.0.md	725	748	4	location
+api/auth/2.0.md	749	762	4	heading
+api/auth/2.0.md	763	766	4	note
+api/auth/2.0.md	767	826	2	6. Logout Service
+api/auth/2.0.md	771	820	3	6.1. Logout Service Description
+api/auth/2.0.md	779	782	4	id
+api/auth/2.0.md	783	786	4	type
+api/auth/2.0.md	787	794	4	label
+api/auth/2.0.md	795	820	4	Example Logout Service Description
+api/auth/2.0.md	821	826	3	6.2. Logout Interaction
+api/auth/2.0.md	827	899	2	7. Workflow from the Browser Client Perspective
+api/auth/2.0.md	833	889	3	7.1. Authorization Flow Algorithm
+api/auth/2.0.md	890	899	3	7.1 Tiered Access
+api/auth/2.0.md	900	930	2	Appendices
+api/auth/2.0.md	902	911	3	A. User Interaction at the Access Service and Third Party Cookies
+api/auth/2.0.md	912	915	3	B. Versioning
+api/auth/2.0.md	916	919	3	C. Acknowledgments
+api/auth/2.0.md	920	930	3	D. Change Log
 api/auth/1.0/implementation.md	3	6	2	Status of this Document
 api/auth/1.0/implementation.md	7	37	2	1. Introduction
 api/auth/1.0/implementation.md	13	37	3	1.1 Summary of Authentication Flow
@@ -384,166 +384,166 @@ api/cookbook/recipe.md	61	69	1	Fixtures
 api/cookbook/recipe/0000_template.md	3	6	2	Use Case
 api/cookbook/recipe/0000_template.md	7	10	2	Implementation Notes
 api/cookbook/recipe/0000_template.md	11	16	2	Restrictions
-api/cookbook/recipe/0000_template.md	17	27	2	Example
-api/cookbook/recipe/0000_template.md	28	30	2	Related Recipes
+api/cookbook/recipe/0000_template.md	17	24	2	Example
+api/cookbook/recipe/0000_template.md	25	27	2	Related Recipes
 api/cookbook/recipe/0001-mvm-image.md	3	6	2	Use Case
 api/cookbook/recipe/0001-mvm-image.md	7	14	2	Implementation Notes
 api/cookbook/recipe/0001-mvm-image.md	15	18	2	Restrictions
-api/cookbook/recipe/0001-mvm-image.md	19	27	2	Example
-api/cookbook/recipe/0001-mvm-image.md	28	57	1	Related Recipes
-api/cookbook/recipe/0001-mvm-image.md	35	38	2	Use Case
-api/cookbook/recipe/0001-mvm-image.md	39	46	2	Implementation Notes
-api/cookbook/recipe/0001-mvm-image.md	47	50	2	Restrictions
-api/cookbook/recipe/0001-mvm-image.md	51	57	2	Example
-api/cookbook/recipe/0001-mvm-image.md	58	71	1	Related Recipes
-api/cookbook/recipe/0001-mvm-image.md	67	71	2	Manifest Comparison
+api/cookbook/recipe/0001-mvm-image.md	19	24	2	Example
+api/cookbook/recipe/0001-mvm-image.md	25	51	1	Related Recipes
+api/cookbook/recipe/0001-mvm-image.md	32	35	2	Use Case
+api/cookbook/recipe/0001-mvm-image.md	36	43	2	Implementation Notes
+api/cookbook/recipe/0001-mvm-image.md	44	47	2	Restrictions
+api/cookbook/recipe/0001-mvm-image.md	48	51	2	Example
+api/cookbook/recipe/0001-mvm-image.md	52	65	1	Related Recipes
+api/cookbook/recipe/0001-mvm-image.md	61	65	2	Manifest Comparison
 api/cookbook/recipe/0002-mvm-audio.md	3	6	2	Use Case
 api/cookbook/recipe/0002-mvm-audio.md	7	10	2	Implementation Notes
-api/cookbook/recipe/0002-mvm-audio.md	11	21	2	Example
-api/cookbook/recipe/0002-mvm-audio.md	22	26	2	Related Recipes
-api/cookbook/recipe/0002-mvm-audio.md	27	30	2	Use Case
-api/cookbook/recipe/0002-mvm-audio.md	31	40	2	Implementation Notes
-api/cookbook/recipe/0002-mvm-audio.md	41	49	2	Example
-api/cookbook/recipe/0002-mvm-audio.md	50	55	2	Related Recipes
-api/cookbook/recipe/0002-mvm-audio.md	56	60	2	Manifest Comparison
+api/cookbook/recipe/0002-mvm-audio.md	11	18	2	Example
+api/cookbook/recipe/0002-mvm-audio.md	19	23	2	Related Recipes
+api/cookbook/recipe/0002-mvm-audio.md	24	27	2	Use Case
+api/cookbook/recipe/0002-mvm-audio.md	28	37	2	Implementation Notes
+api/cookbook/recipe/0002-mvm-audio.md	38	43	2	Example
+api/cookbook/recipe/0002-mvm-audio.md	44	49	2	Related Recipes
+api/cookbook/recipe/0002-mvm-audio.md	50	54	2	Manifest Comparison
 api/cookbook/recipe/0003-mvm-video.md	3	6	2	Use Case
 api/cookbook/recipe/0003-mvm-video.md	7	10	2	Implementation Notes
-api/cookbook/recipe/0003-mvm-video.md	11	21	2	Example
-api/cookbook/recipe/0003-mvm-video.md	22	48	1	Related Recipes
-api/cookbook/recipe/0003-mvm-video.md	26	29	2	Use Case
-api/cookbook/recipe/0003-mvm-video.md	30	39	2	Implementation Notes
-api/cookbook/recipe/0003-mvm-video.md	40	48	2	Example
-api/cookbook/recipe/0003-mvm-video.md	49	59	1	Related Recipes
-api/cookbook/recipe/0003-mvm-video.md	55	59	2	Manifest Comparison
+api/cookbook/recipe/0003-mvm-video.md	11	18	2	Example
+api/cookbook/recipe/0003-mvm-video.md	19	42	1	Related Recipes
+api/cookbook/recipe/0003-mvm-video.md	23	26	2	Use Case
+api/cookbook/recipe/0003-mvm-video.md	27	36	2	Implementation Notes
+api/cookbook/recipe/0003-mvm-video.md	37	42	2	Example
+api/cookbook/recipe/0003-mvm-video.md	43	53	1	Related Recipes
+api/cookbook/recipe/0003-mvm-video.md	49	53	2	Manifest Comparison
 api/cookbook/recipe/0004-canvas-size.md	3	6	2	Use Case
 api/cookbook/recipe/0004-canvas-size.md	7	20	2	Implementation notes
 api/cookbook/recipe/0004-canvas-size.md	21	24	2	Restrictions
-api/cookbook/recipe/0004-canvas-size.md	25	35	2	Example
-api/cookbook/recipe/0004-canvas-size.md	36	39	1	Related recipes
+api/cookbook/recipe/0004-canvas-size.md	25	32	2	Example
+api/cookbook/recipe/0004-canvas-size.md	33	36	1	Related recipes
 api/cookbook/recipe/0005-image-service.md	3	6	2	Use Case
 api/cookbook/recipe/0005-image-service.md	7	16	2	Implementation Notes
 api/cookbook/recipe/0005-image-service.md	17	20	2	Restrictions
-api/cookbook/recipe/0005-image-service.md	21	29	2	Example
-api/cookbook/recipe/0005-image-service.md	30	35	1	Related recipes
+api/cookbook/recipe/0005-image-service.md	21	26	2	Example
+api/cookbook/recipe/0005-image-service.md	27	32	1	Related recipes
 api/cookbook/recipe/0006-text-language.md	3	6	2	Use case
 api/cookbook/recipe/0006-text-language.md	7	14	2	Implementation notes
 api/cookbook/recipe/0006-text-language.md	15	20	2	Restrictions
-api/cookbook/recipe/0006-text-language.md	21	43	2	Example
-api/cookbook/recipe/0006-text-language.md	44	47	1	Related recipes
+api/cookbook/recipe/0006-text-language.md	21	40	2	Example
+api/cookbook/recipe/0006-text-language.md	41	44	1	Related recipes
 api/cookbook/recipe/0007-string-formats.md	3	6	2	Use Case
 api/cookbook/recipe/0007-string-formats.md	7	12	2	Implementation notes
 api/cookbook/recipe/0007-string-formats.md	13	16	2	Restrictions
-api/cookbook/recipe/0007-string-formats.md	17	25	2	Example
-api/cookbook/recipe/0007-string-formats.md	26	28	1	Related recipes
+api/cookbook/recipe/0007-string-formats.md	17	22	2	Example
+api/cookbook/recipe/0007-string-formats.md	23	25	1	Related recipes
 api/cookbook/recipe/0008-rights.md	3	15	2	Use Case
 api/cookbook/recipe/0008-rights.md	16	21	2	Implementation notes
 api/cookbook/recipe/0008-rights.md	22	25	2	Restrictions
-api/cookbook/recipe/0008-rights.md	26	34	2	Example
-api/cookbook/recipe/0008-rights.md	35	38	1	Related recipes
+api/cookbook/recipe/0008-rights.md	26	31	2	Example
+api/cookbook/recipe/0008-rights.md	32	35	1	Related recipes
 api/cookbook/recipe/0009-book-1.md	3	6	2	Use Case
 api/cookbook/recipe/0009-book-1.md	7	18	2	Implementation notes
-api/cookbook/recipe/0009-book-1.md	19	27	2	Example
-api/cookbook/recipe/0009-book-1.md	28	34	1	Related recipes
+api/cookbook/recipe/0009-book-1.md	19	24	2	Example
+api/cookbook/recipe/0009-book-1.md	25	31	1	Related recipes
 api/cookbook/recipe/0010-book-2-viewing-direction.md	3	14	2	Use Case
 api/cookbook/recipe/0010-book-2-viewing-direction.md	15	18	2	Implementation notes
 api/cookbook/recipe/0010-book-2-viewing-direction.md	19	22	2	Restrictions
-api/cookbook/recipe/0010-book-2-viewing-direction.md	23	33	2	Example 1: `viewingDirection` `right-to-left`
-api/cookbook/recipe/0010-book-2-viewing-direction.md	34	44	2	Example 2: `viewingDirection` `top-to-bottom`
-api/cookbook/recipe/0010-book-2-viewing-direction.md	45	48	1	Related recipes
+api/cookbook/recipe/0010-book-2-viewing-direction.md	23	30	2	Example 1: `viewingDirection` `right-to-left`
+api/cookbook/recipe/0010-book-2-viewing-direction.md	31	38	2	Example 2: `viewingDirection` `top-to-bottom`
+api/cookbook/recipe/0010-book-2-viewing-direction.md	39	42	1	Related recipes
 api/cookbook/recipe/0011-book-3-behavior.md	3	14	2	Use cases
 api/cookbook/recipe/0011-book-3-behavior.md	15	20	2	Implementation notes
 api/cookbook/recipe/0011-book-3-behavior.md	21	24	2	Restrictions
-api/cookbook/recipe/0011-book-3-behavior.md	25	48	2	Examples
-api/cookbook/recipe/0011-book-3-behavior.md	27	37	3	Use case 1: Accordion book (`continuous`)
-api/cookbook/recipe/0011-book-3-behavior.md	38	48	3	Use case 2: Book imaged as 2-page spreads (`individuals`)
-api/cookbook/recipe/0011-book-3-behavior.md	49	52	1	Related recipes
+api/cookbook/recipe/0011-book-3-behavior.md	25	42	2	Examples
+api/cookbook/recipe/0011-book-3-behavior.md	27	34	3	Use case 1: Accordion book (`continuous`)
+api/cookbook/recipe/0011-book-3-behavior.md	35	42	3	Use case 2: Book imaged as 2-page spreads (`individuals`)
+api/cookbook/recipe/0011-book-3-behavior.md	43	46	1	Related recipes
 api/cookbook/recipe/0013-placeholderCanvas.md	3	6	2	Use Case
 api/cookbook/recipe/0013-placeholderCanvas.md	7	14	2	Implementation notes
 api/cookbook/recipe/0013-placeholderCanvas.md	15	18	2	Restrictions
-api/cookbook/recipe/0013-placeholderCanvas.md	19	29	2	Example
-api/cookbook/recipe/0013-placeholderCanvas.md	30	33	1	Related recipes
+api/cookbook/recipe/0013-placeholderCanvas.md	19	26	2	Example
+api/cookbook/recipe/0013-placeholderCanvas.md	27	30	1	Related recipes
 api/cookbook/recipe/0014-accompanyingcanvas.md	3	6	2	Use Case
 api/cookbook/recipe/0014-accompanyingcanvas.md	7	14	2	Implementation notes
 api/cookbook/recipe/0014-accompanyingcanvas.md	15	18	2	Restrictions
-api/cookbook/recipe/0014-accompanyingcanvas.md	19	29	2	Example
-api/cookbook/recipe/0014-accompanyingcanvas.md	30	33	1	Related recipes
+api/cookbook/recipe/0014-accompanyingcanvas.md	19	26	2	Example
+api/cookbook/recipe/0014-accompanyingcanvas.md	27	30	1	Related recipes
 api/cookbook/recipe/0015-start.md	3	6	2	Use Case
 api/cookbook/recipe/0015-start.md	7	22	2	Implementation notes
 api/cookbook/recipe/0015-start.md	17	22	3	About selector classes:
-api/cookbook/recipe/0015-start.md	23	33	2	Example
-api/cookbook/recipe/0015-start.md	34	38	1	Related recipes
+api/cookbook/recipe/0015-start.md	23	30	2	Example
+api/cookbook/recipe/0015-start.md	31	35	1	Related recipes
 api/cookbook/recipe/0017-transcription-av.md	3	6	2	Use Case
 api/cookbook/recipe/0017-transcription-av.md	7	14	2	Implementation notes
 api/cookbook/recipe/0017-transcription-av.md	15	18	2	Restrictions
-api/cookbook/recipe/0017-transcription-av.md	19	31	2	Example
-api/cookbook/recipe/0017-transcription-av.md	32	38	1	Related recipes
+api/cookbook/recipe/0017-transcription-av.md	19	28	2	Example
+api/cookbook/recipe/0017-transcription-av.md	29	35	1	Related recipes
 api/cookbook/recipe/0019-html-in-annotations.md	3	6	2	Use Case
 api/cookbook/recipe/0019-html-in-annotations.md	7	14	2	Implementation Notes
 api/cookbook/recipe/0019-html-in-annotations.md	15	28	2	Restrictions
-api/cookbook/recipe/0019-html-in-annotations.md	29	39	2	Example
-api/cookbook/recipe/0019-html-in-annotations.md	40	43	2	Related Recipes
+api/cookbook/recipe/0019-html-in-annotations.md	29	36	2	Example
+api/cookbook/recipe/0019-html-in-annotations.md	37	40	2	Related Recipes
 api/cookbook/recipe/0021-tagging.md	3	6	2	Use Case
 api/cookbook/recipe/0021-tagging.md	7	12	2	Implementation Notes
 api/cookbook/recipe/0021-tagging.md	13	16	2	Restrictions
-api/cookbook/recipe/0021-tagging.md	17	29	2	Example
-api/cookbook/recipe/0021-tagging.md	30	32	2	Related Recipes
+api/cookbook/recipe/0021-tagging.md	17	26	2	Example
+api/cookbook/recipe/0021-tagging.md	27	29	2	Related Recipes
 api/cookbook/recipe/0022-linking-with-a-hotspot.md	3	6	2	Use Case
-api/cookbook/recipe/0022-linking-with-a-hotspot.md	7	31	2	Implementation Notes
-api/cookbook/recipe/0022-linking-with-a-hotspot.md	32	35	2	Restrictions
-api/cookbook/recipe/0022-linking-with-a-hotspot.md	36	44	2	Example
-api/cookbook/recipe/0022-linking-with-a-hotspot.md	45	47	2	Related Recipes
+api/cookbook/recipe/0022-linking-with-a-hotspot.md	7	29	2	Implementation Notes
+api/cookbook/recipe/0022-linking-with-a-hotspot.md	30	33	2	Restrictions
+api/cookbook/recipe/0022-linking-with-a-hotspot.md	34	39	2	Example
+api/cookbook/recipe/0022-linking-with-a-hotspot.md	40	42	2	Related Recipes
 api/cookbook/recipe/0024-book-4-toc.md	3	6	2	Use Case
 api/cookbook/recipe/0024-book-4-toc.md	7	14	2	Implementation Notes
 api/cookbook/recipe/0024-book-4-toc.md	15	18	2	Restrictions
-api/cookbook/recipe/0024-book-4-toc.md	19	34	2	Example
-api/cookbook/recipe/0024-book-4-toc.md	35	39	2	Related Recipes
+api/cookbook/recipe/0024-book-4-toc.md	19	31	2	Example
+api/cookbook/recipe/0024-book-4-toc.md	32	36	2	Related Recipes
 api/cookbook/recipe/0025-newspaper-article-index.md	3	6	2	Use Case
 api/cookbook/recipe/0025-newspaper-article-index.md	7	18	2	Implementation Notes
 api/cookbook/recipe/0025-newspaper-article-index.md	19	22	2	Restrictions
-api/cookbook/recipe/0025-newspaper-article-index.md	23	33	2	Example
-api/cookbook/recipe/0025-newspaper-article-index.md	34	38	2	Related Recipes
+api/cookbook/recipe/0025-newspaper-article-index.md	23	30	2	Example
+api/cookbook/recipe/0025-newspaper-article-index.md	31	35	2	Related Recipes
 api/cookbook/recipe/0026-toc-opera.md	3	8	2	Use Case
 api/cookbook/recipe/0026-toc-opera.md	9	16	2	Implementation Notes
 api/cookbook/recipe/0026-toc-opera.md	17	20	2	Restrictions
-api/cookbook/recipe/0026-toc-opera.md	21	31	2	Example
-api/cookbook/recipe/0026-toc-opera.md	32	38	2	Related Recipes
+api/cookbook/recipe/0026-toc-opera.md	21	28	2	Example
+api/cookbook/recipe/0026-toc-opera.md	29	35	2	Related Recipes
 api/cookbook/recipe/0027-alternative-page-order.md	3	6	2	Use Case
 api/cookbook/recipe/0027-alternative-page-order.md	7	14	2	Implementation Notes
-api/cookbook/recipe/0027-alternative-page-order.md	15	27	2	Example
-api/cookbook/recipe/0027-alternative-page-order.md	28	31	2	Related Recipes
+api/cookbook/recipe/0027-alternative-page-order.md	15	24	2	Example
+api/cookbook/recipe/0027-alternative-page-order.md	25	28	2	Related Recipes
 api/cookbook/recipe/0029-metadata-anywhere.md	3	6	2	Use Case
 api/cookbook/recipe/0029-metadata-anywhere.md	7	10	2	Implementation notes
 api/cookbook/recipe/0029-metadata-anywhere.md	11	16	2	Restrictions
-api/cookbook/recipe/0029-metadata-anywhere.md	17	31	2	Example
-api/cookbook/recipe/0029-metadata-anywhere.md	32	37	1	Related recipes
+api/cookbook/recipe/0029-metadata-anywhere.md	17	28	2	Example
+api/cookbook/recipe/0029-metadata-anywhere.md	29	34	1	Related recipes
 api/cookbook/recipe/0030-multi-volume.md	3	6	2	Use Case
 api/cookbook/recipe/0030-multi-volume.md	7	14	2	Implementation notes
 api/cookbook/recipe/0030-multi-volume.md	15	18	2	Restrictions
-api/cookbook/recipe/0030-multi-volume.md	19	51	2	Example
-api/cookbook/recipe/0030-multi-volume.md	52	56	1	Related recipes
+api/cookbook/recipe/0030-multi-volume.md	19	42	2	Example
+api/cookbook/recipe/0030-multi-volume.md	43	47	1	Related recipes
 api/cookbook/recipe/0031-bound-multivolume.md	3	12	2	Use Case
 api/cookbook/recipe/0031-bound-multivolume.md	13	20	2	Implementation Notes
-api/cookbook/recipe/0031-bound-multivolume.md	21	61	2	Example
-api/cookbook/recipe/0031-bound-multivolume.md	62	66	2	Related Recipes
+api/cookbook/recipe/0031-bound-multivolume.md	21	56	2	Example
+api/cookbook/recipe/0031-bound-multivolume.md	57	61	2	Related Recipes
 api/cookbook/recipe/0032-collection.md	3	6	2	Use Case
 api/cookbook/recipe/0032-collection.md	7	22	2	Implementation notes
 api/cookbook/recipe/0032-collection.md	23	26	2	Restrictions
-api/cookbook/recipe/0032-collection.md	27	58	2	Example
-api/cookbook/recipe/0032-collection.md	59	63	1	Related recipes
+api/cookbook/recipe/0032-collection.md	27	49	2	Example
+api/cookbook/recipe/0032-collection.md	50	54	1	Related recipes
 api/cookbook/recipe/0033-choice.md	3	26	2	Use Cases
 api/cookbook/recipe/0033-choice.md	27	40	2	Implementation notes
 api/cookbook/recipe/0033-choice.md	41	48	2	Restrictions
-api/cookbook/recipe/0033-choice.md	49	63	2	Example
-api/cookbook/recipe/0033-choice.md	64	67	2	Related recipes
+api/cookbook/recipe/0033-choice.md	49	60	2	Example
+api/cookbook/recipe/0033-choice.md	61	64	2	Related recipes
 api/cookbook/recipe/0035-foldouts.md	3	14	2	Use Case
 api/cookbook/recipe/0035-foldouts.md	15	20	2	Implementation notes
-api/cookbook/recipe/0035-foldouts.md	21	50	2	Example
-api/cookbook/recipe/0035-foldouts.md	51	54	2	Related recipes
+api/cookbook/recipe/0035-foldouts.md	21	47	2	Example
+api/cookbook/recipe/0035-foldouts.md	48	51	2	Related recipes
 api/cookbook/recipe/0036-composition-from-multiple-images.md	3	28	2	Use Case
 api/cookbook/recipe/0036-composition-from-multiple-images.md	29	36	2	Multiple painted resources vs Choice
 api/cookbook/recipe/0036-composition-from-multiple-images.md	37	42	2	Implementation notes
-api/cookbook/recipe/0036-composition-from-multiple-images.md	43	55	2	Example
-api/cookbook/recipe/0036-composition-from-multiple-images.md	56	60	1	Related recipes
+api/cookbook/recipe/0036-composition-from-multiple-images.md	43	52	2	Example
+api/cookbook/recipe/0036-composition-from-multiple-images.md	53	57	1	Related recipes
 api/cookbook/recipe/0040-image-rotation-service.md	3	6	2	Use Case
 api/cookbook/recipe/0040-image-rotation-service.md	7	41	2	Implementation Notes
 api/cookbook/recipe/0040-image-rotation-service.md	11	20	3	Image Service
@@ -551,43 +551,43 @@ api/cookbook/recipe/0040-image-rotation-service.md	21	37	3	Cascading Style Sheet
 api/cookbook/recipe/0040-image-rotation-service.md	38	41	3	Rotation and Annotations
 api/cookbook/recipe/0040-image-rotation-service.md	42	49	2	Restrictions
 api/cookbook/recipe/0040-image-rotation-service.md	50	61	2	Example
-api/cookbook/recipe/0040-image-rotation-service.md	62	70	2	Example 1: Using an Image Service
-api/cookbook/recipe/0040-image-rotation-service.md	71	79	2	Example 2: CSS
-api/cookbook/recipe/0040-image-rotation-service.md	80	82	2	Related Recipes
+api/cookbook/recipe/0040-image-rotation-service.md	62	67	2	Example 1: Using an Image Service
+api/cookbook/recipe/0040-image-rotation-service.md	68	73	2	Example 2: CSS
+api/cookbook/recipe/0040-image-rotation-service.md	74	76	2	Related Recipes
 api/cookbook/recipe/0045-css.md	3	6	2	Use Case
 api/cookbook/recipe/0045-css.md	7	16	2	Implementation Notes
 api/cookbook/recipe/0045-css.md	17	26	2	Restrictions
-api/cookbook/recipe/0045-css.md	27	40	2	Example
-api/cookbook/recipe/0045-css.md	36	40	3	Stylesheet
-api/cookbook/recipe/0045-css.md	41	45	2	Related Recipes
+api/cookbook/recipe/0045-css.md	27	34	2	Example
+api/cookbook/recipe/0045-css.md	33	34	3	Stylesheet
+api/cookbook/recipe/0045-css.md	35	39	2	Related Recipes
 api/cookbook/recipe/0046-rendering.md	3	6	2	Use Case
 api/cookbook/recipe/0046-rendering.md	7	20	2	Implementation notes
 api/cookbook/recipe/0046-rendering.md	21	24	2	Restrictions
-api/cookbook/recipe/0046-rendering.md	25	37	2	Example
-api/cookbook/recipe/0046-rendering.md	38	45	1	Related recipes
+api/cookbook/recipe/0046-rendering.md	25	34	2	Example
+api/cookbook/recipe/0046-rendering.md	35	42	1	Related recipes
 api/cookbook/recipe/0047-homepage.md	3	6	2	Use Case
 api/cookbook/recipe/0047-homepage.md	7	16	2	Implementation Notes
 api/cookbook/recipe/0047-homepage.md	17	20	2	Restrictions
-api/cookbook/recipe/0047-homepage.md	21	33	2	Example
-api/cookbook/recipe/0047-homepage.md	34	38	2	Related Recipes
+api/cookbook/recipe/0047-homepage.md	21	30	2	Example
+api/cookbook/recipe/0047-homepage.md	31	35	2	Related Recipes
 api/cookbook/recipe/0053-seeAlso.md	3	6	2	Use Case
 api/cookbook/recipe/0053-seeAlso.md	7	20	2	Implementation Notes
 api/cookbook/recipe/0053-seeAlso.md	21	24	2	Restrictions
-api/cookbook/recipe/0053-seeAlso.md	25	41	2	Example
-api/cookbook/recipe/0053-seeAlso.md	42	45	2	Related Recipes
+api/cookbook/recipe/0053-seeAlso.md	25	38	2	Example
+api/cookbook/recipe/0053-seeAlso.md	39	42	2	Related Recipes
 api/cookbook/recipe/0057-publishing-v2-and-v3.md	3	6	2	Use Case
 api/cookbook/recipe/0057-publishing-v2-and-v3.md	7	24	2	Implementation notes
 api/cookbook/recipe/0057-publishing-v2-and-v3.md	25	30	2	Restrictions
-api/cookbook/recipe/0057-publishing-v2-and-v3.md	31	75	2	Example
+api/cookbook/recipe/0057-publishing-v2-and-v3.md	31	69	2	Example
 api/cookbook/recipe/0064-opera-one-canvas.md	3	6	2	Use Case
 api/cookbook/recipe/0064-opera-one-canvas.md	7	14	2	Implementation Notes
-api/cookbook/recipe/0064-opera-one-canvas.md	15	23	2	Example
-api/cookbook/recipe/0064-opera-one-canvas.md	24	29	2	Related Recipes
+api/cookbook/recipe/0064-opera-one-canvas.md	15	20	2	Example
+api/cookbook/recipe/0064-opera-one-canvas.md	21	26	2	Related Recipes
 api/cookbook/recipe/0065-opera-multiple-canvases.md	3	6	2	Use Case
 api/cookbook/recipe/0065-opera-multiple-canvases.md	7	10	2	Implementation Notes
 api/cookbook/recipe/0065-opera-multiple-canvases.md	11	14	2	Restrictions
-api/cookbook/recipe/0065-opera-multiple-canvases.md	15	23	2	Example
-api/cookbook/recipe/0065-opera-multiple-canvases.md	24	29	2	Related Recipes
+api/cookbook/recipe/0065-opera-multiple-canvases.md	15	20	2	Example
+api/cookbook/recipe/0065-opera-multiple-canvases.md	21	26	2	Related Recipes
 api/cookbook/recipe/0068-newspaper.md	3	6	2	Use Case
 api/cookbook/recipe/0068-newspaper.md	7	52	2	Implementation notes
 api/cookbook/recipe/0068-newspaper.md	11	18	3	Navigate by Date
@@ -595,8 +595,8 @@ api/cookbook/recipe/0068-newspaper.md	19	34	3	Linking to OCR Text
 api/cookbook/recipe/0068-newspaper.md	21	30	4	As Annotations
 api/cookbook/recipe/0068-newspaper.md	31	34	4	Linking Directly to an ALTO File
 api/cookbook/recipe/0068-newspaper.md	35	52	3	Newspapers and IIIF Structures
-api/cookbook/recipe/0068-newspaper.md	53	92	2	Example
-api/cookbook/recipe/0068-newspaper.md	93	99	2	Related recipes
+api/cookbook/recipe/0068-newspaper.md	53	89	2	Example
+api/cookbook/recipe/0068-newspaper.md	90	96	2	Related recipes
 api/cookbook/recipe/0074-multiple-language-captions.md	3	6	2	Use Case
 api/cookbook/recipe/0074-multiple-language-captions.md	7	14	2	Implementation notes
 api/cookbook/recipe/0074-multiple-language-captions.md	15	20	2	Restrictions
@@ -604,186 +604,186 @@ api/cookbook/recipe/0074-multiple-language-captions.md	21	33	2	Example
 api/cookbook/recipe/0074-multiple-language-captions.md	34	40	1	Related recipes
 api/cookbook/recipe/0103-poetry-reading-annotations.md	3	14	2	Use Case
 api/cookbook/recipe/0103-poetry-reading-annotations.md	15	22	2	Implementation notes
-api/cookbook/recipe/0103-poetry-reading-annotations.md	23	31	2	Example
-api/cookbook/recipe/0103-poetry-reading-annotations.md	32	37	1	Related recipes
+api/cookbook/recipe/0103-poetry-reading-annotations.md	23	28	2	Example
+api/cookbook/recipe/0103-poetry-reading-annotations.md	29	34	1	Related recipes
 api/cookbook/recipe/0117-add-image-thumbnail.md	3	6	2	Use Case
 api/cookbook/recipe/0117-add-image-thumbnail.md	7	14	2	Implementation Notes
 api/cookbook/recipe/0117-add-image-thumbnail.md	15	18	2	Restrictions
-api/cookbook/recipe/0117-add-image-thumbnail.md	19	27	2	Example
-api/cookbook/recipe/0117-add-image-thumbnail.md	28	31	2	Related Recipes
+api/cookbook/recipe/0117-add-image-thumbnail.md	19	24	2	Example
+api/cookbook/recipe/0117-add-image-thumbnail.md	25	28	2	Related Recipes
 api/cookbook/recipe/0118-multivalue.md	3	6	2	Use Case
 api/cookbook/recipe/0118-multivalue.md	7	12	2	Implementation Notes
 api/cookbook/recipe/0118-multivalue.md	13	16	2	Restrictions
-api/cookbook/recipe/0118-multivalue.md	17	27	2	Example
-api/cookbook/recipe/0118-multivalue.md	28	32	2	Related Recipes
+api/cookbook/recipe/0118-multivalue.md	17	24	2	Example
+api/cookbook/recipe/0118-multivalue.md	25	29	2	Related Recipes
 api/cookbook/recipe/0135-annotating-point-in-canvas.md	3	6	2	Use Case
 api/cookbook/recipe/0135-annotating-point-in-canvas.md	7	14	2	Implementation notes
-api/cookbook/recipe/0135-annotating-point-in-canvas.md	15	23	2	Example
-api/cookbook/recipe/0135-annotating-point-in-canvas.md	24	27	1	Related recipes
+api/cookbook/recipe/0135-annotating-point-in-canvas.md	15	20	2	Example
+api/cookbook/recipe/0135-annotating-point-in-canvas.md	21	24	1	Related recipes
 api/cookbook/recipe/0139-geolocate-canvas-fragment.md	5	10	3	Use Case
 api/cookbook/recipe/0139-geolocate-canvas-fragment.md	11	18	3	Implementation Notes
 api/cookbook/recipe/0139-geolocate-canvas-fragment.md	19	22	3	Restrictions
-api/cookbook/recipe/0139-geolocate-canvas-fragment.md	23	31	3	Example
-api/cookbook/recipe/0139-geolocate-canvas-fragment.md	32	39	2	Related Recipes
-api/cookbook/recipe/0139-geolocate-canvas-fragment.md	37	39	4	Click Image to Close
+api/cookbook/recipe/0139-geolocate-canvas-fragment.md	23	28	3	Example
+api/cookbook/recipe/0139-geolocate-canvas-fragment.md	29	36	2	Related Recipes
+api/cookbook/recipe/0139-geolocate-canvas-fragment.md	34	36	4	Click Image to Close
 api/cookbook/recipe/0154-geo-extension.md	3	6	3	Use Case
 api/cookbook/recipe/0154-geo-extension.md	7	18	3	Implementation Notes
-api/cookbook/recipe/0154-geo-extension.md	19	27	3	Example
-api/cookbook/recipe/0154-geo-extension.md	28	32	2	Related Recipes
+api/cookbook/recipe/0154-geo-extension.md	19	24	3	Example
+api/cookbook/recipe/0154-geo-extension.md	25	29	2	Related Recipes
 api/cookbook/recipe/0202-start-canvas.md	3	6	2	Use Case
 api/cookbook/recipe/0202-start-canvas.md	7	14	2	Implementation Notes
-api/cookbook/recipe/0202-start-canvas.md	15	23	2	Example
-api/cookbook/recipe/0202-start-canvas.md	24	27	2	Related Recipes
+api/cookbook/recipe/0202-start-canvas.md	15	20	2	Example
+api/cookbook/recipe/0202-start-canvas.md	21	24	2	Related Recipes
 api/cookbook/recipe/0219-using-caption-file.md	3	6	2	Use Case
 api/cookbook/recipe/0219-using-caption-file.md	7	16	2	Implementation notes
 api/cookbook/recipe/0219-using-caption-file.md	17	22	2	Restrictions
-api/cookbook/recipe/0219-using-caption-file.md	23	33	2	Example
-api/cookbook/recipe/0219-using-caption-file.md	34	40	1	Related recipes
+api/cookbook/recipe/0219-using-caption-file.md	23	30	2	Example
+api/cookbook/recipe/0219-using-caption-file.md	31	37	1	Related recipes
 api/cookbook/recipe/0229-behavior-ranges.md	3	6	2	Use Case
 api/cookbook/recipe/0229-behavior-ranges.md	7	21	2	Implementation Notes
 api/cookbook/recipe/0229-behavior-ranges.md	22	25	2	Restrictions
-api/cookbook/recipe/0229-behavior-ranges.md	26	34	2	Example
-api/cookbook/recipe/0229-behavior-ranges.md	35	45	2	Related Recipes
+api/cookbook/recipe/0229-behavior-ranges.md	26	31	2	Example
+api/cookbook/recipe/0229-behavior-ranges.md	32	42	2	Related Recipes
 api/cookbook/recipe/0230-navdate.md	3	6	2	Use Case
 api/cookbook/recipe/0230-navdate.md	7	16	2	Implementation Notes
 api/cookbook/recipe/0230-navdate.md	17	20	2	Restrictions
-api/cookbook/recipe/0230-navdate.md	21	51	2	Example
-api/cookbook/recipe/0230-navdate.md	25	33	3	Collection
-api/cookbook/recipe/0230-navdate.md	34	42	3	1986 Map
-api/cookbook/recipe/0230-navdate.md	43	51	3	1987 Map
-api/cookbook/recipe/0230-navdate.md	52	58	2	Related Recipes
+api/cookbook/recipe/0230-navdate.md	21	42	2	Example
+api/cookbook/recipe/0230-navdate.md	25	30	3	Collection
+api/cookbook/recipe/0230-navdate.md	31	36	3	1986 Map
+api/cookbook/recipe/0230-navdate.md	37	42	3	1987 Map
+api/cookbook/recipe/0230-navdate.md	43	49	2	Related Recipes
 api/cookbook/recipe/0231-transcript-meta-recipe.md	3	6	2	Use Case
 api/cookbook/recipe/0231-transcript-meta-recipe.md	7	36	2	Transcripts
 api/cookbook/recipe/0231-transcript-meta-recipe.md	37	52	2	Captions and Subtitles
 api/cookbook/recipe/0231-transcript-meta-recipe.md	53	62	2	Related Recipes
 api/cookbook/recipe/0232-image-thumbnail-canvas.md	3	18	2	Use Case
-api/cookbook/recipe/0232-image-thumbnail-canvas.md	19	87	2	Implementation Notes
-api/cookbook/recipe/0232-image-thumbnail-canvas.md	21	40	3	Minimal thumbnail requirements
-api/cookbook/recipe/0232-image-thumbnail-canvas.md	41	46	3	Thumbnails with a IIIF image service
-api/cookbook/recipe/0232-image-thumbnail-canvas.md	47	87	3	Thumbnails with a IIIF image service + JSON image response sizes
-api/cookbook/recipe/0232-image-thumbnail-canvas.md	88	91	2	Restrictions
-api/cookbook/recipe/0232-image-thumbnail-canvas.md	92	105	2	Example
-api/cookbook/recipe/0232-image-thumbnail-canvas.md	106	109	2	Related Recipes
+api/cookbook/recipe/0232-image-thumbnail-canvas.md	19	83	2	Implementation Notes
+api/cookbook/recipe/0232-image-thumbnail-canvas.md	21	38	3	Minimal thumbnail requirements
+api/cookbook/recipe/0232-image-thumbnail-canvas.md	39	44	3	Thumbnails with a IIIF image service
+api/cookbook/recipe/0232-image-thumbnail-canvas.md	45	83	3	Thumbnails with a IIIF image service + JSON image response sizes
+api/cookbook/recipe/0232-image-thumbnail-canvas.md	84	87	2	Restrictions
+api/cookbook/recipe/0232-image-thumbnail-canvas.md	88	95	2	Example
+api/cookbook/recipe/0232-image-thumbnail-canvas.md	96	99	2	Related Recipes
 api/cookbook/recipe/0234-provider.md	3	6	2	Use Case
 api/cookbook/recipe/0234-provider.md	7	18	2	Implementation Notes
 api/cookbook/recipe/0234-provider.md	19	22	2	Restrictions
-api/cookbook/recipe/0234-provider.md	23	35	2	Example
-api/cookbook/recipe/0234-provider.md	36	41	2	Related Recipes
+api/cookbook/recipe/0234-provider.md	23	32	2	Example
+api/cookbook/recipe/0234-provider.md	33	38	2	Related Recipes
 api/cookbook/recipe/0240-navPlace-on-canvases.md	3	6	3	Use Case
 api/cookbook/recipe/0240-navPlace-on-canvases.md	7	20	3	Implementation Notes
-api/cookbook/recipe/0240-navPlace-on-canvases.md	21	31	3	Example
-api/cookbook/recipe/0240-navPlace-on-canvases.md	32	36	2	Related Recipes
+api/cookbook/recipe/0240-navPlace-on-canvases.md	21	28	3	Example
+api/cookbook/recipe/0240-navPlace-on-canvases.md	29	33	2	Related Recipes
 api/cookbook/recipe/0258-tagging-external-resource.md	3	6	2	Use Case
 api/cookbook/recipe/0258-tagging-external-resource.md	7	14	2	Implementation Notes
 api/cookbook/recipe/0258-tagging-external-resource.md	15	18	2	Restrictions
-api/cookbook/recipe/0258-tagging-external-resource.md	19	31	2	Example
-api/cookbook/recipe/0258-tagging-external-resource.md	32	35	2	Related Recipes
+api/cookbook/recipe/0258-tagging-external-resource.md	19	28	2	Example
+api/cookbook/recipe/0258-tagging-external-resource.md	29	32	2	Related Recipes
 api/cookbook/recipe/0261-non-rectangular-commenting.md	3	6	2	Use Case
 api/cookbook/recipe/0261-non-rectangular-commenting.md	7	40	2	Implementation Notes
 api/cookbook/recipe/0261-non-rectangular-commenting.md	17	40	3	Additional Notes on SVG
 api/cookbook/recipe/0261-non-rectangular-commenting.md	21	36	4	For Viewers
 api/cookbook/recipe/0261-non-rectangular-commenting.md	37	40	4	For Manifest Creators
 api/cookbook/recipe/0261-non-rectangular-commenting.md	41	44	2	Restrictions
-api/cookbook/recipe/0261-non-rectangular-commenting.md	45	55	2	Example
-api/cookbook/recipe/0261-non-rectangular-commenting.md	56	58	2	Related Recipes
+api/cookbook/recipe/0261-non-rectangular-commenting.md	45	52	2	Example
+api/cookbook/recipe/0261-non-rectangular-commenting.md	53	55	2	Related Recipes
 api/cookbook/recipe/0266-full-canvas-annotation.md	3	6	2	Use Case
 api/cookbook/recipe/0266-full-canvas-annotation.md	7	20	2	Implementation Notes
 api/cookbook/recipe/0266-full-canvas-annotation.md	21	24	2	Restrictions
-api/cookbook/recipe/0266-full-canvas-annotation.md	25	35	2	Example
-api/cookbook/recipe/0266-full-canvas-annotation.md	36	43	2	Related Recipes
+api/cookbook/recipe/0266-full-canvas-annotation.md	25	32	2	Example
+api/cookbook/recipe/0266-full-canvas-annotation.md	33	40	2	Related Recipes
 api/cookbook/recipe/0269-embedded-or-referenced-annotations.md	3	6	2	Use Case
 api/cookbook/recipe/0269-embedded-or-referenced-annotations.md	7	31	2	Implementation Notes
-api/cookbook/recipe/0269-embedded-or-referenced-annotations.md	32	55	2	Example
-api/cookbook/recipe/0269-embedded-or-referenced-annotations.md	42	48	3	Manifest file
-api/cookbook/recipe/0269-embedded-or-referenced-annotations.md	49	55	3	Annotation Page file
-api/cookbook/recipe/0269-embedded-or-referenced-annotations.md	56	60	2	Related Recipes
+api/cookbook/recipe/0269-embedded-or-referenced-annotations.md	32	49	2	Example
+api/cookbook/recipe/0269-embedded-or-referenced-annotations.md	42	45	3	Manifest file
+api/cookbook/recipe/0269-embedded-or-referenced-annotations.md	46	49	3	Annotation Page file
+api/cookbook/recipe/0269-embedded-or-referenced-annotations.md	50	54	2	Related Recipes
 api/cookbook/recipe/0283-missing-image.md	3	6	2	Use Case
 api/cookbook/recipe/0283-missing-image.md	7	20	2	Implementation notes
 api/cookbook/recipe/0283-missing-image.md	15	20	3	Additional Information
 api/cookbook/recipe/0283-missing-image.md	21	24	2	Restrictions
-api/cookbook/recipe/0283-missing-image.md	25	33	2	Example
-api/cookbook/recipe/0283-missing-image.md	34	38	1	Related recipes
+api/cookbook/recipe/0283-missing-image.md	25	30	2	Example
+api/cookbook/recipe/0283-missing-image.md	31	35	1	Related recipes
 api/cookbook/recipe/0299-region.md	3	6	2	Use Case
 api/cookbook/recipe/0299-region.md	7	23	2	Implementation Notes
 api/cookbook/recipe/0299-region.md	24	27	2	Restrictions
-api/cookbook/recipe/0299-region.md	28	38	2	Examples
-api/cookbook/recipe/0299-region.md	39	46	2	Related Recipes
+api/cookbook/recipe/0299-region.md	28	35	2	Examples
+api/cookbook/recipe/0299-region.md	36	43	2	Related Recipes
 api/cookbook/recipe/0306-linking-annotations-to-manifests.md	3	8	2	Use Case
 api/cookbook/recipe/0306-linking-annotations-to-manifests.md	9	12	2	Implementation Notes
 api/cookbook/recipe/0306-linking-annotations-to-manifests.md	13	16	2	Restrictions
-api/cookbook/recipe/0306-linking-annotations-to-manifests.md	17	38	2	Example
-api/cookbook/recipe/0306-linking-annotations-to-manifests.md	39	44	2	Related Recipes
+api/cookbook/recipe/0306-linking-annotations-to-manifests.md	17	32	2	Example
+api/cookbook/recipe/0306-linking-annotations-to-manifests.md	33	38	2	Related Recipes
 api/cookbook/recipe/0309-annotation-collection.md	3	6	2	Use Case
 api/cookbook/recipe/0309-annotation-collection.md	7	24	2	Implementation Notes
-api/cookbook/recipe/0309-annotation-collection.md	25	48	2	Example
-api/cookbook/recipe/0309-annotation-collection.md	49	52	2	Related Recipes
+api/cookbook/recipe/0309-annotation-collection.md	25	42	2	Example
+api/cookbook/recipe/0309-annotation-collection.md	43	46	2	Related Recipes
 api/cookbook/recipe/0318-navPlace-navDate.md	3	6	3	Use Case
 api/cookbook/recipe/0318-navPlace-navDate.md	7	14	3	Implementation Notes
-api/cookbook/recipe/0318-navPlace-navDate.md	15	35	3	Example
-api/cookbook/recipe/0318-navPlace-navDate.md	36	39	2	Related Recipes
+api/cookbook/recipe/0318-navPlace-navDate.md	15	32	3	Example
+api/cookbook/recipe/0318-navPlace-navDate.md	33	36	2	Related Recipes
 api/cookbook/recipe/0326-annotating-image-layer.md	3	10	2	Use Case
 api/cookbook/recipe/0326-annotating-image-layer.md	11	24	2	Implementation Notes
 api/cookbook/recipe/0326-annotating-image-layer.md	25	28	2	Restrictions
-api/cookbook/recipe/0326-annotating-image-layer.md	29	39	2	Example
-api/cookbook/recipe/0326-annotating-image-layer.md	40	48	2	Related Recipes
+api/cookbook/recipe/0326-annotating-image-layer.md	29	36	2	Example
+api/cookbook/recipe/0326-annotating-image-layer.md	37	45	2	Related Recipes
 api/cookbook/recipe/0346-multilingual-annotation-body.md	3	6	2	Use Case
 api/cookbook/recipe/0346-multilingual-annotation-body.md	7	18	2	Implementation Notes
 api/cookbook/recipe/0346-multilingual-annotation-body.md	19	22	2	Restrictions
-api/cookbook/recipe/0346-multilingual-annotation-body.md	23	35	2	Example
-api/cookbook/recipe/0346-multilingual-annotation-body.md	36	41	2	Related Recipes
+api/cookbook/recipe/0346-multilingual-annotation-body.md	23	32	2	Example
+api/cookbook/recipe/0346-multilingual-annotation-body.md	33	38	2	Related Recipes
 api/cookbook/recipe/0377-image-in-annotation.md	3	10	2	Use Case
 api/cookbook/recipe/0377-image-in-annotation.md	11	14	2	Implementation Notes
-api/cookbook/recipe/0377-image-in-annotation.md	15	23	2	Example
-api/cookbook/recipe/0377-image-in-annotation.md	24	29	2	Related Recipes
+api/cookbook/recipe/0377-image-in-annotation.md	15	20	2	Example
+api/cookbook/recipe/0377-image-in-annotation.md	21	26	2	Related Recipes
 api/cookbook/recipe/0434-choice-av.md	3	6	2	Use Case
 api/cookbook/recipe/0434-choice-av.md	7	18	2	Implementation Notes
 api/cookbook/recipe/0434-choice-av.md	19	22	2	Restrictions
-api/cookbook/recipe/0434-choice-av.md	23	39	2	Example
-api/cookbook/recipe/0434-choice-av.md	40	43	2	Related Recipes
+api/cookbook/recipe/0434-choice-av.md	23	36	2	Example
+api/cookbook/recipe/0434-choice-av.md	37	40	2	Related Recipes
 api/cookbook/recipe/0464-reuse-manifest.md	3	6	2	Use Case
 api/cookbook/recipe/0464-reuse-manifest.md	7	26	2	Implementation Notes
-api/cookbook/recipe/0464-reuse-manifest.md	27	39	2	Example
-api/cookbook/recipe/0464-reuse-manifest.md	40	43	2	Related Recipes
+api/cookbook/recipe/0464-reuse-manifest.md	27	36	2	Example
+api/cookbook/recipe/0464-reuse-manifest.md	37	40	2	Related Recipes
 api/cookbook/recipe/0466-link-for-loading-manifest.md	3	6	1	Use case
 api/cookbook/recipe/0466-link-for-loading-manifest.md	7	31	1	Implementation notes
 api/cookbook/recipe/0466-link-for-loading-manifest.md	19	28	2	Example
 api/cookbook/recipe/0466-link-for-loading-manifest.md	29	31	2	Related Recipes
 api/cookbook/recipe/0485-contentstate-canvas-region.md	3	8	2	Use Case
-api/cookbook/recipe/0485-contentstate-canvas-region.md	9	53	2	Implementation Notes
-api/cookbook/recipe/0485-contentstate-canvas-region.md	54	61	2	Restrictions
-api/cookbook/recipe/0485-contentstate-canvas-region.md	62	76	2	Example
-api/cookbook/recipe/0485-contentstate-canvas-region.md	77	82	2	Related Recipes
+api/cookbook/recipe/0485-contentstate-canvas-region.md	9	49	2	Implementation Notes
+api/cookbook/recipe/0485-contentstate-canvas-region.md	50	57	2	Restrictions
+api/cookbook/recipe/0485-contentstate-canvas-region.md	58	69	2	Example
+api/cookbook/recipe/0485-contentstate-canvas-region.md	70	75	2	Related Recipes
 api/cookbook/recipe/0489-multimedia-canvas.md	3	6	2	Use Case
 api/cookbook/recipe/0489-multimedia-canvas.md	7	16	2	Implementation Notes
 api/cookbook/recipe/0489-multimedia-canvas.md	17	20	2	Restrictions
-api/cookbook/recipe/0489-multimedia-canvas.md	21	33	2	Example
-api/cookbook/recipe/0489-multimedia-canvas.md	34	39	2	Related Recipes
+api/cookbook/recipe/0489-multimedia-canvas.md	21	30	2	Example
+api/cookbook/recipe/0489-multimedia-canvas.md	31	36	2	Related Recipes
 api/cookbook/recipe/0540-link-for-opening-multiple-canvases.md	3	8	2	Use Case
 api/cookbook/recipe/0540-link-for-opening-multiple-canvases.md	9	18	2	Implementation Notes
 api/cookbook/recipe/0540-link-for-opening-multiple-canvases.md	19	26	2	Restrictions
-api/cookbook/recipe/0540-link-for-opening-multiple-canvases.md	27	39	2	Example
-api/cookbook/recipe/0540-link-for-opening-multiple-canvases.md	40	43	2	Related Recipes
+api/cookbook/recipe/0540-link-for-opening-multiple-canvases.md	27	36	2	Example
+api/cookbook/recipe/0540-link-for-opening-multiple-canvases.md	37	40	2	Related Recipes
 api/cookbook/recipe/0560-resources-on-a-timeline.md	3	6	2	Use Case
 api/cookbook/recipe/0560-resources-on-a-timeline.md	7	18	2	Implementation Notes
 api/cookbook/recipe/0560-resources-on-a-timeline.md	19	22	2	Restrictions
-api/cookbook/recipe/0560-resources-on-a-timeline.md	23	31	2	Example
-api/cookbook/recipe/0560-resources-on-a-timeline.md	32	36	2	Related Recipes
+api/cookbook/recipe/0560-resources-on-a-timeline.md	23	28	2	Example
+api/cookbook/recipe/0560-resources-on-a-timeline.md	29	33	2	Related Recipes
 api/cookbook/recipe/0561-text-on-image.md	3	6	2	Use Case
 api/cookbook/recipe/0561-text-on-image.md	7	20	2	Implementation Notes
 api/cookbook/recipe/0561-text-on-image.md	21	24	2	Restrictions
-api/cookbook/recipe/0561-text-on-image.md	25	35	2	Example
-api/cookbook/recipe/0561-text-on-image.md	36	39	2	Related Recipes
+api/cookbook/recipe/0561-text-on-image.md	25	32	2	Example
+api/cookbook/recipe/0561-text-on-image.md	33	36	2	Related Recipes
 api/cookbook/recipe/0599-drag-and-drop.md	3	8	2	Use Case
-api/cookbook/recipe/0599-drag-and-drop.md	9	64	2	Implementation Notes
-api/cookbook/recipe/0599-drag-and-drop.md	13	60	3	For Resource Providers
-api/cookbook/recipe/0599-drag-and-drop.md	61	64	3	For Viewer Developers
-api/cookbook/recipe/0599-drag-and-drop.md	65	70	2	Restrictions
-api/cookbook/recipe/0599-drag-and-drop.md	71	84	2	Example
-api/cookbook/recipe/0599-drag-and-drop.md	85	87	2	Related Recipes
+api/cookbook/recipe/0599-drag-and-drop.md	9	60	2	Implementation Notes
+api/cookbook/recipe/0599-drag-and-drop.md	13	56	3	For Resource Providers
+api/cookbook/recipe/0599-drag-and-drop.md	57	60	3	For Viewer Developers
+api/cookbook/recipe/0599-drag-and-drop.md	61	66	2	Restrictions
+api/cookbook/recipe/0599-drag-and-drop.md	67	78	2	Example
+api/cookbook/recipe/0599-drag-and-drop.md	79	81	2	Related Recipes
 api/cookbook/recipe/0608-mvm-3d.md	3	6	2	Use Case
 api/cookbook/recipe/0608-mvm-3d.md	7	12	2	Implementation Notes
-api/cookbook/recipe/0608-mvm-3d.md	13	23	2	Example
-api/cookbook/recipe/0608-mvm-3d.md	24	26	1	Related Recipes
+api/cookbook/recipe/0608-mvm-3d.md	13	20	2	Example
+api/cookbook/recipe/0608-mvm-3d.md	21	23	1	Related Recipes
 api/cookbook/recipe/code.md	3	130	1	Code samples
 api/cookbook/recipe/code.md	7	15	2	Which libraries are included?
 api/cookbook/recipe/code.md	16	130	2	Code samples matrix
@@ -875,33 +875,33 @@ api/image/2.1.md	47	106	2	2. URI Syntax
 api/image/2.1.md	75	90	3	2.1. Image Request URI Syntax
 api/image/2.1.md	91	106	3	2.2. Image Information Request URI Syntax
 api/image/2.1.md	107	110	2	3. Identifier
-api/image/2.1.md	111	424	2	4. Image Request Parameters
-api/image/2.1.md	115	166	3	4.1. Region
-api/image/2.1.md	167	229	3	4.2. Size
-api/image/2.1.md	230	279	3	4.3. Rotation
-api/image/2.1.md	280	321	3	4.4. Quality
-api/image/2.1.md	322	343	3	4.5. Format
-api/image/2.1.md	344	366	3	4.6. Order of Implementation
-api/image/2.1.md	367	424	3	4.7. Canonical URI Syntax
-api/image/2.1.md	425	727	2	5. Image Information
-api/image/2.1.md	429	458	3	5.1. Image Information Request
-api/image/2.1.md	459	518	3	5.2. Technical Properties
-api/image/2.1.md	519	595	3	5.3. Profile Description
-api/image/2.1.md	596	636	3	5.4. Rights and Licensing Properties
-api/image/2.1.md	637	662	3	5.5. Related Services
-api/image/2.1.md	663	727	3	5.6. Complete Response
-api/image/2.1.md	728	739	2	6. Compliance Levels
-api/image/2.1.md	740	759	2	7. Server Responses
-api/image/2.1.md	742	745	3	7.1. Successful Responses
-api/image/2.1.md	746	759	3	7.2. Error Conditions
-api/image/2.1.md	760	765	2	8. Authentication
-api/image/2.1.md	766	786	2	9. URI Encoding and Decoding
-api/image/2.1.md	787	796	2	10. Security Considerations
-api/image/2.1.md	797	860	2	11. Appendices
-api/image/2.1.md	799	841	3	A. Implementation Notes
-api/image/2.1.md	842	845	3	B. Versioning
-api/image/2.1.md	846	851	3	C. Acknowledgments
-api/image/2.1.md	852	860	3	D. Change Log
+api/image/2.1.md	111	272	2	4. Image Request Parameters
+api/image/2.1.md	115	137	3	4.1. Region
+api/image/2.1.md	138	165	3	4.2. Size
+api/image/2.1.md	166	188	3	4.3. Rotation
+api/image/2.1.md	189	210	3	4.4. Quality
+api/image/2.1.md	211	232	3	4.5. Format
+api/image/2.1.md	233	246	3	4.6. Order of Implementation
+api/image/2.1.md	247	272	3	4.7. Canonical URI Syntax
+api/image/2.1.md	273	575	2	5. Image Information
+api/image/2.1.md	277	306	3	5.1. Image Information Request
+api/image/2.1.md	307	366	3	5.2. Technical Properties
+api/image/2.1.md	367	443	3	5.3. Profile Description
+api/image/2.1.md	444	484	3	5.4. Rights and Licensing Properties
+api/image/2.1.md	485	510	3	5.5. Related Services
+api/image/2.1.md	511	575	3	5.6. Complete Response
+api/image/2.1.md	576	587	2	6. Compliance Levels
+api/image/2.1.md	588	607	2	7. Server Responses
+api/image/2.1.md	590	593	3	7.1. Successful Responses
+api/image/2.1.md	594	607	3	7.2. Error Conditions
+api/image/2.1.md	608	613	2	8. Authentication
+api/image/2.1.md	614	634	2	9. URI Encoding and Decoding
+api/image/2.1.md	635	644	2	10. Security Considerations
+api/image/2.1.md	645	708	2	11. Appendices
+api/image/2.1.md	647	689	3	A. Implementation Notes
+api/image/2.1.md	690	693	3	B. Versioning
+api/image/2.1.md	694	699	3	C. Acknowledgments
+api/image/2.1.md	700	708	3	D. Change Log
 api/image/3.0.md	3	26	2	Status of this Document
 api/image/3.0.md	27	52	2	1. Introduction
 api/image/3.0.md	33	44	3	1.1. Audience and Scope
@@ -910,39 +910,39 @@ api/image/3.0.md	53	112	2	2. URI Syntax
 api/image/3.0.md	81	96	3	2.1. Image Request URI Syntax
 api/image/3.0.md	97	112	3	2.2. Image Information Request URI Syntax
 api/image/3.0.md	113	116	2	3. Identifier
-api/image/3.0.md	117	469	2	4. Image Requests
-api/image/3.0.md	125	176	3	4.1. Region
-api/image/3.0.md	177	264	3	4.2. Size
-api/image/3.0.md	265	314	3	4.3. Rotation
-api/image/3.0.md	315	358	3	4.4. Quality
-api/image/3.0.md	359	380	3	4.5. Format
-api/image/3.0.md	381	403	3	4.6. Order of Implementation
-api/image/3.0.md	404	407	3	4.7. Floating Point Values
-api/image/3.0.md	408	465	3	4.8. Canonical URI Syntax
-api/image/3.0.md	466	469	3	4.9. Extensions
-api/image/3.0.md	470	801	2	5. Image Information
-api/image/3.0.md	474	497	3	5.1. Image Information Request
-api/image/3.0.md	498	533	3	5.2. Technical Properties
-api/image/3.0.md	534	566	3	5.3. Sizes
-api/image/3.0.md	567	600	3	5.4. Tiles
-api/image/3.0.md	601	622	3	5.5. Preferred Formats
-api/image/3.0.md	623	645	3	5.6. Rights
-api/image/3.0.md	646	700	3	5.7. Extra Functionality
-api/image/3.0.md	701	758	3	5.8. Linking Properties
-api/image/3.0.md	759	801	3	5.9. Complete Response
-api/image/3.0.md	802	819	2	6. Compliance Level and Profile Document
-api/image/3.0.md	820	849	2	7. Server Responses
-api/image/3.0.md	824	827	3	7.1. CORS
-api/image/3.0.md	828	831	3	7.2. Successful Responses
-api/image/3.0.md	832	845	3	7.3. Error Conditions
-api/image/3.0.md	846	849	3	7.4. HTTP Versions
-api/image/3.0.md	850	855	2	8. Authentication
-api/image/3.0.md	856	876	2	9. URI Encoding and Decoding
-api/image/3.0.md	877	884	2	10. Security Considerations
-api/image/3.0.md	885	904	2	11. Appendices
-api/image/3.0.md	887	890	3	A. Versioning
-api/image/3.0.md	891	894	3	B. Acknowledgments
-api/image/3.0.md	895	904	3	C. Change Log
+api/image/3.0.md	117	300	2	4. Image Requests
+api/image/3.0.md	125	147	3	4.1. Region
+api/image/3.0.md	148	183	3	4.2. Size
+api/image/3.0.md	184	206	3	4.3. Rotation
+api/image/3.0.md	207	230	3	4.4. Quality
+api/image/3.0.md	231	252	3	4.5. Format
+api/image/3.0.md	253	266	3	4.6. Order of Implementation
+api/image/3.0.md	267	270	3	4.7. Floating Point Values
+api/image/3.0.md	271	296	3	4.8. Canonical URI Syntax
+api/image/3.0.md	297	300	3	4.9. Extensions
+api/image/3.0.md	301	632	2	5. Image Information
+api/image/3.0.md	305	328	3	5.1. Image Information Request
+api/image/3.0.md	329	364	3	5.2. Technical Properties
+api/image/3.0.md	365	397	3	5.3. Sizes
+api/image/3.0.md	398	431	3	5.4. Tiles
+api/image/3.0.md	432	453	3	5.5. Preferred Formats
+api/image/3.0.md	454	476	3	5.6. Rights
+api/image/3.0.md	477	531	3	5.7. Extra Functionality
+api/image/3.0.md	532	589	3	5.8. Linking Properties
+api/image/3.0.md	590	632	3	5.9. Complete Response
+api/image/3.0.md	633	650	2	6. Compliance Level and Profile Document
+api/image/3.0.md	651	680	2	7. Server Responses
+api/image/3.0.md	655	658	3	7.1. CORS
+api/image/3.0.md	659	662	3	7.2. Successful Responses
+api/image/3.0.md	663	676	3	7.3. Error Conditions
+api/image/3.0.md	677	680	3	7.4. HTTP Versions
+api/image/3.0.md	681	686	2	8. Authentication
+api/image/3.0.md	687	707	2	9. URI Encoding and Decoding
+api/image/3.0.md	708	715	2	10. Security Considerations
+api/image/3.0.md	716	735	2	11. Appendices
+api/image/3.0.md	718	721	3	A. Versioning
+api/image/3.0.md	722	725	3	B. Acknowledgments
+api/image/3.0.md	726	735	3	C. Change Log
 api/image/validator.md	9	19	3	Technical Note
 api/image/validator.md	20	21	3	Image Validator
 api/image/validator.md	22	35	2	IIIF Server to Validate
@@ -1183,10 +1183,10 @@ api/registry/rights.md	23	36	2	1. Introduction
 api/registry/rights.md	29	32	3	1.1. Disclaimer
 api/registry/rights.md	33	36	3	1.2. Inclusion Process
 api/registry/rights.md	37	38	2	2. Requirements for Inclusion
-api/registry/rights.md	39	73	2	3. Registry
-api/registry/rights.md	74	84	2	Appendices
-api/registry/rights.md	76	79	3	A. Acknowledgements
-api/registry/rights.md	80	84	3	B. Change Log
+api/registry/rights.md	39	47	2	3. Registry
+api/registry/rights.md	48	58	2	Appendices
+api/registry/rights.md	50	53	3	A. Acknowledgements
+api/registry/rights.md	54	58	3	B. Change Log
 api/registry/selectors.md	3	22	2	Status of this Document
 api/registry/selectors.md	23	30	2	1. Introduction
 api/registry/selectors.md	31	115	2	2. Selector Classes

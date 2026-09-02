@@ -50,9 +50,6 @@ This provides a default response of a IIIF v2 manifest. Looking at some of the r
 
 The response content should be a v2 manifest:
 
-``` line-numbers
-```
-
 To request a IIIF v3 manifest at the same URL the `Accept` header value can be adjusted:
 
     $ curl -v -H "Accept: application/ld+json;profile=http://iiif.io/api/presentation/3/context.json" "https://iiif.io/api/cookbook/recipe/0057-publishing-v2-and-v3/manifest.json"
@@ -70,6 +67,3 @@ Looking at the same request (`>`) and response (`<`) values from cURL as for the
     < content-type: application/json
 
 The response now should be a v3 manifest. Note that the value of the manifest’s `id` field is the same as in the v2 manifest.
-
-``` line-numbers
-```

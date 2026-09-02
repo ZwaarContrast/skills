@@ -22,9 +22,6 @@ In this example, the work has multiple titles in both English and French. The Ma
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0118-multivalue/)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Internationalization and Multi-language Values](0006-text-language.md "Internationalization and Multi-language Values")

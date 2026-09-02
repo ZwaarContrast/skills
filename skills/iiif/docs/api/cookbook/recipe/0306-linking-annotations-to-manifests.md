@@ -26,15 +26,9 @@ Annotation Page file
 
 [JSON-LD](0306-linking-annotations-to-manifests/annotationpage.json)
 
-``` line-numbers
-```
-
 Manifest file
 
 [JSON-LD](0306-linking-annotations-to-manifests/manifest.json)
-
-``` line-numbers
-```
 
 ## Related Recipes
 

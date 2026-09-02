@@ -30,9 +30,6 @@ Note: Mirador only partially implements `provider`. The property must be on the 
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0234-provider/)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Linking to Web Page of an Object](0047-homepage.md "Linking to Web Page of an Object") for demonstrating the use of `homepage` at the Manifest level

@@ -26,9 +26,6 @@ In this example (a minimal implementation of the use case), there are two painti
 
 [JSON-LD](0560-resources-on-a-timeline/manifest.json)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Composition from Multiple Images](0036-composition-from-multiple-images.md "Composition from Multiple Images") for using multiple IIIF resources on a single Canvas

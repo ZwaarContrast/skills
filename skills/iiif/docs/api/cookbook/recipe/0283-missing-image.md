@@ -28,9 +28,6 @@ For this example, we are using views from a paged Ethiopic manuscript. One verso
 
 [JSON-LD](0283-missing-image/manifest.json)
 
-``` line-numbers
-```
-
 # Related recipes
 
 - [Simple Manifest - Book](0009-book-1.md "Simple Manifest - Book")

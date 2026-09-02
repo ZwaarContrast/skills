@@ -34,9 +34,6 @@ To see the property in action in Mirador, toggle the sidebar by activating the t
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0053-seeAlso/)
 
-``` line-numbers
-```
-
 The direct link to the fixture is a useful convenience.
 
 ## Related Recipes

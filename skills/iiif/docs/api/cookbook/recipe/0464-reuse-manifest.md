@@ -34,9 +34,6 @@ The original Manifest label “Picture of Göttingen taken during the 2019 IIIF 
 
 [JSON-LD](0464-reuse-manifest/manifest.json)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Rights statement](0008-rights.md "Rights") for the source Manifest and information on rights statements

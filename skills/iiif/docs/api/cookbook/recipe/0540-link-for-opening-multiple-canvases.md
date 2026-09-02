@@ -32,9 +32,6 @@ The Annotation will target the `id` of the two Canvases we want to compare and c
 
 [JSON-LD](0540-link-for-opening-multiple-canvases/annotation.json)
 
-``` line-numbers
-```
-
 The expected result should show the two Canvases of the two Manifest depicting the Colosseum.
 
 ## Related Recipes

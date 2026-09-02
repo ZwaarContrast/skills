@@ -30,9 +30,6 @@ Note that viewers may not add a visual indicator of the Annotation when it targe
 
 [JSON-LD](0266-full-canvas-annotation/manifest.json)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Simple Annotation — Tagging](0021-tagging.md "Simple Annotation — Tagging") for an Annotation using a fragment selector

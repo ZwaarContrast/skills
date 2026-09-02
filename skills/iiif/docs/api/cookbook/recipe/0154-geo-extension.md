@@ -22,9 +22,6 @@ The map shows the location of the object represented in the image, the Laocoön 
 
 [JSON-LD](0154-geo-extension/manifest.json)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Represent Canvas Fragment as a Geographic Area in a Web Mapping Client](0139-geolocate-canvas-fragment.md "Represent Canvas Fragment as a Geographic Area on a Web Map")

@@ -34,9 +34,6 @@ This example Manifest contains an embedded Annotation containing the HTML text â
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0019-html-in-annotations/)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Simplest Annotation](0266-full-canvas-annotation.md "Simplest Annotation") for a general description of Annotations and an example of a plain text body

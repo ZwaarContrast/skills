@@ -1,0 +1,321 @@
+type	property	requirement
+Annotation	accompanyingCanvas	NOT ALLOWED
+Annotation	annotations	NOT ALLOWED
+Annotation	behavior	OPTIONAL
+Annotation	duration	NOT ALLOWED
+Annotation	format	NOT ALLOWED
+Annotation	height	NOT ALLOWED
+Annotation	homepage	OPTIONAL
+Annotation	id	REQUIRED
+Annotation	items	NOT ALLOWED
+Annotation	label	OPTIONAL
+Annotation	language	NOT ALLOWED
+Annotation	metadata	OPTIONAL
+Annotation	navDate	NOT ALLOWED
+Annotation	partOf	OPTIONAL
+Annotation	placeholderCanvas	NOT ALLOWED
+Annotation	profile	NOT ALLOWED
+Annotation	provider	OPTIONAL
+Annotation	rendering	OPTIONAL
+Annotation	requiredStatement	OPTIONAL
+Annotation	rights	OPTIONAL
+Annotation	seeAlso	OPTIONAL
+Annotation	service	OPTIONAL
+Annotation	services	NOT ALLOWED
+Annotation	start	NOT ALLOWED
+Annotation	structures	NOT ALLOWED
+Annotation	summary	OPTIONAL
+Annotation	supplementary	NOT ALLOWED
+Annotation	thumbnail	OPTIONAL
+Annotation	timeMode	OPTIONAL
+Annotation	type	REQUIRED
+Annotation	viewingDirection	NOT ALLOWED
+Annotation	width	NOT ALLOWED
+AnnotationCollection	accompanyingCanvas	NOT ALLOWED
+AnnotationCollection	annotations	NOT ALLOWED
+AnnotationCollection	behavior	OPTIONAL
+AnnotationCollection	duration	NOT ALLOWED
+AnnotationCollection	format	NOT ALLOWED
+AnnotationCollection	height	NOT ALLOWED
+AnnotationCollection	homepage	OPTIONAL
+AnnotationCollection	id	REQUIRED
+AnnotationCollection	items	NOT ALLOWED
+AnnotationCollection	label	RECOMMENDED
+AnnotationCollection	language	NOT ALLOWED
+AnnotationCollection	metadata	OPTIONAL
+AnnotationCollection	navDate	NOT ALLOWED
+AnnotationCollection	partOf	OPTIONAL
+AnnotationCollection	placeholderCanvas	NOT ALLOWED
+AnnotationCollection	profile	NOT ALLOWED
+AnnotationCollection	provider	OPTIONAL
+AnnotationCollection	rendering	OPTIONAL
+AnnotationCollection	requiredStatement	OPTIONAL
+AnnotationCollection	rights	OPTIONAL
+AnnotationCollection	seeAlso	OPTIONAL
+AnnotationCollection	service	OPTIONAL
+AnnotationCollection	services	NOT ALLOWED
+AnnotationCollection	start	NOT ALLOWED
+AnnotationCollection	structures	NOT ALLOWED
+AnnotationCollection	summary	OPTIONAL
+AnnotationCollection	supplementary	NOT ALLOWED
+AnnotationCollection	thumbnail	OPTIONAL
+AnnotationCollection	timeMode	NOT ALLOWED
+AnnotationCollection	type	REQUIRED
+AnnotationCollection	viewingDirection	NOT ALLOWED
+AnnotationCollection	width	NOT ALLOWED
+AnnotationPage	accompanyingCanvas	NOT ALLOWED
+AnnotationPage	annotations	NOT ALLOWED
+AnnotationPage	behavior	OPTIONAL
+AnnotationPage	duration	NOT ALLOWED
+AnnotationPage	format	NOT ALLOWED
+AnnotationPage	height	NOT ALLOWED
+AnnotationPage	homepage	OPTIONAL
+AnnotationPage	id	REQUIRED
+AnnotationPage	items	RECOMMENDED
+AnnotationPage	label	OPTIONAL
+AnnotationPage	language	NOT ALLOWED
+AnnotationPage	metadata	OPTIONAL
+AnnotationPage	navDate	NOT ALLOWED
+AnnotationPage	partOf	OPTIONAL
+AnnotationPage	placeholderCanvas	NOT ALLOWED
+AnnotationPage	profile	NOT ALLOWED
+AnnotationPage	provider	OPTIONAL
+AnnotationPage	rendering	OPTIONAL
+AnnotationPage	requiredStatement	OPTIONAL
+AnnotationPage	rights	OPTIONAL
+AnnotationPage	seeAlso	OPTIONAL
+AnnotationPage	service	OPTIONAL
+AnnotationPage	services	NOT ALLOWED
+AnnotationPage	start	NOT ALLOWED
+AnnotationPage	structures	NOT ALLOWED
+AnnotationPage	summary	OPTIONAL
+AnnotationPage	supplementary	NOT ALLOWED
+AnnotationPage	thumbnail	OPTIONAL
+AnnotationPage	timeMode	NOT ALLOWED
+AnnotationPage	type	REQUIRED
+AnnotationPage	viewingDirection	NOT ALLOWED
+AnnotationPage	width	NOT ALLOWED
+Canvas	accompanyingCanvas	OPTIONAL
+Canvas	annotations	OPTIONAL
+Canvas	behavior	OPTIONAL
+Canvas	behavior:auto-advance	OPTIONAL
+Canvas	behavior:continuous	NOT ALLOWED
+Canvas	behavior:facing-pages	OPTIONAL
+Canvas	behavior:hidden *	NOT ALLOWED
+Canvas	behavior:individuals	NOT ALLOWED
+Canvas	behavior:multi-part	NOT ALLOWED
+Canvas	behavior:no-auto-advance	OPTIONAL
+Canvas	behavior:no-nav	NOT ALLOWED
+Canvas	behavior:no-repeat	NOT ALLOWED
+Canvas	behavior:non-paged	OPTIONAL
+Canvas	behavior:paged	NOT ALLOWED
+Canvas	behavior:repeat	NOT ALLOWED
+Canvas	behavior:sequence	NOT ALLOWED
+Canvas	behavior:thumbnail-nav	NOT ALLOWED
+Canvas	behavior:together	NOT ALLOWED
+Canvas	behavior:unordered	NOT ALLOWED
+Canvas	duration	OPTIONAL
+Canvas	format	NOT ALLOWED
+Canvas	height	OPTIONAL
+Canvas	homepage	OPTIONAL
+Canvas	id	REQUIRED
+Canvas	items	RECOMMENDED
+Canvas	label	RECOMMENDED
+Canvas	language	NOT ALLOWED
+Canvas	metadata	OPTIONAL
+Canvas	navDate	OPTIONAL
+Canvas	partOf	OPTIONAL
+Canvas	placeholderCanvas	OPTIONAL
+Canvas	profile	NOT ALLOWED
+Canvas	provider	OPTIONAL
+Canvas	rendering	OPTIONAL
+Canvas	requiredStatement	OPTIONAL
+Canvas	rights	OPTIONAL
+Canvas	seeAlso	OPTIONAL
+Canvas	service	OPTIONAL
+Canvas	services	NOT ALLOWED
+Canvas	start	NOT ALLOWED
+Canvas	structures	NOT ALLOWED
+Canvas	summary	OPTIONAL
+Canvas	supplementary	NOT ALLOWED
+Canvas	thumbnail	OPTIONAL
+Canvas	timeMode	NOT ALLOWED
+Canvas	type	REQUIRED
+Canvas	viewingDirection	NOT ALLOWED
+Canvas	width	OPTIONAL
+Collection	accompanyingCanvas	OPTIONAL
+Collection	annotations	OPTIONAL
+Collection	behavior	OPTIONAL
+Collection	behavior:auto-advance	OPTIONAL
+Collection	behavior:continuous	OPTIONAL
+Collection	behavior:facing-pages	NOT ALLOWED
+Collection	behavior:hidden *	NOT ALLOWED
+Collection	behavior:individuals	OPTIONAL
+Collection	behavior:multi-part	OPTIONAL
+Collection	behavior:no-auto-advance	OPTIONAL
+Collection	behavior:no-nav	NOT ALLOWED
+Collection	behavior:no-repeat	OPTIONAL
+Collection	behavior:non-paged	NOT ALLOWED
+Collection	behavior:paged	OPTIONAL
+Collection	behavior:repeat	OPTIONAL
+Collection	behavior:sequence	NOT ALLOWED
+Collection	behavior:thumbnail-nav	NOT ALLOWED
+Collection	behavior:together	OPTIONAL
+Collection	behavior:unordered	OPTIONAL
+Collection	duration	NOT ALLOWED
+Collection	format	NOT ALLOWED
+Collection	height	NOT ALLOWED
+Collection	homepage	OPTIONAL
+Collection	id	REQUIRED
+Collection	items	REQUIRED
+Collection	label	REQUIRED
+Collection	language	NOT ALLOWED
+Collection	metadata	RECOMMENDED
+Collection	navDate	OPTIONAL
+Collection	partOf	OPTIONAL
+Collection	placeholderCanvas	OPTIONAL
+Collection	profile	NOT ALLOWED
+Collection	provider	RECOMMENDED
+Collection	rendering	OPTIONAL
+Collection	requiredStatement	OPTIONAL
+Collection	rights	OPTIONAL
+Collection	seeAlso	OPTIONAL
+Collection	service	OPTIONAL
+Collection	services	OPTIONAL
+Collection	start	NOT ALLOWED
+Collection	structures	NOT ALLOWED
+Collection	summary	RECOMMENDED
+Collection	supplementary	NOT ALLOWED
+Collection	thumbnail	RECOMMENDED
+Collection	timeMode	NOT ALLOWED
+Collection	type	REQUIRED
+Collection	viewingDirection	OPTIONAL
+Collection	width	NOT ALLOWED
+ContentResources	accompanyingCanvas	NOT ALLOWED
+ContentResources	annotations	OPTIONAL
+ContentResources	behavior	OPTIONAL
+ContentResources	duration	OPTIONAL
+ContentResources	format	OPTIONAL
+ContentResources	height	OPTIONAL
+ContentResources	homepage	OPTIONAL
+ContentResources	id	REQUIRED
+ContentResources	items	NOT ALLOWED
+ContentResources	label	OPTIONAL
+ContentResources	language	RECOMMENDED
+ContentResources	metadata	OPTIONAL
+ContentResources	navDate	NOT ALLOWED
+ContentResources	partOf	OPTIONAL
+ContentResources	placeholderCanvas	NOT ALLOWED
+ContentResources	profile	OPTIONAL
+ContentResources	provider	OPTIONAL
+ContentResources	rendering	OPTIONAL
+ContentResources	requiredStatement	OPTIONAL
+ContentResources	rights	OPTIONAL
+ContentResources	seeAlso	OPTIONAL
+ContentResources	service	OPTIONAL
+ContentResources	services	NOT ALLOWED
+ContentResources	start	NOT ALLOWED
+ContentResources	structures	NOT ALLOWED
+ContentResources	summary	OPTIONAL
+ContentResources	supplementary	NOT ALLOWED
+ContentResources	thumbnail	OPTIONAL
+ContentResources	timeMode	NOT ALLOWED
+ContentResources	type	REQUIRED
+ContentResources	viewingDirection	NOT ALLOWED
+ContentResources	width	OPTIONAL
+Manifest	accompanyingCanvas	OPTIONAL
+Manifest	annotations	OPTIONAL
+Manifest	behavior	OPTIONAL
+Manifest	behavior:auto-advance	OPTIONAL
+Manifest	behavior:continuous	OPTIONAL
+Manifest	behavior:facing-pages	NOT ALLOWED
+Manifest	behavior:hidden *	NOT ALLOWED
+Manifest	behavior:individuals	OPTIONAL
+Manifest	behavior:multi-part	NOT ALLOWED
+Manifest	behavior:no-auto-advance	OPTIONAL
+Manifest	behavior:no-nav	NOT ALLOWED
+Manifest	behavior:no-repeat	OPTIONAL
+Manifest	behavior:non-paged	NOT ALLOWED
+Manifest	behavior:paged	OPTIONAL
+Manifest	behavior:repeat	OPTIONAL
+Manifest	behavior:sequence	NOT ALLOWED
+Manifest	behavior:thumbnail-nav	NOT ALLOWED
+Manifest	behavior:together	NOT ALLOWED
+Manifest	behavior:unordered	OPTIONAL
+Manifest	duration	NOT ALLOWED
+Manifest	format	NOT ALLOWED
+Manifest	height	NOT ALLOWED
+Manifest	homepage	OPTIONAL
+Manifest	id	REQUIRED
+Manifest	items	REQUIRED
+Manifest	label	REQUIRED
+Manifest	language	NOT ALLOWED
+Manifest	metadata	RECOMMENDED
+Manifest	navDate	OPTIONAL
+Manifest	partOf	OPTIONAL
+Manifest	placeholderCanvas	OPTIONAL
+Manifest	profile	NOT ALLOWED
+Manifest	provider	RECOMMENDED
+Manifest	rendering	OPTIONAL
+Manifest	requiredStatement	OPTIONAL
+Manifest	rights	OPTIONAL
+Manifest	seeAlso	OPTIONAL
+Manifest	service	OPTIONAL
+Manifest	services	OPTIONAL
+Manifest	start	OPTIONAL
+Manifest	structures	OPTIONAL
+Manifest	summary	RECOMMENDED
+Manifest	supplementary	NOT ALLOWED
+Manifest	thumbnail	RECOMMENDED
+Manifest	timeMode	NOT ALLOWED
+Manifest	type	REQUIRED
+Manifest	viewingDirection	OPTIONAL
+Manifest	width	NOT ALLOWED
+Range	accompanyingCanvas	OPTIONAL
+Range	annotations	OPTIONAL
+Range	behavior	OPTIONAL
+Range	behavior:auto-advance	OPTIONAL
+Range	behavior:continuous	OPTIONAL
+Range	behavior:facing-pages	NOT ALLOWED
+Range	behavior:hidden *	NOT ALLOWED
+Range	behavior:individuals	OPTIONAL
+Range	behavior:multi-part	NOT ALLOWED
+Range	behavior:no-auto-advance	OPTIONAL
+Range	behavior:no-nav	OPTIONAL
+Range	behavior:no-repeat	NOT ALLOWED
+Range	behavior:non-paged	NOT ALLOWED
+Range	behavior:paged	OPTIONAL
+Range	behavior:repeat	NOT ALLOWED
+Range	behavior:sequence	OPTIONAL
+Range	behavior:thumbnail-nav	OPTIONAL
+Range	behavior:together	NOT ALLOWED
+Range	behavior:unordered	OPTIONAL
+Range	duration	NOT ALLOWED
+Range	format	NOT ALLOWED
+Range	height	NOT ALLOWED
+Range	homepage	OPTIONAL
+Range	id	REQUIRED
+Range	items	REQUIRED
+Range	label	RECOMMENDED
+Range	language	NOT ALLOWED
+Range	metadata	OPTIONAL
+Range	navDate	OPTIONAL
+Range	partOf	OPTIONAL
+Range	placeholderCanvas	OPTIONAL
+Range	profile	NOT ALLOWED
+Range	provider	OPTIONAL
+Range	rendering	OPTIONAL
+Range	requiredStatement	OPTIONAL
+Range	rights	OPTIONAL
+Range	seeAlso	OPTIONAL
+Range	service	OPTIONAL
+Range	services	NOT ALLOWED
+Range	start	OPTIONAL
+Range	structures	NOT ALLOWED
+Range	summary	OPTIONAL
+Range	supplementary	OPTIONAL
+Range	thumbnail	OPTIONAL
+Range	timeMode	NOT ALLOWED
+Range	type	REQUIRED
+Range	viewingDirection	OPTIONAL
+Range	width	NOT ALLOWED

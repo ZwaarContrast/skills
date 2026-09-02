@@ -35,7 +35,7 @@ The `textGranularity` property identifies the Text Granularity Level of a resour
 | `word`                 | A single word                  |
 | `glyph`                | A single glyph or symbol       |
 
-``` highlight
+``` json
 { "textGranularity": "line" }
 ```
 
@@ -45,7 +45,7 @@ An Annotation *may* have the `textGranularity` property. An Annotation that has 
 
 The Annotation Body’s textual content *should* be equivalent to the textual content represented by the content resources painted on the Target. For example, the Body of the Annotation might be a [TextualBody](https://www.w3.org/TR/annotation-model/#embedded-textual-body) that contains the transcription of the Target, which is painted with the image of a page of a medieval manuscript.
 
-``` highlight
+``` json
 {
   "id": "https://example.org/iiif/aeneid/book1/transcription-line1",
   "type": "Annotation",
@@ -69,7 +69,7 @@ The Annotation Body’s textual content *should* be equivalent to the textual co
 
 Alternatively, the body might be an [external web resource](https://www.w3.org/TR/annotation-model/#external-web-resources). For example, the Body could use an XPath selector to identify the transcription of a paragraph of text within an XML document.
 
-``` highlight
+``` json
 {
   "id": "https://example.org/iiif/aeneid/book1/transcription-line2",
   "type": "Annotation",
@@ -102,7 +102,7 @@ The `motivation` value of the associated Annotation *must* have the value `suppl
 
 The URI of the JSON-LD context for this extension is `http://iiif.io/api/extension/text-granularity/context.json`. Consult the [Linked Data Context and Extensions](../presentation/3.0.md#46-linked-data-context-and-extensions "Linked Data Context and Extensions") section of the Presentation API for further guidance on its use within the `@context` property.
 
-``` highlight
+``` json
 {
   "@context": [
      "http://iiif.io/api/extension/text-granularity/context.json",
@@ -115,71 +115,14 @@ The URI of the JSON-LD context for this extension is `http://iiif.io/api/extensi
 
 The Text Granularity Levels defined above were derived from a survey of commonly used formats for OCR output such as hOCR, ALTO, and ABBYY, as well the output produced by the Google Cloud Vision API. The following table maps Text Granularity Levels to structures found in these output formats and is intended as an aid to implementers.
 
-<table id="table-ocr-granularity-map" class="api-table">
-<colgroup>
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-</colgroup>
-<thead>
-<tr>
-<th>Level</th>
-<th>hOCR</th>
-<th>ALTO</th>
-<th>ABBYY</th>
-<th>Google</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code class="language-plaintext highlighter-rouge">page</code></td>
-<td><code class="language-plaintext highlighter-rouge">ocr_page</code></td>
-<td><code class="language-plaintext highlighter-rouge">Page</code></td>
-<td><code class="language-plaintext highlighter-rouge">page</code></td>
-<td><code class="language-plaintext highlighter-rouge">Page</code></td>
-</tr>
-<tr>
-<td><code class="language-plaintext highlighter-rouge">block</code></td>
-<td><code class="language-plaintext highlighter-rouge">ocrx_block</code><br />
-<code class="language-plaintext highlighter-rouge">div[@class=”ocr_carea”]</code></td>
-<td><code class="language-plaintext highlighter-rouge">TextBlock</code><br />
-<code class="language-plaintext highlighter-rouge">ComposedBlock</code></td>
-<td><code class="language-plaintext highlighter-rouge">block[@blockType="Text"]</code></td>
-<td><code class="language-plaintext highlighter-rouge">Block</code></td>
-</tr>
-<tr>
-<td><code class="language-plaintext highlighter-rouge">paragraph</code></td>
-<td><code class="language-plaintext highlighter-rouge">p[@class=”ocr_carea”]</code></td>
-<td><code class="language-plaintext highlighter-rouge">TextBlock</code></td>
-<td><code class="language-plaintext highlighter-rouge">par</code></td>
-<td><code class="language-plaintext highlighter-rouge">Paragraph</code></td>
-</tr>
-<tr>
-<td><code class="language-plaintext highlighter-rouge">line</code></td>
-<td><code class="language-plaintext highlighter-rouge">ocr_line</code><br />
-<code class="language-plaintext highlighter-rouge">ocrx_line</code></td>
-<td><code class="language-plaintext highlighter-rouge">TextLine</code></td>
-<td><code class="language-plaintext highlighter-rouge">line</code></td>
-<td>-</td>
-</tr>
-<tr>
-<td><code class="language-plaintext highlighter-rouge">word</code></td>
-<td><code class="language-plaintext highlighter-rouge">ocrx_word</code></td>
-<td><code class="language-plaintext highlighter-rouge">String</code></td>
-<td><code class="language-plaintext highlighter-rouge">charParams[@wordStart=”1”]</code></td>
-<td><code class="language-plaintext highlighter-rouge">Word</code></td>
-</tr>
-<tr>
-<td><code class="language-plaintext highlighter-rouge">glyph</code></td>
-<td><code class="language-plaintext highlighter-rouge">ocrx_word[@cuts]</code></td>
-<td><code class="language-plaintext highlighter-rouge">Glyph</code></td>
-<td><code class="language-plaintext highlighter-rouge">charParams</code></td>
-<td><code class="language-plaintext highlighter-rouge">Symbol</code></td>
-</tr>
-</tbody>
-</table>
+| Level | hOCR | ALTO | ABBYY | Google |
+|----|----|----|----|----|
+| `page` | `ocr_page` | `Page` | `page` | `Page` |
+| `block` | `ocrx_block` / `div[@class=”ocr_carea”]` | `TextBlock` / `ComposedBlock` | `block[@blockType="Text"]` | `Block` |
+| `paragraph` | `p[@class=”ocr_carea”]` | `TextBlock` | `par` | `Paragraph` |
+| `line` | `ocr_line` / `ocrx_line` | `TextLine` | `line` | \- |
+| `word` | `ocrx_word` | `String` | `charParams[@wordStart=”1”]` | `Word` |
+| `glyph` | `ocrx_word[@cuts]` | `Glyph` | `charParams` | `Symbol` |
 
 ## Appendices
 

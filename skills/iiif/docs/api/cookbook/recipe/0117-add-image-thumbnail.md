@@ -22,9 +22,6 @@ This example uses an image of the cover of the same kabuki performance program a
 
 [JSON-LD](0117-add-image-thumbnail/manifest.json)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Support Deep Viewing with Basic Use of a IIIF Image Service](0005-image-service.md "Support Deep Viewing with Basic Use of a IIIF Image Service")

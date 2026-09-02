@@ -44,7 +44,7 @@ This table summarizes the services available and which APIs they may be used in.
 
 | Service | Image API | Presentation API |
 |----|:--:|:--:|
-| [Image Information](../image/3.0.md "Image API") | ![optional](https://iiif.io/api/assets/images/icons/metadata-api/optional.png "Optional") | ![recommended](https://iiif.io/api/assets/images/icons/metadata-api/recommended.png "Recommended") |
+| [Image Information](../image/3.0.md "Image API") | OPTIONAL | RECOMMENDED |
 
 ### 3.1 Image Information
 
@@ -52,7 +52,7 @@ This table summarizes the services available and which APIs they may be used in.
 
 The Image Information service allows the [Presentation API](../presentation/3.0.md "Presentation API"), and potentially other APIs, to reference content to be displayed via the [Image API](../image/3.0.md "Image API"). The JSON-LD content to be referenced or embedded is the Image Information document, also known as `info.json`. The service *must* have the `@context`, `@id` and `profile` keys, pointing to the context document, service base URI and compliance level profile respectively.
 
-``` highlight
+``` json
 {
   "service": {
     "@context" : "http://iiif.io/api/image/2/context.json",
@@ -64,7 +64,7 @@ The Image Information service allows the [Presentation API](../presentation/3.0.
 
 The service *may* have additional information embedded from the Image Information document to avoid the need to retrieve and parse it separately. In this case, the profile *may* also point to the profile of what functionality is supported, as described in the Image API.
 
-``` highlight
+``` json
 {
   "service": {
     "@context" : "http://iiif.io/api/image/2/context.json",
@@ -96,7 +96,7 @@ The service *may* have additional information embedded from the Image Informatio
 
 With the `logo` property added to the Image Information description in version 2.1 of the Image API, it is possible and reasonable for one `info.json` response to embed another using this pattern. In this case, the second service is related to the icon that should be displayed when a client renders the image described by the main response.
 
-``` highlight
+``` json
 {
   "@context" : "http://iiif.io/api/image/2/context.json",
   "@id" : "http://www.example.org/image-service/baseImage",

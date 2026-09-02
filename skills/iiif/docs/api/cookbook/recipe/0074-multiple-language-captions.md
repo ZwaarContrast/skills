@@ -28,7 +28,7 @@ In this example we use subtitle files in the WebVTT format. Other format options
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0074-multiple-language-captions/)
 
-``` line-numbers
+``` captions
 ```
 
 # Related recipes

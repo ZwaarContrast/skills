@@ -18,9 +18,6 @@ The main content is a photo of a square in Göttingen, which shows, among others
 
 [JSON-LD](0377-image-in-annotation/manifest.json)
 
-``` line-numbers
-```
-
 ## Related Recipes
 
 - [Simplest Annotation](0266-full-canvas-annotation.md "Simplest Annotation")

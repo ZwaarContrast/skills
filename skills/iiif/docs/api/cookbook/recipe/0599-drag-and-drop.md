@@ -16,47 +16,43 @@ The resource provider must have a draggable item — customarily the IIIF logo i
 
 A script implementing such a method for a Manifest could look like the below.
 
-``` javascript
-<script>
-function drag(ev) {
-  ev.dataTransfer.setData("text/plain", JSON.stringify({
-    "@context": "http://iiif.io/api/presentation/3/context.json",
-    "id": "https://iiif.io/api/cookbook/recipe/0599-drag-and-drop/dnd-manifest",
-    "type": "Annotation",
-    "motivation": ["contentState"],
-    "target": {
-      "id": "https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json",
-      "type": "Manifest"
+    <script>
+    function drag(ev) {
+      ev.dataTransfer.setData("text/plain", JSON.stringify({
+        "@context": "http://iiif.io/api/presentation/3/context.json",
+        "id": "https://iiif.io/api/cookbook/recipe/0599-drag-and-drop/dnd-manifest",
+        "type": "Annotation",
+        "motivation": ["contentState"],
+        "target": {
+          "id": "https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json",
+          "type": "Manifest"
+        }
+      }));
     }
-  }));
-}
-</script>
-```
+    </script>
 
 Note that the script represents the manifest content as JSON to parallel other cookbook resource content, but converts it to a string to match the content type parameter. While [the `setData` method of Web Assembly can use other content types](https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer/setData), the spec for [IIIF Content State](../../content-state/1.0.md#initialization-mechanisms-dragdrop) requires a content type of `text/plain` for maximum compatibility.
 
 The content does not have to be a full Manifest. A script implementing this same method for a single Canvas of a Manifest could look like the below. (Noting that there would be no likely practical difference from the above since this manifest contains but one Canvas.)
 
-``` javascript
-<script>
-function drag(ev) {
-  ev.dataTransfer.setData("text/plain", JSON.stringify({
-    "@context": "http://iiif.io/api/presentation/3/context.json",
-    "id": "https://iiif.io/api/cookbook/recipe/0599-drag-and-drop/dnd-manifest",
-    "type": "Annotation",
-    "motivation": ["contentState"],
-    "target": {
-      "id": "https://iiif.io/api/cookbook/recipe/0006-text-language/canvas/p1",
-      "type": "Canvas",
-      "partOf": [{
-        "id": "https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json",
-        "type": "Manifest"
-      }]
+    <script>
+    function drag(ev) {
+      ev.dataTransfer.setData("text/plain", JSON.stringify({
+        "@context": "http://iiif.io/api/presentation/3/context.json",
+        "id": "https://iiif.io/api/cookbook/recipe/0599-drag-and-drop/dnd-manifest",
+        "type": "Annotation",
+        "motivation": ["contentState"],
+        "target": {
+          "id": "https://iiif.io/api/cookbook/recipe/0006-text-language/canvas/p1",
+          "type": "Canvas",
+          "partOf": [{
+            "id": "https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json",
+            "type": "Manifest"
+          }]
+        }
+      }));
     }
-  }));
-}
-</script>
-```
+    </script>
 
 ### For Viewer Developers
 
@@ -76,9 +72,7 @@ No viewers currently support this approach to dragging and dropping a manifest.
 
 <img src="logo-sm.png" style="cursor:grab;" draggable="true" ondragstart="drag(event)" alt="IIIF logo; drag and drop onto a supporting viewer to see this resource in that viewer" />
 
-``` html
-<img src="logo-sm.png" draggable="true" ondragstart="drag(event)" alt="IIIF logo; drag and drop onto a supporting viewer to see this resource in that viewer" style="cursor:grab;">
-```
+    <img src="logo-sm.png" draggable="true" ondragstart="drag(event)" alt="IIIF logo; drag and drop onto a supporting viewer to see this resource in that viewer" style="cursor:grab;">
 
 Though no viewer supports it, IIIF-C Technical Director Glen Robson has [a working version of a non-canonical viewer implementation](https://iiif.gdmrdigital.com/import_to_viewers/DragDropDestination.html) publicly available. This brief screencast demonstrates what it could look like to use that viewer:
 

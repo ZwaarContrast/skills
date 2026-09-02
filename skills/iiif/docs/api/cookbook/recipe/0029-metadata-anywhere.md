@@ -26,9 +26,6 @@ Credit: *John Dee performing an experiment before Queen Elizabeth I*. Oil painti
 
 Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0029-metadata-anywhere/)
 
-``` line-numbers
-```
-
 # Related recipes
 
 - [Internationalization and Multi-language Values](0006-text-language.md "Internationalization and Multi-language Values")
