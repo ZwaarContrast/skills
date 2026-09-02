@@ -1,0 +1,77 @@
+slug	topic	title	prez_versions	json
+0000_template	-	0000_template	3	0000_template/manifest.json
+0001-mvm-image	Building a manifest in stages, adding more complexity at each stage	Simplest Manifest - Image	3/4	0001-mvm-image/manifest.json,0001-mvm-image/v4/manifest.json
+0002-mvm-audio	Building a manifest in stages, adding more complexity at each stage	Simplest Manifest - Audio	3/4	0002-mvm-audio/manifest.json,0002-mvm-audio/v4/manifest.json
+0003-mvm-video	Building a manifest in stages, adding more complexity at each stage	Simplest Manifest - Video	3/4	0003-mvm-video/manifest.json,0003-mvm-video/v4/manifest.json
+0004-canvas-size	Building a manifest in stages, adding more complexity at each stage	Image and Canvas with Differing Dimensions	3	0004-canvas-size/manifest.json
+0005-image-service	Building a manifest in stages, adding more complexity at each stage	Support Deep Viewing with Basic Use of a IIIF Image Service	3	0005-image-service/manifest.json
+0006-text-language	Building a manifest in stages, adding more complexity at each stage	Internationalization and Multi-language Values	3	0006-text-language/manifest.json
+0007-string-formats	Building a manifest in stages, adding more complexity at each stage	Embedding HTML in descriptive properties	3	0007-string-formats/manifest.json
+0008-rights	Building a manifest in stages, adding more complexity at each stage	Rights statement(s)	3	0008-rights/manifest.json
+0009-book-1	Building a manifest in stages, adding more complexity at each stage	Simple Manifest - Book	3	0009-book-1/manifest.json
+0010-book-2-viewing-direction	Building a manifest in stages, adding more complexity at each stage	Viewing direction and its effect on navigation	3	0010-book-2-viewing-direction/manifest-rtl.json,0010-book-2-viewing-direction/manifest-ttb.json
+0011-book-3-behavior	Building a manifest in stages, adding more complexity at each stage	Book behavior (paging) variations	3	0011-book-3-behavior/manifest-continuous.json,0011-book-3-behavior/manifest-individuals.json
+0013-placeholderCanvas	Building a manifest in stages, adding more complexity at each stage	Load a Preview Image Before the Main Content	3	0013-placeholderCanvas/manifest.json
+0014-accompanyingcanvas	Building a manifest in stages, adding more complexity at each stage	Audio Presentation with Accompanying Image	3	0014-accompanyingcanvas/manifest.json
+0015-start	Building a manifest in stages, adding more complexity at each stage	Begin playback at a specific point - Time-based media	3	0015-start/manifest.json
+0017-transcription-av	Textual and other supplementary content	Using Transcripts with A/V Content	3	0017-transcription-av/manifest.json
+0019-html-in-annotations	Other kinds of annotations	HTML in Annotations	3	0019-html-in-annotations/manifest.json
+0021-tagging	Other kinds of annotations	Simple Annotation - Tagging	3	0021-tagging/manifest.json
+0022-linking-with-a-hotspot	Other kinds of annotations	Redirecting from one Canvas to another resource (Hotspot linking)	3	0022-linking-with-a-hotspot/manifest.json
+0024-book-4-toc	Internal structure	Table of Contents for Book Chapters	3	0024-book-4-toc/manifest.json
+0025-newspaper-article-index	Internal structure	Navigation by Newspaper Article	3	0025-newspaper-article-index/manifest.json
+0026-toc-opera	Internal structure	Table of contents for A/V content	3	0026-toc-opera/manifest.json
+0027-alternative-page-order	Internal structure	Alternative Page Sequences	3	0027-alternative-page-order/manifest.json
+0029-metadata-anywhere	Building a manifest in stages, adding more complexity at each stage	Metadata on any Resource	3	0029-metadata-anywhere/manifest.json
+0030-multi-volume	Higher-level structure	Multi-volume Work with Individually-bound Volumes	3	0030-multi-volume/collection.json,0030-multi-volume/manifest_v1.json,0030-multi-volume/manifest_v2.json
+0031-bound-multivolume	Higher-level structure	Multiple Volumes in a Single Bound Volume	3	0031-bound-multivolume/manifest.json
+0032-collection	Building a manifest in stages, adding more complexity at each stage	Simple Collection	3	0032-collection/collection.json,0032-collection/manifest-01.json,0032-collection/manifest-02.json
+0033-choice	Segmentation and complex resources	Multiple choice of images in a single view	3	0033-choice/manifest.json
+0035-foldouts	Segmentation and complex resources	Foldouts, Flaps, and Maps	3	0035-foldouts/manifest.json
+0036-composition-from-multiple-images	Segmentation and complex resources	Composition from Multiple Images	3	0036-composition-from-multiple-images/manifest.json
+0040-image-rotation-service	Segmentation and complex resources	Image Rotation Two Ways	3	0040-image-rotation-service/manifest-css.json,0040-image-rotation-service/manifest-service.json
+0045-css	Other kinds of annotations	CSS in an Annotation	3	0045-css/manifest.json
+0046-rendering	Textual and other supplementary content	Providing Alternative Representations	3	0046-rendering/manifest.json
+0047-homepage	Linking	Linking to Web Page of an Object (homepage)	3	0047-homepage/manifest.json
+0053-seeAlso	Linking	Linking to Structured Metadata	3	0053-seeAlso/manifest.json
+0057-publishing-v2-and-v3	Technical	Making IIIF Presentation API v2 and v3 manifests available at the same URL	3	0057-publishing-v2-and-v3/manifest.json
+0064-opera-one-canvas	Real-world complex objects (ideally taken from actual collections)	Table of Contents for Multiple A/V files on a Single Canvas	3	0064-opera-one-canvas/manifest.json
+0065-opera-multiple-canvases	Real-world complex objects (ideally taken from actual collections)	Table of Contents for Multiple A/V files on Multiple Canvases	3	0065-opera-multiple-canvases/manifest.json
+0068-newspaper	Real-world complex objects (ideally taken from actual collections)	Basic Newspaper	3	0068-newspaper/newspaper_issue_1-anno_p1.json,0068-newspaper/newspaper_issue_1-anno_p2.json,0068-newspaper/newspaper_issue_1-manifest.json,0068-newspaper/newspaper_issue_2-anno_p1.json,0068-newspaper/newspaper_issue_2-anno_p2.json,0068-newspaper/newspaper_issue_2-manifest.json,0068-newspaper/newspaper_title-collection.json
+0074-multiple-language-captions	Real-world complex objects (ideally taken from actual collections)	Using Caption and Subtitle Files in Multiple Languages with Video Content	3	0074-multiple-language-captions/manifest.json
+0103-poetry-reading-annotations	Textual and other supplementary content	Scholarly Annotation of a Poetry Reading	3	0103-poetry-reading-annotations/manifest.json
+0117-add-image-thumbnail	Building a manifest in stages, adding more complexity at each stage	Image Thumbnail for Manifest	3	0117-add-image-thumbnail/manifest.json
+0118-multivalue	Building a manifest in stages, adding more complexity at each stage	Displaying Multiple Values with Language Maps	3	0118-multivalue/manifest.json
+0135-annotating-point-in-canvas	Other kinds of annotations	Annotating a specific point of an image	3	0135-annotating-point-in-canvas/manifest.json
+0139-geolocate-canvas-fragment	Other kinds of annotations	Geographic coordinates	3	0139-geolocate-canvas-fragment/manifest.json
+0154-geo-extension	Building a manifest in stages, adding more complexity at each stage	Locate a Manifest on a Web Map	3	0154-geo-extension/manifest.json
+0202-start-canvas	Building a manifest in stages, adding more complexity at each stage	Load Manifest Beginning with a Specific Canvas	3	0202-start-canvas/manifest.json
+0219-using-caption-file	Textual and other supplementary content	Using Captions and Subtitles with Video Content	3	0219-using-caption-file/manifest.json
+0229-behavior-ranges	Internal structure	Adding Thumbnail Navigation and `no-nav` to a Video Resource	3	0229-behavior-ranges/manifest.json
+0230-navdate	Building a manifest in stages, adding more complexity at each stage	Navigation by Chronology	3	0230-navdate/navdate-collection.json,0230-navdate/navdate_map_1-manifest.json,0230-navdate/navdate_map_2-manifest.json
+0231-transcript-meta-recipe	Textual and other supplementary content	Transcripts, Captions, and Subtitles - General Considerations	3	
+0232-image-thumbnail-canvas	Building a manifest in stages, adding more complexity at each stage	Implementation discussion: Thumbnails on Canvases	3	0232-image-thumbnail-canvas/manifest-av.json,0232-image-thumbnail-canvas/manifest-image.json
+0234-provider	Building a manifest in stages, adding more complexity at each stage	Acknowledge Content Contributors	3	0234-provider/manifest.json
+0240-navPlace-on-canvases	Building a manifest in stages, adding more complexity at each stage	Locate Multiple Canvases on a Web Map	3	0240-navPlace-on-canvases/manifest.json
+0258-tagging-external-resource	Other kinds of annotations	Tagging with an External Resource	3	0258-tagging-external-resource/manifest.json
+0261-non-rectangular-commenting	Other kinds of annotations	Annotation with a Non-Rectangular Polygon	3	0261-non-rectangular-commenting/manifest.json
+0266-full-canvas-annotation	Other kinds of annotations	Simplest Annotation	3	0266-full-canvas-annotation/manifest.json
+0269-embedded-or-referenced-annotations	Other kinds of annotations	Embedded or Referenced Annotations	3	0269-embedded-or-referenced-annotations/annotationpage.json,0269-embedded-or-referenced-annotations/manifest.json
+0283-missing-image	Building a manifest in stages, adding more complexity at each stage	Missing Images in a Sequence	3	0283-missing-image/manifest.json
+0299-region	Building a manifest in stages, adding more complexity at each stage	Addressing a spatial region	3	0299-region/manifest.json
+0306-linking-annotations-to-manifests	Other kinds of annotations	Linking external Annotations targeting a Canvas to a Manifest	3	0306-linking-annotations-to-manifests/annotationpage.json,0306-linking-annotations-to-manifests/manifest.json
+0309-annotation-collection	Other kinds of annotations	Using Annotation collections	3	0309-annotation-collection/anno_p1.json,0309-annotation-collection/anno_p2.json,0309-annotation-collection/manifest.json
+0318-navPlace-navDate	Real-world complex objects (ideally taken from actual collections)	Locating an Item in Place and Time	3	0318-navPlace-navDate/collection.json,0318-navPlace-navDate/manifest-1.json,0318-navPlace-navDate/manifest-2.json,0318-navPlace-navDate/manifest-3.json,0318-navPlace-navDate/manifest-4.json,0318-navPlace-navDate/manifest-5.json
+0326-annotating-image-layer	Other kinds of annotations	Annotate a specific images or layers	3	0326-annotating-image-layer/manifest.json
+0346-multilingual-annotation-body	Other kinds of annotations	Annotating in Multiple Languages	3	0346-multilingual-annotation-body/manifest.json
+0377-image-in-annotation	Other kinds of annotations	Image in annotations	3	0377-image-in-annotation/manifest.json
+0434-choice-av	Real-world complex objects (ideally taken from actual collections)	Multiple Choice of Audio Formats in a Single View (Canvas)	3	0434-choice-av/manifest.json
+0464-reuse-manifest	Building a manifest in stages, adding more complexity at each stage	Reuse parts of a Manifest	3	0464-reuse-manifest/manifest.json
+0466-link-for-loading-manifest	Sharing IIIF content	Loading a manifest with a viewer using a link	3	
+0485-contentstate-canvas-region	Sharing IIIF content	Open a specific region of a canvas in a viewer	3	0485-contentstate-canvas-region/annotation.json
+0489-multimedia-canvas	Segmentation and complex resources	Rendering Multiple Media Types on a Time-Based Canvas	3	0489-multimedia-canvas/manifest.json
+0540-link-for-opening-multiple-canvases	Sharing IIIF content	Sharing a link for opening two or more Canvases	3	0540-link-for-opening-multiple-canvases/annotation.json
+0560-resources-on-a-timeline	Segmentation and complex resources	Rendering Resources Sequentially on a Timeline	3	0560-resources-on-a-timeline/manifest.json
+0561-text-on-image	Other kinds of annotations	Visible Text Resource on a Canvas	3	0561-text-on-image/manifest.json
+0599-drag-and-drop	Sharing IIIF content	Drag and drop	3	
+0608-mvm-3d	Building a manifest in stages, adding more complexity at each stage	Simplest Manifest - 3D	4	0608-mvm-3d/v4/manifest.json

@@ -1,0 +1,1774 @@
+file	start	end	depth	heading
+api.md	3	13	2	Current specifications
+api.md	14	23	2	Draft specifications
+api.md	20	23	3	Feedback requested
+api.md	24	35	2	Approved extensions
+api.md	36	52	2	Community translations
+api.md	53	63	2	Community cookbook
+api.md	64	68	2	Validators
+api.md	69	88	2	Older versions
+api.md	89	92	2	Notes
+api.md	93	95	2	Process
+get-started.md	9	157	1	Get Started
+get-started.md	13	24	2	End user or implementer?
+get-started.md	25	66	2	Resources for end users
+get-started.md	29	34	3	How IIIF works
+get-started.md	35	40	3	Find IIIF resources
+get-started.md	41	46	3	Use IIIF resources
+get-started.md	47	52	3	Learn to do it yourself
+get-started.md	53	58	3	Find non-English resources
+get-started.md	59	66	3	Popular IIIF tools
+get-started.md	67	118	2	Implement IIIF for your materials
+get-started.md	71	76	3	IIIF APIs
+get-started.md	77	82	3	Get recipes
+get-started.md	83	88	3	Guide for IIIF Implementers
+get-started.md	89	94	3	IIIF-compliant vendors
+get-started.md	95	100	3	IIIF viewers
+get-started.md	101	106	3	IIIF image servers
+get-started.md	107	112	3	Community tools list
+get-started.md	113	118	3	Test an API implementation
+get-started.md	119	157	2	More resources
+get-started.md	121	126	3	Talks
+get-started.md	127	132	3	Outreach materials
+get-started.md	133	157	3	Tools
+get-started.md	143	150	4	About
+get-started.md	151	157	4	Stay Connected
+guides.md	9	99	1	Guides
+guides.md	13	26	2	Guides to finding and working with IIIF materials
+guides.md	15	20	3	Find IIIF resources
+guides.md	21	26	3	How to use IIIF viewers
+guides.md	27	46	2	Technical guides for implementers
+guides.md	29	34	3	Guide for IIIF implementers
+guides.md	35	40	3	Guide for Thinking about IIIF and SEO
+guides.md	41	46	3	Using the navPlace Extension With Leaflet
+guides.md	47	54	2	Guides on UX and design elements
+guides.md	49	54	3	Guide to IIIF personas
+guides.md	55	99	2	Other tutorials and guides of interest
+guides.md	57	62	3	Learn the basics of how IIIF works
+guides.md	63	68	3	IIIF online training course
+guides.md	69	74	3	Non-English IIIF Resources
+guides.md	75	99	3	IIIF image playground
+guides.md	85	92	4	About
+guides.md	93	99	4	Stay Connected
+guides/IIIF-and-SEO.md	7	27	2	**IIIF and SEO**
+guides/IIIF-and-SEO.md	15	18	3	**Ensure your information is in the page, not only in the data.**
+guides/IIIF-and-SEO.md	19	22	3	**Ensure your URLs are granular and descriptive.**
+guides/IIIF-and-SEO.md	23	27	3	**Ensure your information is also structured and semantic.**
+guides/finding_resources.md	11	14	2	Contribution and corrections
+guides/finding_resources.md	15	87	2	Collections
+guides/guide_for_implementers.md	5	14	2	Community
+guides/guide_for_implementers.md	15	22	2	Information gathering
+guides/guide_for_implementers.md	23	89	2	Core APIs
+guides/guide_for_implementers.md	29	38	3	Image API
+guides/guide_for_implementers.md	39	65	3	Presentation API
+guides/guide_for_implementers.md	53	65	4	Community Cookbook
+guides/guide_for_implementers.md	66	79	3	Viewers and site integration
+guides/guide_for_implementers.md	80	89	3	Additional APIs
+guides/guide_for_implementers.md	90	95	2	Other considerations
+guides/guide_for_implementers.md	96	101	2	Further exploration
+guides/using_iiif_resources.md	5	10	2	What is a IIIF Manifest?
+guides/using_iiif_resources.md	11	30	2	Finding a Manifest URL
+guides/using_iiif_resources.md	31	132	2	Tools for viewing Manifests
+guides/using_iiif_resources.md	35	70	3	Mirador
+guides/using_iiif_resources.md	41	58	4	Mirador 2
+guides/using_iiif_resources.md	59	70	4	Mirador 3
+guides/using_iiif_resources.md	71	88	3	Universal Viewer (UV)
+guides/using_iiif_resources.md	89	102	3	Tify
+guides/using_iiif_resources.md	103	120	3	IIIF Curation Viewer
+guides/using_iiif_resources.md	121	132	3	Diva.js
+guides/using_iiif_resources.md	133	142	2	Quick links
+api/cookbook.md	12	19	2	Viewer Support
+api/cookbook.md	20	23	2	Presentation API Versions
+api/cookbook.md	24	27	2	Code samples
+api/cookbook.md	28	31	1	Contributing
+api/cookbook.md	32	143	1	The Recipes
+api/cookbook.md	34	64	2	Building a manifest in stages, adding more complexity at each stage
+api/cookbook.md	65	74	2	Textual and other supplementary content
+api/cookbook.md	75	95	2	Other kinds of annotations
+api/cookbook.md	96	103	2	Internal structure
+api/cookbook.md	104	108	2	Higher-level structure
+api/cookbook.md	109	117	2	Segmentation and complex resources
+api/cookbook.md	118	122	2	Linking
+api/cookbook.md	123	131	2	Sharing IIIF content
+api/cookbook.md	132	135	2	Technical
+api/cookbook.md	136	143	2	Real-world complex objects (ideally taken from actual collections)
+api/extension.md	3	20	2	Status of this Document
+api/extension.md	21	26	2	Abstract
+api/extension.md	27	38	2	1. Introduction
+api/extension.md	31	34	3	1.1. Disclaimer
+api/extension.md	35	38	3	1.2. Inclusion Process
+api/extension.md	39	40	2	2. Requirements for Inclusion
+api/extension.md	41	50	2	3. Registry
+api/extension.md	51	62	2	Appendices
+api/extension.md	53	56	3	A. Acknowledgements
+api/extension.md	57	62	3	B. Change Log
+api/registry.md	3	6	1	Process
+api/registry.md	7	29	1	Registries
+api/registry.md	9	22	2	Presentation API Registries
+api/registry.md	23	26	2	Image API Registries
+api/registry.md	27	29	2	Other Registries
+api/extension/georef.md	3	8	2	Status of this Document
+api/extension/georef.md	9	47	2	1. Introduction
+api/extension/georef.md	15	26	3	1.1 Objectives and Scope
+api/extension/georef.md	27	35	3	1.2 Motivating Use Cases
+api/extension/georef.md	36	47	3	1.3 Terminology
+api/extension/georef.md	48	74	2	2. Georeferencing IIIF Resources
+api/extension/georef.md	50	55	3	2.1 Georeferencing
+api/extension/georef.md	56	74	3	2.2 Georeferencing Process
+api/extension/georef.md	75	256	2	3. Web Annotations for Georeferencing
+api/extension/georef.md	79	87	3	3.1 Embedded vs. Referenced Annotations
+api/extension/georef.md	88	93	3	3.2 Georeference Annotation `motivation`
+api/extension/georef.md	94	171	3	3.3 Georeference Annotation `target`
+api/extension/georef.md	104	117	4	3.3.1 Targeting the Full Resource
+api/extension/georef.md	118	149	4	3.3.2 Targeting a Specific Region of the Resource
+api/extension/georef.md	150	171	4	3.3.3 Content Variants
+api/extension/georef.md	152	160	5	Multiple Maps Depicted on a Single IIIF Resource
+api/extension/georef.md	161	171	5	A Canvas with multiple painting Annotations
+api/extension/georef.md	172	196	3	3.4 Georeference Annotation `body`
+api/extension/georef.md	197	218	3	3.5 The `resourceCoords` Property
+api/extension/georef.md	219	256	3	3.6 The `transformation` Property
+api/extension/georef.md	257	461	2	4. Full Examples
+api/extension/georef.md	259	364	3	4.1 Full Canvas Example
+api/extension/georef.md	365	461	3	4.2 Full Georeference Annotation Example
+api/extension/georef.md	462	470	2	5. Linked Data Context
+api/extension/georef.md	471	483	2	6. Appendices
+api/extension/georef.md	473	478	3	A. Acknowledgements
+api/extension/georef.md	479	483	3	B. Change Log
+api/extension/navplace.md	3	8	2	Status of this Document
+api/extension/navplace.md	9	45	2	1. Introduction
+api/extension/navplace.md	13	18	3	1.1 Objectives and Scope
+api/extension/navplace.md	19	32	3	1.2 Motivating Use Cases
+api/extension/navplace.md	33	45	3	1.3 Terminology
+api/extension/navplace.md	46	150	2	2. The `navPlace` Property and GeoJSON-LD
+api/extension/navplace.md	48	96	3	2.1 `navPlace` Property
+api/extension/navplace.md	97	150	3	2.2 GeoJSON
+api/extension/navplace.md	101	113	4	2.2.1 GeoJSON as Linked Data
+api/extension/navplace.md	114	121	4	2.2.2 Feature Collection
+api/extension/navplace.md	122	130	4	2.2.3 Feature
+api/extension/navplace.md	131	150	4	2.2.4 Geometry Objects and Position
+api/extension/navplace.md	151	165	2	3. Linked Data
+api/extension/navplace.md	153	161	3	3.1 Linked Data Context
+api/extension/navplace.md	162	165	3	3.2 Context Considerations for GeoJSON-LD `properties`
+api/extension/navplace.md	166	256	2	4. Full Manifest Example
+api/extension/navplace.md	257	266	2	5. Implementation Notes
+api/extension/navplace.md	259	262	3	5.1 GeoJSON-LD on the Web
+api/extension/navplace.md	263	266	3	5.2 IIIF Cookbook
+api/extension/navplace.md	267	277	2	Appendices
+api/extension/navplace.md	269	272	3	A. Acknowledgements
+api/extension/navplace.md	273	277	3	B. Change Log
+api/extension/text-granularity.md	3	8	2	Status of this Document
+api/extension/text-granularity.md	9	24	2	1. Introduction
+api/extension/text-granularity.md	11	14	3	1.1 Objectives and Scope
+api/extension/text-granularity.md	15	24	3	1.2 Motivating Use Cases
+api/extension/text-granularity.md	25	41	2	2. Text Granularity Levels and the `textGranularity` Property
+api/extension/text-granularity.md	42	100	2	3. Use of the `textGranularity` Property with Annotations
+api/extension/text-granularity.md	101	113	2	4. Linked Data Context
+api/extension/text-granularity.md	114	183	2	5. Implementation Note
+api/extension/text-granularity.md	184	195	2	Appendices
+api/extension/text-granularity.md	186	189	3	A. Acknowledgements
+api/extension/text-granularity.md	190	195	3	B. Change Log
+api/extension/georef/vocab/georef-terms.md	3	35	1	New terms introduced in the Georeference Extension
+api/extension/georef/vocab/georef-terms.md	5	8	2	`georeferencing`
+api/extension/georef/vocab/georef-terms.md	9	12	2	`resourceCoords`
+api/extension/georef/vocab/georef-terms.md	13	16	2	`transformation`
+api/extension/georef/vocab/georef-terms.md	17	20	2	`type`
+api/extension/georef/vocab/georef-terms.md	21	24	2	`options`
+api/extension/georef/vocab/georef-terms.md	25	28	2	`order`
+api/extension/georef/vocab/georef-terms.md	29	32	2	`thinPlateSpline`
+api/extension/georef/vocab/georef-terms.md	33	35	2	`polynomial`
+api/auth/1.0.md	3	29	2	Status of this Document
+api/auth/1.0.md	30	89	2	1. Introduction
+api/auth/1.0.md	62	69	3	1.1. Terminology
+api/auth/1.0.md	70	73	3	1.2. Authentication for Content Resources
+api/auth/1.0.md	74	81	3	1.3. Authentication for Description Resources
+api/auth/1.0.md	82	89	3	1.4. Security
+api/auth/1.0.md	90	521	2	2. Authentication Services
+api/auth/1.0.md	94	264	3	2.1. Access Cookie Service
+api/auth/1.0.md	100	125	4	2.1.1. Service Description
+api/auth/1.0.md	126	141	4	2.1.2. Interaction with the Access Cookie Service
+api/auth/1.0.md	142	175	4	2.1.3. Login Interaction Pattern
+api/auth/1.0.md	176	207	4	2.1.4. Clickthrough Interaction Pattern
+api/auth/1.0.md	208	236	4	2.1.5. Kiosk Interaction Pattern
+api/auth/1.0.md	237	264	4	2.1.6. External Interaction Pattern
+api/auth/1.0.md	265	439	3	2.2. Access Token Service
+api/auth/1.0.md	269	294	4	2.2.1. Service Description
+api/auth/1.0.md	295	315	4	2.2.2. The JSON Access Token Response
+api/auth/1.0.md	316	339	4	2.2.3. Interaction for Non-Browser Client Applications
+api/auth/1.0.md	340	405	4	2.2.4. Interaction for Browser-Based Client Applications
+api/auth/1.0.md	406	414	4	2.2.5. Using the Access Token
+api/auth/1.0.md	415	439	4	2.2.6. Access Token Error Conditions
+api/auth/1.0.md	440	476	3	2.3. Logout Service
+api/auth/1.0.md	444	472	4	2.3.1. Service Description
+api/auth/1.0.md	473	476	4	2.3.2. Interaction
+api/auth/1.0.md	477	521	3	2.4. Example Description Resource with Authentication Services
+api/auth/1.0.md	522	541	2	3. Interaction with Access-Controlled Resources
+api/auth/1.0.md	528	533	3	3.1. All or Nothing Access
+api/auth/1.0.md	534	541	3	3.2. Tiered Access
+api/auth/1.0.md	542	582	2	4. Workflow from the Browser Client Perspective
+api/auth/1.0.md	583	608	2	Appendices
+api/auth/1.0.md	585	588	3	A. Implementation Notes
+api/auth/1.0.md	589	592	3	B. Versioning
+api/auth/1.0.md	593	598	3	C. Acknowledgments
+api/auth/1.0.md	599	608	3	D. Change Log
+api/auth/2.0.md	3	28	2	Status of this Document
+api/auth/2.0.md	29	75	2	1. Introduction
+api/auth/2.0.md	56	71	3	1.1. Terminology
+api/auth/2.0.md	72	75	3	1.2. Common Specification Features
+api/auth/2.0.md	76	153	2	2. Authorization Flow Services
+api/auth/2.0.md	89	130	3	2.1. Declaring Services
+api/auth/2.0.md	131	153	3	2.2. Simple Authorization Flow
+api/auth/2.0.md	154	390	2	3. Access Service
+api/auth/2.0.md	164	226	3	3.1. Access Service Description
+api/auth/2.0.md	175	184	4	id
+api/auth/2.0.md	185	192	4	type
+api/auth/2.0.md	193	208	4	profile
+api/auth/2.0.md	209	226	4	service
+api/auth/2.0.md	227	242	3	3.2. Client Interaction with Access Services
+api/auth/2.0.md	243	390	3	3.3. Interaction Patterns
+api/auth/2.0.md	247	263	4	3.3.1 Active Interaction Pattern
+api/auth/2.0.md	264	271	4	label
+api/auth/2.0.md	272	279	4	confirmLabel
+api/auth/2.0.md	280	287	4	heading
+api/auth/2.0.md	288	295	4	note
+api/auth/2.0.md	296	327	4	Complete Service Description
+api/auth/2.0.md	318	327	5	3.3.1.1. Active Pattern Interaction
+api/auth/2.0.md	328	358	4	3.3.2. Kiosk Interaction Pattern
+api/auth/2.0.md	359	390	4	3.3.3. External Interaction Pattern
+api/auth/2.0.md	391	631	2	4. Access Token Service
+api/auth/2.0.md	397	455	3	4.1. Access Token Service Description
+api/auth/2.0.md	408	411	4	id
+api/auth/2.0.md	412	415	4	type
+api/auth/2.0.md	416	419	4	errorHeading
+api/auth/2.0.md	420	423	4	errorNote
+api/auth/2.0.md	424	455	4	Example Access Token Service Description
+api/auth/2.0.md	456	500	3	4.2. Access Token Service Request
+api/auth/2.0.md	501	527	3	4.3. Access Token Service Response
+api/auth/2.0.md	528	580	3	4.4. Access Token Message Format
+api/auth/2.0.md	540	547	4	messageId
+api/auth/2.0.md	548	560	4	accessToken
+api/auth/2.0.md	561	568	4	expiresIn
+api/auth/2.0.md	569	580	4	Example Access Token Message Body
+api/auth/2.0.md	581	631	3	4.5. Access Token Error Format
+api/auth/2.0.md	594	606	4	profile
+api/auth/2.0.md	607	610	4	messageId
+api/auth/2.0.md	611	614	4	heading
+api/auth/2.0.md	615	618	4	note
+api/auth/2.0.md	619	631	4	Example Access Token Error Response
+api/auth/2.0.md	632	774	2	5. Probe Service
+api/auth/2.0.md	636	665	3	5.1. Probe Service Description
+api/auth/2.0.md	646	649	4	id
+api/auth/2.0.md	650	653	4	type
+api/auth/2.0.md	654	657	4	errorHeading
+api/auth/2.0.md	658	661	4	errorNote
+api/auth/2.0.md	662	665	4	service
+api/auth/2.0.md	666	673	3	5.1. Probe Service Request
+api/auth/2.0.md	674	774	3	5.2. Probe Service Response
+api/auth/2.0.md	688	691	4	type
+api/auth/2.0.md	692	703	4	status
+api/auth/2.0.md	704	732	4	substitute
+api/auth/2.0.md	733	756	4	location
+api/auth/2.0.md	757	770	4	heading
+api/auth/2.0.md	771	774	4	note
+api/auth/2.0.md	775	834	2	6. Logout Service
+api/auth/2.0.md	779	828	3	6.1. Logout Service Description
+api/auth/2.0.md	787	790	4	id
+api/auth/2.0.md	791	794	4	type
+api/auth/2.0.md	795	802	4	label
+api/auth/2.0.md	803	828	4	Example Logout Service Description
+api/auth/2.0.md	829	834	3	6.2. Logout Interaction
+api/auth/2.0.md	835	915	2	7. Workflow from the Browser Client Perspective
+api/auth/2.0.md	849	905	3	7.1. Authorization Flow Algorithm
+api/auth/2.0.md	906	915	3	7.1 Tiered Access
+api/auth/2.0.md	916	946	2	Appendices
+api/auth/2.0.md	918	927	3	A. User Interaction at the Access Service and Third Party Cookies
+api/auth/2.0.md	928	931	3	B. Versioning
+api/auth/2.0.md	932	935	3	C. Acknowledgments
+api/auth/2.0.md	936	946	3	D. Change Log
+api/auth/1.0/implementation.md	3	6	2	Status of this Document
+api/auth/1.0/implementation.md	7	37	2	1. Introduction
+api/auth/1.0/implementation.md	13	37	3	1.1 Summary of Authentication Flow
+api/auth/1.0/implementation.md	38	45	2	2. CORS Support
+api/auth/1.0/implementation.md	46	51	2	3. Use of Service Labels and Descriptions
+api/auth/1.0/implementation.md	52	79	2	4. Window Behavior Across Devices
+api/auth/1.0/implementation.md	56	65	3	4.1 Event Initiation
+api/auth/1.0/implementation.md	66	75	3	4.2 Windows and Tabs
+api/auth/1.0/implementation.md	76	79	3	4.3 Consistency
+api/auth/1.0/implementation.md	80	114	2	5. Redirects and Degraded Images
+api/auth/1.0/implementation.md	100	114	3	5.1 User Interface Patterns
+api/auth/1.0/implementation.md	115	124	2	6. Token Storage Strategies
+api/auth/1.0/implementation.md	125	144	2	7. Security for Server Implementers
+api/auth/1.0/implementation.md	145	225	2	8. Optimizations at the Presentation API Level
+api/auth/1.0/implementation.md	226	262	2	9. Browser-Specific Issues
+api/auth/1.0/implementation.md	228	262	3	9.1 Internet Explorer
+api/auth/1.0/implementation.md	230	246	4	9.1.1 CORS and XDomainRequest in IE9 and Below
+api/auth/1.0/implementation.md	247	254	4	9.1.2 P3P Policy in IE Prior to Edge
+api/auth/1.0/implementation.md	255	262	4	9.1.3 Security Zones in All Versions of IE
+api/auth/1.0/implementation.md	263	272	2	Appendices
+api/auth/1.0/implementation.md	265	272	3	A. Change Log
+api/auth/2.0/change-log.md	5	32	2	1. Breaking changes
+api/auth/2.0/change-log.md	9	12	3	1.1. Use JSON-LD 1.1
+api/auth/2.0/change-log.md	13	16	3	1.2. Rename `@id` to `id`, `@type` to `type`
+api/auth/2.0/change-log.md	17	20	3	1.3. Every class has a `type`
+api/auth/2.0/change-log.md	21	24	3	1.4. Removal of `profile` where no longer necessary; use of @context-aliased URIs
+api/auth/2.0/change-log.md	25	28	3	1.5. Use Language Maps
+api/auth/2.0/change-log.md	29	32	3	1.6. Remove the “clickthrough” and “login” patterns, merge into new “active” interaction pattern
+api/auth/2.0/change-log.md	33	50	2	2. New Features
+api/auth/2.0/change-log.md	35	38	3	2.1. Support Access Control on any Content Resource
+api/auth/2.0/change-log.md	39	42	3	2.2. Introduce concept of “authorizing aspect”
+api/auth/2.0/change-log.md	43	46	3	2.3. Introduce a Probe Service
+api/auth/2.0/change-log.md	47	50	3	2.4. Allow responses to provide user-facing strings
+api/auth/2.0/change-log.md	51	59	2	3. Editorial and Naming Changes
+api/auth/2.0/change-log.md	53	56	3	3.1. Rename specification
+api/auth/2.0/change-log.md	57	59	3	3.2. Rename Cookie Service to Access Service
+api/discovery/1.0.md	3	26	2	Status of this Document
+api/discovery/1.0.md	27	55	2	1. Introduction
+api/discovery/1.0.md	33	45	3	1.1. Objectives and Scope
+api/discovery/1.0.md	46	55	3	1.2. Terminology
+api/discovery/1.0.md	56	256	2	2. Overview of IIIF Resource Discovery
+api/discovery/1.0.md	66	187	3	2.1. IIIF Resources and their Changes
+api/discovery/1.0.md	72	91	4	2.1.1. Level 0: Resource References
+api/discovery/1.0.md	92	108	4	2.1.2. Level 1: Resource Changes
+api/discovery/1.0.md	109	127	4	2.1.3. Level 2: Resource Creation, Change, Deletion and Moving
+api/discovery/1.0.md	128	173	4	2.1.4. Aggregating Activities
+api/discovery/1.0.md	174	187	4	2.1.5. State Refresh Activities
+api/discovery/1.0.md	188	231	3	2.2. Pages of Changes
+api/discovery/1.0.md	232	252	3	2.3. Collections of Pages
+api/discovery/1.0.md	253	256	3	2.4. Registries of Collections
+api/discovery/1.0.md	257	820	2	3. Activity Streams Details
+api/discovery/1.0.md	265	418	3	3.1. Ordered Collection
+api/discovery/1.0.md	273	282	5	id
+api/discovery/1.0.md	283	292	5	type
+api/discovery/1.0.md	293	307	5	first
+api/discovery/1.0.md	308	322	5	last
+api/discovery/1.0.md	323	332	5	totalItems
+api/discovery/1.0.md	333	356	5	seeAlso
+api/discovery/1.0.md	357	373	5	partOf
+api/discovery/1.0.md	374	383	5	rights
+api/discovery/1.0.md	384	418	5	Complete Ordered Collection Example
+api/discovery/1.0.md	419	553	3	3.2. Ordered Collection Page
+api/discovery/1.0.md	425	434	5	id
+api/discovery/1.0.md	435	444	5	type
+api/discovery/1.0.md	445	459	5	partOf
+api/discovery/1.0.md	460	469	5	startIndex
+api/discovery/1.0.md	470	484	5	next
+api/discovery/1.0.md	485	499	5	prev
+api/discovery/1.0.md	500	520	5	orderedItems
+api/discovery/1.0.md	521	553	5	Complete Ordered Collection Page Example
+api/discovery/1.0.md	554	729	3	3.3. Activities
+api/discovery/1.0.md	560	569	5	id
+api/discovery/1.0.md	570	591	5	type
+api/discovery/1.0.md	592	631	5	object
+api/discovery/1.0.md	632	653	5	target
+api/discovery/1.0.md	654	663	5	endTime
+api/discovery/1.0.md	664	673	5	startTime
+api/discovery/1.0.md	674	683	5	summary
+api/discovery/1.0.md	684	698	5	actor
+api/discovery/1.0.md	699	729	5	Complete Activity Example
+api/discovery/1.0.md	730	754	3	3.4. Linked Data Context and Extensions
+api/discovery/1.0.md	732	741	4	3.4.1. @context
+api/discovery/1.0.md	742	754	4	3.4.2. Extensions
+api/discovery/1.0.md	755	820	3	3.5. Activity Streams Processing Algorithm
+api/discovery/1.0.md	763	775	4	3.5.1. Collection Algorithm
+api/discovery/1.0.md	776	795	4	3.5.2. Page Algorithm
+api/discovery/1.0.md	796	801	4	3.5.3. Resource Processing: Indexing
+api/discovery/1.0.md	802	820	4	3.5.4. Processing Multiple Streams
+api/discovery/1.0.md	821	883	2	4. Network Considerations
+api/discovery/1.0.md	823	842	3	4.1. Media Type
+api/discovery/1.0.md	843	848	3	4.2. Activities for Access-Restricted Content
+api/discovery/1.0.md	849	883	3	4.3. Negotiable Resources
+api/discovery/1.0.md	884	903	2	Appendices
+api/discovery/1.0.md	886	891	3	A. Acknowledgements
+api/discovery/1.0.md	892	903	3	B. Change Log
+api/cookbook/recipe.md	34	60	1	Full process
+api/cookbook/recipe.md	61	69	1	Fixtures
+api/cookbook/recipe/0000_template.md	3	6	2	Use Case
+api/cookbook/recipe/0000_template.md	7	10	2	Implementation Notes
+api/cookbook/recipe/0000_template.md	11	16	2	Restrictions
+api/cookbook/recipe/0000_template.md	17	27	2	Example
+api/cookbook/recipe/0000_template.md	28	30	2	Related Recipes
+api/cookbook/recipe/0001-mvm-image.md	3	6	2	Use Case
+api/cookbook/recipe/0001-mvm-image.md	7	14	2	Implementation Notes
+api/cookbook/recipe/0001-mvm-image.md	15	18	2	Restrictions
+api/cookbook/recipe/0001-mvm-image.md	19	27	2	Example
+api/cookbook/recipe/0001-mvm-image.md	28	57	1	Related Recipes
+api/cookbook/recipe/0001-mvm-image.md	35	38	2	Use Case
+api/cookbook/recipe/0001-mvm-image.md	39	46	2	Implementation Notes
+api/cookbook/recipe/0001-mvm-image.md	47	50	2	Restrictions
+api/cookbook/recipe/0001-mvm-image.md	51	57	2	Example
+api/cookbook/recipe/0001-mvm-image.md	58	71	1	Related Recipes
+api/cookbook/recipe/0001-mvm-image.md	67	71	2	Manifest Comparison
+api/cookbook/recipe/0002-mvm-audio.md	3	6	2	Use Case
+api/cookbook/recipe/0002-mvm-audio.md	7	10	2	Implementation Notes
+api/cookbook/recipe/0002-mvm-audio.md	11	21	2	Example
+api/cookbook/recipe/0002-mvm-audio.md	22	26	2	Related Recipes
+api/cookbook/recipe/0002-mvm-audio.md	27	30	2	Use Case
+api/cookbook/recipe/0002-mvm-audio.md	31	40	2	Implementation Notes
+api/cookbook/recipe/0002-mvm-audio.md	41	49	2	Example
+api/cookbook/recipe/0002-mvm-audio.md	50	55	2	Related Recipes
+api/cookbook/recipe/0002-mvm-audio.md	56	60	2	Manifest Comparison
+api/cookbook/recipe/0003-mvm-video.md	3	6	2	Use Case
+api/cookbook/recipe/0003-mvm-video.md	7	10	2	Implementation Notes
+api/cookbook/recipe/0003-mvm-video.md	11	21	2	Example
+api/cookbook/recipe/0003-mvm-video.md	22	48	1	Related Recipes
+api/cookbook/recipe/0003-mvm-video.md	26	29	2	Use Case
+api/cookbook/recipe/0003-mvm-video.md	30	39	2	Implementation Notes
+api/cookbook/recipe/0003-mvm-video.md	40	48	2	Example
+api/cookbook/recipe/0003-mvm-video.md	49	59	1	Related Recipes
+api/cookbook/recipe/0003-mvm-video.md	55	59	2	Manifest Comparison
+api/cookbook/recipe/0004-canvas-size.md	3	6	2	Use Case
+api/cookbook/recipe/0004-canvas-size.md	7	20	2	Implementation notes
+api/cookbook/recipe/0004-canvas-size.md	21	24	2	Restrictions
+api/cookbook/recipe/0004-canvas-size.md	25	35	2	Example
+api/cookbook/recipe/0004-canvas-size.md	36	39	1	Related recipes
+api/cookbook/recipe/0005-image-service.md	3	6	2	Use Case
+api/cookbook/recipe/0005-image-service.md	7	16	2	Implementation Notes
+api/cookbook/recipe/0005-image-service.md	17	20	2	Restrictions
+api/cookbook/recipe/0005-image-service.md	21	29	2	Example
+api/cookbook/recipe/0005-image-service.md	30	35	1	Related recipes
+api/cookbook/recipe/0006-text-language.md	3	6	2	Use case
+api/cookbook/recipe/0006-text-language.md	7	14	2	Implementation notes
+api/cookbook/recipe/0006-text-language.md	15	20	2	Restrictions
+api/cookbook/recipe/0006-text-language.md	21	43	2	Example
+api/cookbook/recipe/0006-text-language.md	44	47	1	Related recipes
+api/cookbook/recipe/0007-string-formats.md	3	6	2	Use Case
+api/cookbook/recipe/0007-string-formats.md	7	12	2	Implementation notes
+api/cookbook/recipe/0007-string-formats.md	13	16	2	Restrictions
+api/cookbook/recipe/0007-string-formats.md	17	25	2	Example
+api/cookbook/recipe/0007-string-formats.md	26	28	1	Related recipes
+api/cookbook/recipe/0008-rights.md	3	15	2	Use Case
+api/cookbook/recipe/0008-rights.md	16	21	2	Implementation notes
+api/cookbook/recipe/0008-rights.md	22	25	2	Restrictions
+api/cookbook/recipe/0008-rights.md	26	34	2	Example
+api/cookbook/recipe/0008-rights.md	35	38	1	Related recipes
+api/cookbook/recipe/0009-book-1.md	3	6	2	Use Case
+api/cookbook/recipe/0009-book-1.md	7	18	2	Implementation notes
+api/cookbook/recipe/0009-book-1.md	19	27	2	Example
+api/cookbook/recipe/0009-book-1.md	28	34	1	Related recipes
+api/cookbook/recipe/0010-book-2-viewing-direction.md	3	14	2	Use Case
+api/cookbook/recipe/0010-book-2-viewing-direction.md	15	18	2	Implementation notes
+api/cookbook/recipe/0010-book-2-viewing-direction.md	19	22	2	Restrictions
+api/cookbook/recipe/0010-book-2-viewing-direction.md	23	33	2	Example 1: `viewingDirection` `right-to-left`
+api/cookbook/recipe/0010-book-2-viewing-direction.md	34	44	2	Example 2: `viewingDirection` `top-to-bottom`
+api/cookbook/recipe/0010-book-2-viewing-direction.md	45	48	1	Related recipes
+api/cookbook/recipe/0011-book-3-behavior.md	3	14	2	Use cases
+api/cookbook/recipe/0011-book-3-behavior.md	15	20	2	Implementation notes
+api/cookbook/recipe/0011-book-3-behavior.md	21	24	2	Restrictions
+api/cookbook/recipe/0011-book-3-behavior.md	25	48	2	Examples
+api/cookbook/recipe/0011-book-3-behavior.md	27	37	3	Use case 1: Accordion book (`continuous`)
+api/cookbook/recipe/0011-book-3-behavior.md	38	48	3	Use case 2: Book imaged as 2-page spreads (`individuals`)
+api/cookbook/recipe/0011-book-3-behavior.md	49	52	1	Related recipes
+api/cookbook/recipe/0013-placeholderCanvas.md	3	6	2	Use Case
+api/cookbook/recipe/0013-placeholderCanvas.md	7	14	2	Implementation notes
+api/cookbook/recipe/0013-placeholderCanvas.md	15	18	2	Restrictions
+api/cookbook/recipe/0013-placeholderCanvas.md	19	29	2	Example
+api/cookbook/recipe/0013-placeholderCanvas.md	30	33	1	Related recipes
+api/cookbook/recipe/0014-accompanyingcanvas.md	3	6	2	Use Case
+api/cookbook/recipe/0014-accompanyingcanvas.md	7	14	2	Implementation notes
+api/cookbook/recipe/0014-accompanyingcanvas.md	15	18	2	Restrictions
+api/cookbook/recipe/0014-accompanyingcanvas.md	19	29	2	Example
+api/cookbook/recipe/0014-accompanyingcanvas.md	30	33	1	Related recipes
+api/cookbook/recipe/0015-start.md	3	6	2	Use Case
+api/cookbook/recipe/0015-start.md	7	22	2	Implementation notes
+api/cookbook/recipe/0015-start.md	17	22	3	About selector classes:
+api/cookbook/recipe/0015-start.md	23	33	2	Example
+api/cookbook/recipe/0015-start.md	34	38	1	Related recipes
+api/cookbook/recipe/0017-transcription-av.md	3	6	2	Use Case
+api/cookbook/recipe/0017-transcription-av.md	7	14	2	Implementation notes
+api/cookbook/recipe/0017-transcription-av.md	15	18	2	Restrictions
+api/cookbook/recipe/0017-transcription-av.md	19	31	2	Example
+api/cookbook/recipe/0017-transcription-av.md	32	38	1	Related recipes
+api/cookbook/recipe/0019-html-in-annotations.md	3	6	2	Use Case
+api/cookbook/recipe/0019-html-in-annotations.md	7	14	2	Implementation Notes
+api/cookbook/recipe/0019-html-in-annotations.md	15	28	2	Restrictions
+api/cookbook/recipe/0019-html-in-annotations.md	29	39	2	Example
+api/cookbook/recipe/0019-html-in-annotations.md	40	43	2	Related Recipes
+api/cookbook/recipe/0021-tagging.md	3	6	2	Use Case
+api/cookbook/recipe/0021-tagging.md	7	12	2	Implementation Notes
+api/cookbook/recipe/0021-tagging.md	13	16	2	Restrictions
+api/cookbook/recipe/0021-tagging.md	17	29	2	Example
+api/cookbook/recipe/0021-tagging.md	30	32	2	Related Recipes
+api/cookbook/recipe/0022-linking-with-a-hotspot.md	3	6	2	Use Case
+api/cookbook/recipe/0022-linking-with-a-hotspot.md	7	31	2	Implementation Notes
+api/cookbook/recipe/0022-linking-with-a-hotspot.md	32	35	2	Restrictions
+api/cookbook/recipe/0022-linking-with-a-hotspot.md	36	44	2	Example
+api/cookbook/recipe/0022-linking-with-a-hotspot.md	45	47	2	Related Recipes
+api/cookbook/recipe/0024-book-4-toc.md	3	6	2	Use Case
+api/cookbook/recipe/0024-book-4-toc.md	7	14	2	Implementation Notes
+api/cookbook/recipe/0024-book-4-toc.md	15	18	2	Restrictions
+api/cookbook/recipe/0024-book-4-toc.md	19	34	2	Example
+api/cookbook/recipe/0024-book-4-toc.md	35	39	2	Related Recipes
+api/cookbook/recipe/0025-newspaper-article-index.md	3	6	2	Use Case
+api/cookbook/recipe/0025-newspaper-article-index.md	7	18	2	Implementation Notes
+api/cookbook/recipe/0025-newspaper-article-index.md	19	22	2	Restrictions
+api/cookbook/recipe/0025-newspaper-article-index.md	23	33	2	Example
+api/cookbook/recipe/0025-newspaper-article-index.md	34	38	2	Related Recipes
+api/cookbook/recipe/0026-toc-opera.md	3	8	2	Use Case
+api/cookbook/recipe/0026-toc-opera.md	9	16	2	Implementation Notes
+api/cookbook/recipe/0026-toc-opera.md	17	20	2	Restrictions
+api/cookbook/recipe/0026-toc-opera.md	21	31	2	Example
+api/cookbook/recipe/0026-toc-opera.md	32	38	2	Related Recipes
+api/cookbook/recipe/0027-alternative-page-order.md	3	6	2	Use Case
+api/cookbook/recipe/0027-alternative-page-order.md	7	14	2	Implementation Notes
+api/cookbook/recipe/0027-alternative-page-order.md	15	27	2	Example
+api/cookbook/recipe/0027-alternative-page-order.md	28	31	2	Related Recipes
+api/cookbook/recipe/0029-metadata-anywhere.md	3	6	2	Use Case
+api/cookbook/recipe/0029-metadata-anywhere.md	7	10	2	Implementation notes
+api/cookbook/recipe/0029-metadata-anywhere.md	11	16	2	Restrictions
+api/cookbook/recipe/0029-metadata-anywhere.md	17	31	2	Example
+api/cookbook/recipe/0029-metadata-anywhere.md	32	37	1	Related recipes
+api/cookbook/recipe/0030-multi-volume.md	3	6	2	Use Case
+api/cookbook/recipe/0030-multi-volume.md	7	14	2	Implementation notes
+api/cookbook/recipe/0030-multi-volume.md	15	18	2	Restrictions
+api/cookbook/recipe/0030-multi-volume.md	19	51	2	Example
+api/cookbook/recipe/0030-multi-volume.md	52	56	1	Related recipes
+api/cookbook/recipe/0031-bound-multivolume.md	3	12	2	Use Case
+api/cookbook/recipe/0031-bound-multivolume.md	13	20	2	Implementation Notes
+api/cookbook/recipe/0031-bound-multivolume.md	21	61	2	Example
+api/cookbook/recipe/0031-bound-multivolume.md	62	66	2	Related Recipes
+api/cookbook/recipe/0032-collection.md	3	6	2	Use Case
+api/cookbook/recipe/0032-collection.md	7	22	2	Implementation notes
+api/cookbook/recipe/0032-collection.md	23	26	2	Restrictions
+api/cookbook/recipe/0032-collection.md	27	58	2	Example
+api/cookbook/recipe/0032-collection.md	59	63	1	Related recipes
+api/cookbook/recipe/0033-choice.md	3	26	2	Use Cases
+api/cookbook/recipe/0033-choice.md	27	40	2	Implementation notes
+api/cookbook/recipe/0033-choice.md	41	48	2	Restrictions
+api/cookbook/recipe/0033-choice.md	49	63	2	Example
+api/cookbook/recipe/0033-choice.md	64	67	2	Related recipes
+api/cookbook/recipe/0035-foldouts.md	3	14	2	Use Case
+api/cookbook/recipe/0035-foldouts.md	15	20	2	Implementation notes
+api/cookbook/recipe/0035-foldouts.md	21	50	2	Example
+api/cookbook/recipe/0035-foldouts.md	51	54	2	Related recipes
+api/cookbook/recipe/0036-composition-from-multiple-images.md	3	28	2	Use Case
+api/cookbook/recipe/0036-composition-from-multiple-images.md	29	36	2	Multiple painted resources vs Choice
+api/cookbook/recipe/0036-composition-from-multiple-images.md	37	42	2	Implementation notes
+api/cookbook/recipe/0036-composition-from-multiple-images.md	43	55	2	Example
+api/cookbook/recipe/0036-composition-from-multiple-images.md	56	60	1	Related recipes
+api/cookbook/recipe/0040-image-rotation-service.md	3	6	2	Use Case
+api/cookbook/recipe/0040-image-rotation-service.md	7	41	2	Implementation Notes
+api/cookbook/recipe/0040-image-rotation-service.md	11	20	3	Image Service
+api/cookbook/recipe/0040-image-rotation-service.md	21	37	3	Cascading Style Sheets (CSS)
+api/cookbook/recipe/0040-image-rotation-service.md	38	41	3	Rotation and Annotations
+api/cookbook/recipe/0040-image-rotation-service.md	42	49	2	Restrictions
+api/cookbook/recipe/0040-image-rotation-service.md	50	61	2	Example
+api/cookbook/recipe/0040-image-rotation-service.md	62	70	2	Example 1: Using an Image Service
+api/cookbook/recipe/0040-image-rotation-service.md	71	79	2	Example 2: CSS
+api/cookbook/recipe/0040-image-rotation-service.md	80	82	2	Related Recipes
+api/cookbook/recipe/0045-css.md	3	6	2	Use Case
+api/cookbook/recipe/0045-css.md	7	16	2	Implementation Notes
+api/cookbook/recipe/0045-css.md	17	26	2	Restrictions
+api/cookbook/recipe/0045-css.md	27	40	2	Example
+api/cookbook/recipe/0045-css.md	36	40	3	Stylesheet
+api/cookbook/recipe/0045-css.md	41	45	2	Related Recipes
+api/cookbook/recipe/0046-rendering.md	3	6	2	Use Case
+api/cookbook/recipe/0046-rendering.md	7	20	2	Implementation notes
+api/cookbook/recipe/0046-rendering.md	21	24	2	Restrictions
+api/cookbook/recipe/0046-rendering.md	25	37	2	Example
+api/cookbook/recipe/0046-rendering.md	38	45	1	Related recipes
+api/cookbook/recipe/0047-homepage.md	3	6	2	Use Case
+api/cookbook/recipe/0047-homepage.md	7	16	2	Implementation Notes
+api/cookbook/recipe/0047-homepage.md	17	20	2	Restrictions
+api/cookbook/recipe/0047-homepage.md	21	33	2	Example
+api/cookbook/recipe/0047-homepage.md	34	38	2	Related Recipes
+api/cookbook/recipe/0053-seeAlso.md	3	6	2	Use Case
+api/cookbook/recipe/0053-seeAlso.md	7	20	2	Implementation Notes
+api/cookbook/recipe/0053-seeAlso.md	21	24	2	Restrictions
+api/cookbook/recipe/0053-seeAlso.md	25	41	2	Example
+api/cookbook/recipe/0053-seeAlso.md	42	45	2	Related Recipes
+api/cookbook/recipe/0057-publishing-v2-and-v3.md	3	6	2	Use Case
+api/cookbook/recipe/0057-publishing-v2-and-v3.md	7	24	2	Implementation notes
+api/cookbook/recipe/0057-publishing-v2-and-v3.md	25	30	2	Restrictions
+api/cookbook/recipe/0057-publishing-v2-and-v3.md	31	75	2	Example
+api/cookbook/recipe/0064-opera-one-canvas.md	3	6	2	Use Case
+api/cookbook/recipe/0064-opera-one-canvas.md	7	14	2	Implementation Notes
+api/cookbook/recipe/0064-opera-one-canvas.md	15	23	2	Example
+api/cookbook/recipe/0064-opera-one-canvas.md	24	29	2	Related Recipes
+api/cookbook/recipe/0065-opera-multiple-canvases.md	3	6	2	Use Case
+api/cookbook/recipe/0065-opera-multiple-canvases.md	7	10	2	Implementation Notes
+api/cookbook/recipe/0065-opera-multiple-canvases.md	11	14	2	Restrictions
+api/cookbook/recipe/0065-opera-multiple-canvases.md	15	23	2	Example
+api/cookbook/recipe/0065-opera-multiple-canvases.md	24	29	2	Related Recipes
+api/cookbook/recipe/0068-newspaper.md	3	6	2	Use Case
+api/cookbook/recipe/0068-newspaper.md	7	52	2	Implementation notes
+api/cookbook/recipe/0068-newspaper.md	11	18	3	Navigate by Date
+api/cookbook/recipe/0068-newspaper.md	19	34	3	Linking to OCR Text
+api/cookbook/recipe/0068-newspaper.md	21	30	4	As Annotations
+api/cookbook/recipe/0068-newspaper.md	31	34	4	Linking Directly to an ALTO File
+api/cookbook/recipe/0068-newspaper.md	35	52	3	Newspapers and IIIF Structures
+api/cookbook/recipe/0068-newspaper.md	53	92	2	Example
+api/cookbook/recipe/0068-newspaper.md	93	99	2	Related recipes
+api/cookbook/recipe/0074-multiple-language-captions.md	3	6	2	Use Case
+api/cookbook/recipe/0074-multiple-language-captions.md	7	14	2	Implementation notes
+api/cookbook/recipe/0074-multiple-language-captions.md	15	20	2	Restrictions
+api/cookbook/recipe/0074-multiple-language-captions.md	21	33	2	Example
+api/cookbook/recipe/0074-multiple-language-captions.md	34	40	1	Related recipes
+api/cookbook/recipe/0103-poetry-reading-annotations.md	3	14	2	Use Case
+api/cookbook/recipe/0103-poetry-reading-annotations.md	15	22	2	Implementation notes
+api/cookbook/recipe/0103-poetry-reading-annotations.md	23	31	2	Example
+api/cookbook/recipe/0103-poetry-reading-annotations.md	32	37	1	Related recipes
+api/cookbook/recipe/0117-add-image-thumbnail.md	3	6	2	Use Case
+api/cookbook/recipe/0117-add-image-thumbnail.md	7	14	2	Implementation Notes
+api/cookbook/recipe/0117-add-image-thumbnail.md	15	18	2	Restrictions
+api/cookbook/recipe/0117-add-image-thumbnail.md	19	27	2	Example
+api/cookbook/recipe/0117-add-image-thumbnail.md	28	31	2	Related Recipes
+api/cookbook/recipe/0118-multivalue.md	3	6	2	Use Case
+api/cookbook/recipe/0118-multivalue.md	7	12	2	Implementation Notes
+api/cookbook/recipe/0118-multivalue.md	13	16	2	Restrictions
+api/cookbook/recipe/0118-multivalue.md	17	27	2	Example
+api/cookbook/recipe/0118-multivalue.md	28	32	2	Related Recipes
+api/cookbook/recipe/0135-annotating-point-in-canvas.md	3	6	2	Use Case
+api/cookbook/recipe/0135-annotating-point-in-canvas.md	7	14	2	Implementation notes
+api/cookbook/recipe/0135-annotating-point-in-canvas.md	15	23	2	Example
+api/cookbook/recipe/0135-annotating-point-in-canvas.md	24	27	1	Related recipes
+api/cookbook/recipe/0139-geolocate-canvas-fragment.md	5	10	3	Use Case
+api/cookbook/recipe/0139-geolocate-canvas-fragment.md	11	18	3	Implementation Notes
+api/cookbook/recipe/0139-geolocate-canvas-fragment.md	19	22	3	Restrictions
+api/cookbook/recipe/0139-geolocate-canvas-fragment.md	23	31	3	Example
+api/cookbook/recipe/0139-geolocate-canvas-fragment.md	32	39	2	Related Recipes
+api/cookbook/recipe/0139-geolocate-canvas-fragment.md	37	39	4	Click Image to Close
+api/cookbook/recipe/0154-geo-extension.md	3	6	3	Use Case
+api/cookbook/recipe/0154-geo-extension.md	7	18	3	Implementation Notes
+api/cookbook/recipe/0154-geo-extension.md	19	27	3	Example
+api/cookbook/recipe/0154-geo-extension.md	28	32	2	Related Recipes
+api/cookbook/recipe/0202-start-canvas.md	3	6	2	Use Case
+api/cookbook/recipe/0202-start-canvas.md	7	14	2	Implementation Notes
+api/cookbook/recipe/0202-start-canvas.md	15	23	2	Example
+api/cookbook/recipe/0202-start-canvas.md	24	27	2	Related Recipes
+api/cookbook/recipe/0219-using-caption-file.md	3	6	2	Use Case
+api/cookbook/recipe/0219-using-caption-file.md	7	16	2	Implementation notes
+api/cookbook/recipe/0219-using-caption-file.md	17	22	2	Restrictions
+api/cookbook/recipe/0219-using-caption-file.md	23	33	2	Example
+api/cookbook/recipe/0219-using-caption-file.md	34	40	1	Related recipes
+api/cookbook/recipe/0229-behavior-ranges.md	3	6	2	Use Case
+api/cookbook/recipe/0229-behavior-ranges.md	7	21	2	Implementation Notes
+api/cookbook/recipe/0229-behavior-ranges.md	22	25	2	Restrictions
+api/cookbook/recipe/0229-behavior-ranges.md	26	34	2	Example
+api/cookbook/recipe/0229-behavior-ranges.md	35	45	2	Related Recipes
+api/cookbook/recipe/0230-navdate.md	3	6	2	Use Case
+api/cookbook/recipe/0230-navdate.md	7	16	2	Implementation Notes
+api/cookbook/recipe/0230-navdate.md	17	20	2	Restrictions
+api/cookbook/recipe/0230-navdate.md	21	51	2	Example
+api/cookbook/recipe/0230-navdate.md	25	33	3	Collection
+api/cookbook/recipe/0230-navdate.md	34	42	3	1986 Map
+api/cookbook/recipe/0230-navdate.md	43	51	3	1987 Map
+api/cookbook/recipe/0230-navdate.md	52	58	2	Related Recipes
+api/cookbook/recipe/0231-transcript-meta-recipe.md	3	6	2	Use Case
+api/cookbook/recipe/0231-transcript-meta-recipe.md	7	36	2	Transcripts
+api/cookbook/recipe/0231-transcript-meta-recipe.md	37	52	2	Captions and Subtitles
+api/cookbook/recipe/0231-transcript-meta-recipe.md	53	62	2	Related Recipes
+api/cookbook/recipe/0232-image-thumbnail-canvas.md	3	18	2	Use Case
+api/cookbook/recipe/0232-image-thumbnail-canvas.md	19	87	2	Implementation Notes
+api/cookbook/recipe/0232-image-thumbnail-canvas.md	21	40	3	Minimal thumbnail requirements
+api/cookbook/recipe/0232-image-thumbnail-canvas.md	41	46	3	Thumbnails with a IIIF image service
+api/cookbook/recipe/0232-image-thumbnail-canvas.md	47	87	3	Thumbnails with a IIIF image service + JSON image response sizes
+api/cookbook/recipe/0232-image-thumbnail-canvas.md	88	91	2	Restrictions
+api/cookbook/recipe/0232-image-thumbnail-canvas.md	92	105	2	Example
+api/cookbook/recipe/0232-image-thumbnail-canvas.md	106	109	2	Related Recipes
+api/cookbook/recipe/0234-provider.md	3	6	2	Use Case
+api/cookbook/recipe/0234-provider.md	7	18	2	Implementation Notes
+api/cookbook/recipe/0234-provider.md	19	22	2	Restrictions
+api/cookbook/recipe/0234-provider.md	23	35	2	Example
+api/cookbook/recipe/0234-provider.md	36	41	2	Related Recipes
+api/cookbook/recipe/0240-navPlace-on-canvases.md	3	6	3	Use Case
+api/cookbook/recipe/0240-navPlace-on-canvases.md	7	20	3	Implementation Notes
+api/cookbook/recipe/0240-navPlace-on-canvases.md	21	31	3	Example
+api/cookbook/recipe/0240-navPlace-on-canvases.md	32	36	2	Related Recipes
+api/cookbook/recipe/0258-tagging-external-resource.md	3	6	2	Use Case
+api/cookbook/recipe/0258-tagging-external-resource.md	7	14	2	Implementation Notes
+api/cookbook/recipe/0258-tagging-external-resource.md	15	18	2	Restrictions
+api/cookbook/recipe/0258-tagging-external-resource.md	19	31	2	Example
+api/cookbook/recipe/0258-tagging-external-resource.md	32	35	2	Related Recipes
+api/cookbook/recipe/0261-non-rectangular-commenting.md	3	6	2	Use Case
+api/cookbook/recipe/0261-non-rectangular-commenting.md	7	40	2	Implementation Notes
+api/cookbook/recipe/0261-non-rectangular-commenting.md	17	40	3	Additional Notes on SVG
+api/cookbook/recipe/0261-non-rectangular-commenting.md	21	36	4	For Viewers
+api/cookbook/recipe/0261-non-rectangular-commenting.md	37	40	4	For Manifest Creators
+api/cookbook/recipe/0261-non-rectangular-commenting.md	41	44	2	Restrictions
+api/cookbook/recipe/0261-non-rectangular-commenting.md	45	55	2	Example
+api/cookbook/recipe/0261-non-rectangular-commenting.md	56	58	2	Related Recipes
+api/cookbook/recipe/0266-full-canvas-annotation.md	3	6	2	Use Case
+api/cookbook/recipe/0266-full-canvas-annotation.md	7	20	2	Implementation Notes
+api/cookbook/recipe/0266-full-canvas-annotation.md	21	24	2	Restrictions
+api/cookbook/recipe/0266-full-canvas-annotation.md	25	35	2	Example
+api/cookbook/recipe/0266-full-canvas-annotation.md	36	43	2	Related Recipes
+api/cookbook/recipe/0269-embedded-or-referenced-annotations.md	3	6	2	Use Case
+api/cookbook/recipe/0269-embedded-or-referenced-annotations.md	7	31	2	Implementation Notes
+api/cookbook/recipe/0269-embedded-or-referenced-annotations.md	32	55	2	Example
+api/cookbook/recipe/0269-embedded-or-referenced-annotations.md	42	48	3	Manifest file
+api/cookbook/recipe/0269-embedded-or-referenced-annotations.md	49	55	3	Annotation Page file
+api/cookbook/recipe/0269-embedded-or-referenced-annotations.md	56	60	2	Related Recipes
+api/cookbook/recipe/0283-missing-image.md	3	6	2	Use Case
+api/cookbook/recipe/0283-missing-image.md	7	20	2	Implementation notes
+api/cookbook/recipe/0283-missing-image.md	15	20	3	Additional Information
+api/cookbook/recipe/0283-missing-image.md	21	24	2	Restrictions
+api/cookbook/recipe/0283-missing-image.md	25	33	2	Example
+api/cookbook/recipe/0283-missing-image.md	34	38	1	Related recipes
+api/cookbook/recipe/0299-region.md	3	6	2	Use Case
+api/cookbook/recipe/0299-region.md	7	23	2	Implementation Notes
+api/cookbook/recipe/0299-region.md	24	27	2	Restrictions
+api/cookbook/recipe/0299-region.md	28	38	2	Examples
+api/cookbook/recipe/0299-region.md	39	46	2	Related Recipes
+api/cookbook/recipe/0306-linking-annotations-to-manifests.md	3	8	2	Use Case
+api/cookbook/recipe/0306-linking-annotations-to-manifests.md	9	12	2	Implementation Notes
+api/cookbook/recipe/0306-linking-annotations-to-manifests.md	13	16	2	Restrictions
+api/cookbook/recipe/0306-linking-annotations-to-manifests.md	17	38	2	Example
+api/cookbook/recipe/0306-linking-annotations-to-manifests.md	39	44	2	Related Recipes
+api/cookbook/recipe/0309-annotation-collection.md	3	6	2	Use Case
+api/cookbook/recipe/0309-annotation-collection.md	7	24	2	Implementation Notes
+api/cookbook/recipe/0309-annotation-collection.md	25	48	2	Example
+api/cookbook/recipe/0309-annotation-collection.md	49	52	2	Related Recipes
+api/cookbook/recipe/0318-navPlace-navDate.md	3	6	3	Use Case
+api/cookbook/recipe/0318-navPlace-navDate.md	7	14	3	Implementation Notes
+api/cookbook/recipe/0318-navPlace-navDate.md	15	35	3	Example
+api/cookbook/recipe/0318-navPlace-navDate.md	36	39	2	Related Recipes
+api/cookbook/recipe/0326-annotating-image-layer.md	3	10	2	Use Case
+api/cookbook/recipe/0326-annotating-image-layer.md	11	24	2	Implementation Notes
+api/cookbook/recipe/0326-annotating-image-layer.md	25	28	2	Restrictions
+api/cookbook/recipe/0326-annotating-image-layer.md	29	39	2	Example
+api/cookbook/recipe/0326-annotating-image-layer.md	40	48	2	Related Recipes
+api/cookbook/recipe/0346-multilingual-annotation-body.md	3	6	2	Use Case
+api/cookbook/recipe/0346-multilingual-annotation-body.md	7	18	2	Implementation Notes
+api/cookbook/recipe/0346-multilingual-annotation-body.md	19	22	2	Restrictions
+api/cookbook/recipe/0346-multilingual-annotation-body.md	23	35	2	Example
+api/cookbook/recipe/0346-multilingual-annotation-body.md	36	41	2	Related Recipes
+api/cookbook/recipe/0377-image-in-annotation.md	3	10	2	Use Case
+api/cookbook/recipe/0377-image-in-annotation.md	11	14	2	Implementation Notes
+api/cookbook/recipe/0377-image-in-annotation.md	15	23	2	Example
+api/cookbook/recipe/0377-image-in-annotation.md	24	29	2	Related Recipes
+api/cookbook/recipe/0434-choice-av.md	3	6	2	Use Case
+api/cookbook/recipe/0434-choice-av.md	7	18	2	Implementation Notes
+api/cookbook/recipe/0434-choice-av.md	19	22	2	Restrictions
+api/cookbook/recipe/0434-choice-av.md	23	39	2	Example
+api/cookbook/recipe/0434-choice-av.md	40	43	2	Related Recipes
+api/cookbook/recipe/0464-reuse-manifest.md	3	6	2	Use Case
+api/cookbook/recipe/0464-reuse-manifest.md	7	26	2	Implementation Notes
+api/cookbook/recipe/0464-reuse-manifest.md	27	39	2	Example
+api/cookbook/recipe/0464-reuse-manifest.md	40	43	2	Related Recipes
+api/cookbook/recipe/0466-link-for-loading-manifest.md	3	6	1	Use case
+api/cookbook/recipe/0466-link-for-loading-manifest.md	7	31	1	Implementation notes
+api/cookbook/recipe/0466-link-for-loading-manifest.md	19	28	2	Example
+api/cookbook/recipe/0466-link-for-loading-manifest.md	29	31	2	Related Recipes
+api/cookbook/recipe/0485-contentstate-canvas-region.md	3	8	2	Use Case
+api/cookbook/recipe/0485-contentstate-canvas-region.md	9	53	2	Implementation Notes
+api/cookbook/recipe/0485-contentstate-canvas-region.md	54	61	2	Restrictions
+api/cookbook/recipe/0485-contentstate-canvas-region.md	62	76	2	Example
+api/cookbook/recipe/0485-contentstate-canvas-region.md	77	82	2	Related Recipes
+api/cookbook/recipe/0489-multimedia-canvas.md	3	6	2	Use Case
+api/cookbook/recipe/0489-multimedia-canvas.md	7	16	2	Implementation Notes
+api/cookbook/recipe/0489-multimedia-canvas.md	17	20	2	Restrictions
+api/cookbook/recipe/0489-multimedia-canvas.md	21	33	2	Example
+api/cookbook/recipe/0489-multimedia-canvas.md	34	39	2	Related Recipes
+api/cookbook/recipe/0540-link-for-opening-multiple-canvases.md	3	8	2	Use Case
+api/cookbook/recipe/0540-link-for-opening-multiple-canvases.md	9	18	2	Implementation Notes
+api/cookbook/recipe/0540-link-for-opening-multiple-canvases.md	19	26	2	Restrictions
+api/cookbook/recipe/0540-link-for-opening-multiple-canvases.md	27	39	2	Example
+api/cookbook/recipe/0540-link-for-opening-multiple-canvases.md	40	43	2	Related Recipes
+api/cookbook/recipe/0560-resources-on-a-timeline.md	3	6	2	Use Case
+api/cookbook/recipe/0560-resources-on-a-timeline.md	7	18	2	Implementation Notes
+api/cookbook/recipe/0560-resources-on-a-timeline.md	19	22	2	Restrictions
+api/cookbook/recipe/0560-resources-on-a-timeline.md	23	31	2	Example
+api/cookbook/recipe/0560-resources-on-a-timeline.md	32	36	2	Related Recipes
+api/cookbook/recipe/0561-text-on-image.md	3	6	2	Use Case
+api/cookbook/recipe/0561-text-on-image.md	7	20	2	Implementation Notes
+api/cookbook/recipe/0561-text-on-image.md	21	24	2	Restrictions
+api/cookbook/recipe/0561-text-on-image.md	25	35	2	Example
+api/cookbook/recipe/0561-text-on-image.md	36	39	2	Related Recipes
+api/cookbook/recipe/0599-drag-and-drop.md	3	8	2	Use Case
+api/cookbook/recipe/0599-drag-and-drop.md	9	64	2	Implementation Notes
+api/cookbook/recipe/0599-drag-and-drop.md	13	60	3	For Resource Providers
+api/cookbook/recipe/0599-drag-and-drop.md	61	64	3	For Viewer Developers
+api/cookbook/recipe/0599-drag-and-drop.md	65	70	2	Restrictions
+api/cookbook/recipe/0599-drag-and-drop.md	71	84	2	Example
+api/cookbook/recipe/0599-drag-and-drop.md	85	87	2	Related Recipes
+api/cookbook/recipe/0608-mvm-3d.md	3	6	2	Use Case
+api/cookbook/recipe/0608-mvm-3d.md	7	12	2	Implementation Notes
+api/cookbook/recipe/0608-mvm-3d.md	13	23	2	Example
+api/cookbook/recipe/0608-mvm-3d.md	24	26	1	Related Recipes
+api/cookbook/recipe/code.md	3	130	1	Code samples
+api/cookbook/recipe/code.md	7	15	2	Which libraries are included?
+api/cookbook/recipe/code.md	16	130	2	Code samples matrix
+api/cookbook/recipe/code.md	20	39	3	Basic Recipes
+api/cookbook/recipe/code.md	40	60	3	IIIF Properties
+api/cookbook/recipe/code.md	61	75	3	Structuring Resources
+api/cookbook/recipe/code.md	76	88	3	Image Recipes
+api/cookbook/recipe/code.md	89	106	3	Audio/Visual Recipes
+api/cookbook/recipe/code.md	107	122	3	Annotation Recipes
+api/cookbook/recipe/code.md	123	130	3	Geo Recipes
+api/cookbook/recipe/matrix-v4.md	3	47	1	IIIF 4.0 Viewer Matrix
+api/cookbook/recipe/matrix-v4.md	7	14	2	Which viewers are included?
+api/cookbook/recipe/matrix-v4.md	15	47	2	Viewer Matrix
+api/cookbook/recipe/matrix-v4.md	19	27	3	Basic Recipes
+api/cookbook/recipe/matrix-v4.md	28	33	3	Image Recipes
+api/cookbook/recipe/matrix-v4.md	34	42	3	Audio/Visual Recipes
+api/cookbook/recipe/matrix-v4.md	43	47	3	3D Recipes
+api/cookbook/recipe/matrix.md	3	144	1	IIIF 3.0 Viewer Matrix
+api/cookbook/recipe/matrix.md	7	14	2	Which viewers are included?
+api/cookbook/recipe/matrix.md	15	144	2	Viewer Matrix
+api/cookbook/recipe/matrix.md	19	38	3	Basic Recipes
+api/cookbook/recipe/matrix.md	39	59	3	IIIF Properties
+api/cookbook/recipe/matrix.md	60	74	3	Structuring Resources
+api/cookbook/recipe/matrix.md	75	87	3	Image Recipes
+api/cookbook/recipe/matrix.md	88	107	3	Audio/Visual Recipes
+api/cookbook/recipe/matrix.md	108	123	3	Annotation Recipes
+api/cookbook/recipe/matrix.md	124	134	3	Recipes involving Content State
+api/cookbook/recipe/matrix.md	135	144	3	Geo Recipes
+api/annex/services.md	3	16	2	Status of this Document
+api/annex/services.md	17	22	2	Abstract
+api/annex/services.md	23	28	2	1. Introduction
+api/annex/services.md	29	48	2	2. Requirements
+api/annex/services.md	49	216	2	3. Services
+api/annex/services.md	71	138	3	3.1 Image Information
+api/annex/services.md	139	174	3	3.2 GeoJSON
+api/annex/services.md	175	216	3	3.3 Physical Dimensions
+api/annex/services.md	217	232	2	Appendices
+api/annex/services.md	219	224	3	A. Acknowledgements
+api/annex/services.md	225	232	3	B. Change Log
+api/annex/notes/apache.md	3	12	2	Allow Encoded Slashes
+api/annex/notes/apache.md	13	21	2	Enabling CORS
+api/annex/notes/apache.md	22	29	2	Set Compliance Link Header
+api/annex/notes/apache.md	30	54	2	Conditional Content Types
+api/annex/notes/design_principles.md	3	22	2	Status of this Document
+api/annex/notes/design_principles.md	23	24	2	Contents
+api/annex/notes/design_principles.md	25	33	2	1. Overview
+api/annex/notes/design_principles.md	34	113	2	2. Design Principles
+api/annex/notes/design_principles.md	36	41	3	2.1. Scope Design Through Shared Use Cases
+api/annex/notes/design_principles.md	42	47	3	2.2. Select Solutions That Are as Simple as Possible and No Simpler
+api/annex/notes/design_principles.md	48	53	3	2.3. Intelligently Manage Ramping Up
+api/annex/notes/design_principles.md	54	59	3	2.4. Avoid Dependency on Specific Technologies
+api/annex/notes/design_principles.md	60	65	3	2.5. Use Resource Oriented Design
+api/annex/notes/design_principles.md	66	71	3	2.6. Don’t Break Web Caches
+api/annex/notes/design_principles.md	72	77	3	2.7. Follow Linked Data Principles
+api/annex/notes/design_principles.md	78	85	3	2.8. Design for JSON-LD First
+api/annex/notes/design_principles.md	86	91	3	2.9. Use Existing Standards Where Possible
+api/annex/notes/design_principles.md	92	97	3	2.10. Follow Existing Best Practices
+api/annex/notes/design_principles.md	98	103	3	2.11. Separate Concerns, Loosely Couple APIs
+api/annex/notes/design_principles.md	104	109	3	2.12. Define Success, Not Failure
+api/annex/notes/design_principles.md	110	113	3	2.13. Design for Worldwide Use
+api/annex/notes/design_principles.md	114	165	2	3. JSON-LD Design Principles
+api/annex/notes/design_principles.md	124	127	3	3.1. Use Native Data Types
+api/annex/notes/design_principles.md	128	133	3	3.2. Avoid Special Characters
+api/annex/notes/design_principles.md	134	149	3	3.3. Use Consistent Naming Conventions
+api/annex/notes/design_principles.md	138	141	4	3.3.1. Use CamelCase
+api/annex/notes/design_principles.md	142	145	4	3.3.2. Distinguish Classes and Properties
+api/annex/notes/design_principles.md	146	149	4	3.3.3. Avoid Explicit Namespaces
+api/annex/notes/design_principles.md	150	165	3	3.4. Use Consistent Structural Conventions
+api/annex/notes/design_principles.md	154	157	4	3.4.1. Always Use Arrays for Multiple Value Properties
+api/annex/notes/design_principles.md	158	161	4	3.4.2. Use JSON Objects for Referenced Resources
+api/annex/notes/design_principles.md	162	165	4	3.4.3. Use Strings for Enumerated Flags
+api/annex/notes/design_principles.md	166	172	2	4. Change Log
+api/annex/notes/jsonld.md	3	8	2	Introduction
+api/annex/notes/jsonld.md	9	12	2	JSON-LD 1.1
+api/annex/notes/jsonld.md	13	20	2	Semantic Versioning
+api/annex/notes/jsonld.md	21	28	2	Formats and Languages
+api/annex/notes/jsonld.md	29	44	2	Term Expansion/Compaction Issues
+api/annex/notes/jsonld.md	31	38	3	Unintended Expansion of URI Schemes
+api/annex/notes/jsonld.md	39	44	3	Greedy Compaction of Terms
+api/annex/notes/jsonld.md	45	50	2	Frames
+api/annex/notes/jsonld.md	51	56	2	Image API Frame
+api/annex/notes/jsonld.md	57	69	2	Presentation API Frames
+api/annex/notes/jsonld.md	70	87	2	Sample Usage
+api/image/2.1.md	3	26	2	Status of this Document
+api/image/2.1.md	27	46	2	1. Introduction
+api/image/2.1.md	33	42	3	1.1. Audience and Scope
+api/image/2.1.md	43	46	3	1.2. Terminology
+api/image/2.1.md	47	106	2	2. URI Syntax
+api/image/2.1.md	75	90	3	2.1. Image Request URI Syntax
+api/image/2.1.md	91	106	3	2.2. Image Information Request URI Syntax
+api/image/2.1.md	107	110	2	3. Identifier
+api/image/2.1.md	111	424	2	4. Image Request Parameters
+api/image/2.1.md	115	166	3	4.1. Region
+api/image/2.1.md	167	229	3	4.2. Size
+api/image/2.1.md	230	279	3	4.3. Rotation
+api/image/2.1.md	280	321	3	4.4. Quality
+api/image/2.1.md	322	343	3	4.5. Format
+api/image/2.1.md	344	366	3	4.6. Order of Implementation
+api/image/2.1.md	367	424	3	4.7. Canonical URI Syntax
+api/image/2.1.md	425	727	2	5. Image Information
+api/image/2.1.md	429	458	3	5.1. Image Information Request
+api/image/2.1.md	459	518	3	5.2. Technical Properties
+api/image/2.1.md	519	595	3	5.3. Profile Description
+api/image/2.1.md	596	636	3	5.4. Rights and Licensing Properties
+api/image/2.1.md	637	662	3	5.5. Related Services
+api/image/2.1.md	663	727	3	5.6. Complete Response
+api/image/2.1.md	728	739	2	6. Compliance Levels
+api/image/2.1.md	740	759	2	7. Server Responses
+api/image/2.1.md	742	745	3	7.1. Successful Responses
+api/image/2.1.md	746	759	3	7.2. Error Conditions
+api/image/2.1.md	760	765	2	8. Authentication
+api/image/2.1.md	766	786	2	9. URI Encoding and Decoding
+api/image/2.1.md	787	796	2	10. Security Considerations
+api/image/2.1.md	797	860	2	11. Appendices
+api/image/2.1.md	799	841	3	A. Implementation Notes
+api/image/2.1.md	842	845	3	B. Versioning
+api/image/2.1.md	846	851	3	C. Acknowledgments
+api/image/2.1.md	852	860	3	D. Change Log
+api/image/3.0.md	3	26	2	Status of this Document
+api/image/3.0.md	27	52	2	1. Introduction
+api/image/3.0.md	33	44	3	1.1. Audience and Scope
+api/image/3.0.md	45	52	3	1.2. Terminology
+api/image/3.0.md	53	112	2	2. URI Syntax
+api/image/3.0.md	81	96	3	2.1. Image Request URI Syntax
+api/image/3.0.md	97	112	3	2.2. Image Information Request URI Syntax
+api/image/3.0.md	113	116	2	3. Identifier
+api/image/3.0.md	117	469	2	4. Image Requests
+api/image/3.0.md	125	176	3	4.1. Region
+api/image/3.0.md	177	264	3	4.2. Size
+api/image/3.0.md	265	314	3	4.3. Rotation
+api/image/3.0.md	315	358	3	4.4. Quality
+api/image/3.0.md	359	380	3	4.5. Format
+api/image/3.0.md	381	403	3	4.6. Order of Implementation
+api/image/3.0.md	404	407	3	4.7. Floating Point Values
+api/image/3.0.md	408	465	3	4.8. Canonical URI Syntax
+api/image/3.0.md	466	469	3	4.9. Extensions
+api/image/3.0.md	470	801	2	5. Image Information
+api/image/3.0.md	474	497	3	5.1. Image Information Request
+api/image/3.0.md	498	533	3	5.2. Technical Properties
+api/image/3.0.md	534	566	3	5.3. Sizes
+api/image/3.0.md	567	600	3	5.4. Tiles
+api/image/3.0.md	601	622	3	5.5. Preferred Formats
+api/image/3.0.md	623	645	3	5.6. Rights
+api/image/3.0.md	646	700	3	5.7. Extra Functionality
+api/image/3.0.md	701	758	3	5.8. Linking Properties
+api/image/3.0.md	759	801	3	5.9. Complete Response
+api/image/3.0.md	802	819	2	6. Compliance Level and Profile Document
+api/image/3.0.md	820	849	2	7. Server Responses
+api/image/3.0.md	824	827	3	7.1. CORS
+api/image/3.0.md	828	831	3	7.2. Successful Responses
+api/image/3.0.md	832	845	3	7.3. Error Conditions
+api/image/3.0.md	846	849	3	7.4. HTTP Versions
+api/image/3.0.md	850	855	2	8. Authentication
+api/image/3.0.md	856	876	2	9. URI Encoding and Decoding
+api/image/3.0.md	877	884	2	10. Security Considerations
+api/image/3.0.md	885	904	2	11. Appendices
+api/image/3.0.md	887	890	3	A. Versioning
+api/image/3.0.md	891	894	3	B. Acknowledgments
+api/image/3.0.md	895	904	3	C. Change Log
+api/image/validator.md	9	19	3	Technical Note
+api/image/validator.md	20	21	3	Image Validator
+api/image/validator.md	22	35	2	IIIF Server to Validate
+api/image/validator.md	36	36	2	Tests
+api/image/3.0/change-log.md	5	118	2	1. Breaking Changes
+api/image/3.0/change-log.md	9	28	3	1.1. Image Request Changes
+api/image/3.0/change-log.md	11	16	4	1.1.1. Remove size `full` in favor of `max`
+api/image/3.0/change-log.md	17	22	4	1.1.2. Changes to upscaling of images to larger than the extracted region
+api/image/3.0/change-log.md	23	28	4	1.1.3. Change canonical form of size parameter to *`w,h`*
+api/image/3.0/change-log.md	29	96	3	1.2. Image Information Changes
+api/image/3.0/change-log.md	33	38	4	1.2.1. Rename `@id` to `id`, `@type` to `type`
+api/image/3.0/change-log.md	39	44	4	1.2.2. Remove the `attribution` and `logo` properties
+api/image/3.0/change-log.md	45	50	4	1.2.3. Rename `license` to `rights`, allow only a single value
+api/image/3.0/change-log.md	51	58	4	1.2.4. Require the `type` property on image information document and external references, with new values
+api/image/3.0/change-log.md	59	64	4	1.2.5. Change the `profile` property to take one compliance level
+api/image/3.0/change-log.md	65	70	4	1.2.6. Change the `service` property value to an array of objects
+api/image/3.0/change-log.md	71	74	4	1.2.7. Remove feature names `sizeByWhListed` and `sizeByForcedWh`
+api/image/3.0/change-log.md	75	80	4	1.2.8. Remove feature name `sizeByDistortedWh`
+api/image/3.0/change-log.md	81	86	4	1.2.9. Use language map pattern for `label`
+api/image/3.0/change-log.md	87	92	4	1.2.10. Clarify content negotiation expectations
+api/image/3.0/change-log.md	93	96	4	1.2.11. Update context for new major version
+api/image/3.0/change-log.md	97	110	3	1.3. Compliance Requirements
+api/image/3.0/change-log.md	99	104	4	1.3.1. Require support for region `square` at `level1` and `level2` compliance
+api/image/3.0/change-log.md	105	110	4	1.3.2. No longer require support for `pct:x` size at `level1` compliance
+api/image/3.0/change-log.md	111	118	3	1.4. External Specifications
+api/image/3.0/change-log.md	113	118	4	1.4.1. Use JSON-LD 1.1
+api/image/3.0/change-log.md	119	142	2	2. Non-Breaking Changes
+api/image/3.0/change-log.md	123	130	3	2.1. Add notes on extension mechanisms and registry
+api/image/3.0/change-log.md	131	136	3	2.2. Add `partOf` and `seeAlso` linking properties
+api/image/3.0/change-log.md	137	142	3	2.3. Define JSON-LD profile for media type
+api/image/3.0/change-log.md	143	215	2	3. Editorial Changes
+api/image/3.0/change-log.md	147	152	3	3.1. Clarify distinctions between underlying image content, full image, extracted region, and image returned
+api/image/3.0/change-log.md	153	158	3	3.2. Clarify description of the *`!w,h`* form for the size parameter
+api/image/3.0/change-log.md	159	164	3	3.3. Clarify that the `color` format value might still yield a non-color image
+api/image/3.0/change-log.md	165	170	3	3.4. Change examples to use `https` URIs
+api/image/3.0/change-log.md	171	176	3	3.5. Clarify and move discussion of floating point representation
+api/image/3.0/change-log.md	177	182	3	3.6. Clarify support for CORS
+api/image/3.0/change-log.md	183	188	3	3.7. Clarify that the `@context` value may be a single URI or an array of URIs
+api/image/3.0/change-log.md	189	194	3	3.8. Clarify that a compliance `Link` header may be returned with both Image and Image Information responses
+api/image/3.0/change-log.md	195	200	3	3.9. Move implementation notes to a separate document
+api/image/3.0/change-log.md	201	206	3	3.10. Describe implementation with static web resources
+api/image/3.0/change-log.md	207	212	3	3.11. Add note encouraging adoption of HTTP/2
+api/image/3.0/change-log.md	213	215	3	3.12. Improve font and style consistency
+api/image/3.0/compliance.md	3	8	2	Status of this Document
+api/image/3.0/compliance.md	9	12	2	1. Introduction
+api/image/3.0/compliance.md	13	18	2	2. Compliance
+api/image/3.0/compliance.md	19	77	2	3. Image Parameters
+api/image/3.0/compliance.md	21	31	3	3.1 Region
+api/image/3.0/compliance.md	32	47	3	3.2 Size
+api/image/3.0/compliance.md	48	56	3	3.3 Rotation
+api/image/3.0/compliance.md	57	65	3	3.4 Quality
+api/image/3.0/compliance.md	66	77	3	3.5 Format
+api/image/3.0/compliance.md	78	87	2	4. HTTP Features
+api/image/3.0/compliance.md	88	97	2	5. Level 0 Compliance
+api/image/3.0/implementation.md	3	8	2	1. HTTP implementation
+api/image/3.0/implementation.md	9	12	2	2. Linked data implementation
+api/image/3.0/implementation.md	13	35	2	3. Tile region parameter calculation
+api/image/3.0/implementation.md	36	69	2	4. Maximum size calculation
+api/image/3.0/implementation.md	70	79	2	5. Image size calculation for rotated images
+api/image/3.0/implementation.md	80	86	2	Appendices
+api/image/3.0/implementation.md	82	86	3	A. Change Log
+api/search/1.0.md	3	24	2	Status of this Document
+api/search/1.0.md	25	51	2	1. Introduction
+api/search/1.0.md	35	47	3	1.1. Use Cases
+api/search/1.0.md	48	51	3	1.2. Terminology
+api/search/1.0.md	52	61	2	2. Overview
+api/search/1.0.md	62	507	2	3. Search
+api/search/1.0.md	66	84	3	3.1. Service Description
+api/search/1.0.md	85	124	3	3.2. Request
+api/search/1.0.md	89	114	4	3.2.1. Query Parameters
+api/search/1.0.md	115	124	4	3.2.2. Example Request
+api/search/1.0.md	125	242	3	3.3. Presentation API Compatible Responses
+api/search/1.0.md	131	158	4	3.3.1. Simple Lists
+api/search/1.0.md	159	207	4	3.3.2. Paging Results
+api/search/1.0.md	208	242	4	3.3.3. Target Resource Structure
+api/search/1.0.md	243	507	3	3.4 Search API Specific Responses
+api/search/1.0.md	291	325	4	3.4.1. Ignored Parameters
+api/search/1.0.md	326	376	4	3.4.2. Search Term Snippets
+api/search/1.0.md	377	450	4	3.4.3. Search Term Highlighting
+api/search/1.0.md	451	507	4	3.4.4. Multi-Annotations Hits
+api/search/1.0.md	508	626	2	4. Autocomplete
+api/search/1.0.md	512	532	3	4.1. Service Description
+api/search/1.0.md	533	554	3	4.2. Request
+api/search/1.0.md	541	546	4	4.2.1. Query Parameters
+api/search/1.0.md	547	554	4	4.2.2. Example Request
+api/search/1.0.md	555	626	3	4.3. Response
+api/search/1.0.md	627	654	2	5. Property Definitions
+api/search/1.0.md	655	682	2	Appendices
+api/search/1.0.md	657	666	3	A. Request Parameter Requirements
+api/search/1.0.md	667	670	3	B. Versioning
+api/search/1.0.md	671	676	3	C. Acknowledgements
+api/search/1.0.md	677	682	3	D. Change Log
+api/search/2.0.md	3	28	2	Status of this Document
+api/search/2.0.md	29	68	2	1. Introduction
+api/search/2.0.md	39	53	3	1.1. Use Cases
+api/search/2.0.md	54	64	3	1.2. Terminology
+api/search/2.0.md	65	68	3	1.3. Common Specification Features
+api/search/2.0.md	69	78	2	2. Overview
+api/search/2.0.md	79	120	2	3. Declaring Services
+api/search/2.0.md	121	650	2	4. Content Search
+api/search/2.0.md	125	151	3	4.1. Request
+api/search/2.0.md	129	143	4	4.1.1. Query Parameters
+api/search/2.0.md	144	151	4	4.1.2. Example Request
+api/search/2.0.md	152	325	3	4.2. Responses
+api/search/2.0.md	156	190	4	4.2.1. Simple Lists
+api/search/2.0.md	191	257	4	4.2.2. Paging Results
+api/search/2.0.md	258	301	4	4.2.3. References to Containing Resources
+api/search/2.0.md	302	325	4	4.2.4. Ignored Parameters
+api/search/2.0.md	326	650	3	4.3. Extended Responses
+api/search/2.0.md	353	412	4	4.3.1. Match Context
+api/search/2.0.md	413	472	4	4.3.2. Match Highlighting
+api/search/2.0.md	473	560	4	4.3.3. Multi-Match Annotations
+api/search/2.0.md	561	650	4	4.3.4. Multi-Annotation Matches
+api/search/2.0.md	651	773	2	5. Autocomplete
+api/search/2.0.md	655	670	3	5.1. Autocomplete Request
+api/search/2.0.md	671	710	3	5.2. Autocomplete Response
+api/search/2.0.md	711	773	3	5.3. Extended Autocomplete Responses
+api/search/2.0.md	774	792	2	Appendices
+api/search/2.0.md	776	779	3	A. Versioning
+api/search/2.0.md	780	785	3	B. Acknowledgements
+api/search/2.0.md	786	792	3	C. Change Log
+api/search/2.0/change-log.md	5	48	2	1. Breaking Changes
+api/search/2.0/change-log.md	7	12	3	1.1. External Specifications
+api/search/2.0/change-log.md	9	12	4	1.1.1. Use JSON-LD 1.1 and the Web Annotation Data Model
+api/search/2.0/change-log.md	13	32	3	1.2. Property Naming and Semantics Changes
+api/search/2.0/change-log.md	17	20	4	1.2.1. Rename `@id` to `id`, `@type` to `type`
+api/search/2.0/change-log.md	21	24	4	1.2.2. Rename `within` to `partOf`
+api/search/2.0/change-log.md	25	28	4	1.2.3. Rework the semantics of Responses
+api/search/2.0/change-log.md	29	32	4	1.2.4. Update context for new major version
+api/search/2.0/change-log.md	33	38	3	1.3. Property Value Changes
+api/search/2.0/change-log.md	35	38	4	1.3.1. Use language map pattern for label and value
+api/search/2.0/change-log.md	39	48	3	1.4. Classes Changes
+api/search/2.0/change-log.md	41	44	4	1.4.1. Rename `TermList` to `TermPage`
+api/search/2.0/change-log.md	45	48	4	1.4.2. Remove `Layer`, `AnnotationList` in favor of `AnnotationCollection`, `AnnotationPage`
+api/search/2.0/change-log.md	49	60	2	2. Non-Breaking Changes
+api/search/2.0/change-log.md	51	60	3	2.1. Additional Features
+api/search/2.0/change-log.md	53	56	4	2.1.1. Add `contextualizing` motivation
+api/search/2.0/change-log.md	57	60	4	2.1.2. Include `highlighting` motivation
+api/search/2.0/change-log.md	61	85	2	3. Editorial Changes
+api/search/2.0/change-log.md	63	72	3	3.1. Clarifications
+api/search/2.0/change-log.md	65	68	4	3.1.1. Terminology
+api/search/2.0/change-log.md	69	72	4	3.1.2. Search and Autocomplete Services
+api/search/2.0/change-log.md	73	85	3	3.2. Style
+api/search/2.0/change-log.md	75	78	4	3.2.1. Restructure document
+api/search/2.0/change-log.md	79	82	4	3.2.2. Consistency
+api/search/2.0/change-log.md	83	85	4	3.2.3. Examples Improved
+api/content-state/1.0.md	3	30	2	Status of this Document
+api/content-state/1.0.md	31	71	2	1. Introduction
+api/content-state/1.0.md	35	59	3	1.1. Objectives and Scope
+api/content-state/1.0.md	56	59	4	1.1.1. Relationship with Change Discovery API
+api/content-state/1.0.md	60	71	3	1.2. Terminology
+api/content-state/1.0.md	72	185	2	2. Content State
+api/content-state/1.0.md	82	95	3	2.1. Annotation Model for Content State
+api/content-state/1.0.md	96	185	3	2.2. Form of Annotation
+api/content-state/1.0.md	106	124	4	2.2.1. Full Annotation
+api/content-state/1.0.md	125	128	4	2.2.2. Annotation URI
+api/content-state/1.0.md	129	141	4	2.2.3. Target Body
+api/content-state/1.0.md	142	149	4	2.2.4. Target URI
+api/content-state/1.0.md	150	185	4	2.2.5. Limitations of Simple URIs
+api/content-state/1.0.md	186	453	2	3. Protocols
+api/content-state/1.0.md	199	293	3	3.1. Linking: HTTP GET (Query String) Parameter
+api/content-state/1.0.md	284	293	4	3.1.1. Load by Reference
+api/content-state/1.0.md	294	323	3	3.2. HTTP POST (Form) Parameter
+api/content-state/1.0.md	324	343	3	3.3. Accepting the Content State as a Paste Operation
+api/content-state/1.0.md	344	394	3	3.4. Drag and Drop
+api/content-state/1.0.md	395	425	3	3.5. Upload File
+api/content-state/1.0.md	426	444	3	3.6. Common Initialization Parameter
+api/content-state/1.0.md	445	453	3	3.7. Exporting Current Content State from Viewer
+api/content-state/1.0.md	454	461	2	4. Processing Received Content States
+api/content-state/1.0.md	462	582	2	5. Examples of Content States
+api/content-state/1.0.md	468	488	3	5.1. A Region of a Canvas in a Manifest
+api/content-state/1.0.md	489	516	3	5.2. Start Playing at a Point in a Recording
+api/content-state/1.0.md	517	551	3	5.3. Multiple Targets for a Comparison View
+api/content-state/1.0.md	552	582	3	5.4. Search Results
+api/content-state/1.0.md	583	728	2	6. Content State Encoding
+api/content-state/1.0.md	587	614	3	6.1. Choice of encoding mechanism
+api/content-state/1.0.md	615	628	3	6.2. Content State encoding and URI requirements
+api/content-state/1.0.md	629	728	3	6.3. Examples of Content State Encoding
+api/content-state/1.0.md	633	665	4	6.3.1. JavaScript
+api/content-state/1.0.md	666	728	4	6.3.2. Python
+api/content-state/1.0.md	729	756	2	7. HTTP Requests and Responses
+api/content-state/1.0.md	733	736	3	7.1. Requests
+api/content-state/1.0.md	737	756	3	7.2. Responses
+api/content-state/1.0.md	757	774	2	Appendices
+api/content-state/1.0.md	759	764	3	A. Acknowledgements
+api/content-state/1.0.md	765	774	3	B. Change Log
+api/registry/accessibility.md	3	22	2	Status of this Document
+api/registry/accessibility.md	23	28	2	Abstract
+api/registry/accessibility.md	29	40	2	1. Introduction
+api/registry/accessibility.md	33	36	3	1.1. Disclaimer
+api/registry/accessibility.md	37	40	3	1.2. Inclusion Process
+api/registry/accessibility.md	41	42	2	2. Requirements for Inclusion
+api/registry/accessibility.md	43	61	2	3. Registry
+api/registry/accessibility.md	62	72	2	Appendices
+api/registry/accessibility.md	64	67	3	A. Acknowledgements
+api/registry/accessibility.md	68	72	3	B. Change Log
+api/registry/behaviors.md	3	20	2	Status of this Document
+api/registry/behaviors.md	21	26	2	Abstract
+api/registry/behaviors.md	27	38	2	1. Introduction
+api/registry/behaviors.md	31	34	3	1.1. Disclaimer
+api/registry/behaviors.md	35	38	3	1.2. Inclusion Process
+api/registry/behaviors.md	39	40	2	2. Requirements for Inclusion
+api/registry/behaviors.md	41	46	2	3. Registry
+api/registry/behaviors.md	47	57	2	Appendices
+api/registry/behaviors.md	49	52	3	A. Acknowledgements
+api/registry/behaviors.md	53	57	3	B. Change Log
+api/registry/image-extensions.md	3	20	2	Status of this Document
+api/registry/image-extensions.md	21	26	2	Abstract
+api/registry/image-extensions.md	27	38	2	1. Introduction
+api/registry/image-extensions.md	31	34	3	1.1. Disclaimer
+api/registry/image-extensions.md	35	38	3	1.2. Inclusion Process
+api/registry/image-extensions.md	39	40	2	2. Requirements for Inclusion
+api/registry/image-extensions.md	41	46	2	3. Registry
+api/registry/image-extensions.md	47	57	2	Appendices
+api/registry/image-extensions.md	49	52	3	A. Acknowledgements
+api/registry/image-extensions.md	53	57	3	B. Change Log
+api/registry/motivations.md	3	22	2	Status of this Document
+api/registry/motivations.md	23	36	2	1. Introduction
+api/registry/motivations.md	29	32	3	1.1. Disclaimer
+api/registry/motivations.md	33	36	3	1.2. Inclusion Process
+api/registry/motivations.md	37	38	2	2. Requirements for Inclusion
+api/registry/motivations.md	39	57	2	3. Registry
+api/registry/motivations.md	58	70	2	Appendices
+api/registry/motivations.md	60	63	3	A. Acknowledgements
+api/registry/motivations.md	64	70	3	B. Change Log
+api/registry/profiles.md	3	20	2	Status of this Document
+api/registry/profiles.md	21	26	2	Abstract
+api/registry/profiles.md	27	38	2	1. Introduction
+api/registry/profiles.md	31	34	3	1.1. Disclaimer
+api/registry/profiles.md	35	38	3	1.2. Inclusion Process
+api/registry/profiles.md	39	40	2	2. Requirements for Inclusion
+api/registry/profiles.md	41	56	2	3. Registry
+api/registry/profiles.md	57	69	2	Appendices
+api/registry/profiles.md	59	62	3	A. Acknowledgements
+api/registry/profiles.md	63	69	3	B. Change Log
+api/registry/rights.md	3	22	2	Status of this Document
+api/registry/rights.md	23	36	2	1. Introduction
+api/registry/rights.md	29	32	3	1.1. Disclaimer
+api/registry/rights.md	33	36	3	1.2. Inclusion Process
+api/registry/rights.md	37	38	2	2. Requirements for Inclusion
+api/registry/rights.md	39	73	2	3. Registry
+api/registry/rights.md	74	84	2	Appendices
+api/registry/rights.md	76	79	3	A. Acknowledgements
+api/registry/rights.md	80	84	3	B. Change Log
+api/registry/selectors.md	3	22	2	Status of this Document
+api/registry/selectors.md	23	30	2	1. Introduction
+api/registry/selectors.md	31	115	2	2. Selector Classes
+api/registry/selectors.md	33	77	3	2.1 IIIF Image API Selector
+api/registry/selectors.md	78	101	3	2.2 Point Selectors
+api/registry/selectors.md	102	115	3	2.3 Content Selectors
+api/registry/selectors.md	116	130	2	Appendices
+api/registry/selectors.md	118	123	3	A. Acknowledgements
+api/registry/selectors.md	124	130	3	B. Change Log
+api/registry/services.md	3	20	2	Status of this Document
+api/registry/services.md	21	26	2	Abstract
+api/registry/services.md	27	38	2	1. Introduction
+api/registry/services.md	31	34	3	1.1. Disclaimer
+api/registry/services.md	35	38	3	1.2. Inclusion Process
+api/registry/services.md	39	40	2	2. Requirements for Inclusion
+api/registry/services.md	41	116	2	3. Registry
+api/registry/services.md	49	116	3	3.1 Image Information
+api/registry/services.md	117	129	2	Appendices
+api/registry/services.md	119	124	3	A. Acknowledgements
+api/registry/services.md	125	129	3	B. Change Log
+api/registry/timeModes.md	3	20	2	Status of this Document
+api/registry/timeModes.md	21	26	2	Abstract
+api/registry/timeModes.md	27	38	2	1. Introduction
+api/registry/timeModes.md	31	34	3	1.1. Disclaimer
+api/registry/timeModes.md	35	38	3	1.2. Inclusion Process
+api/registry/timeModes.md	39	40	2	2. Requirements for Inclusion
+api/registry/timeModes.md	41	46	2	3. Registry
+api/registry/timeModes.md	47	57	2	Appendices
+api/registry/timeModes.md	49	52	3	A. Acknowledgements
+api/registry/timeModes.md	53	57	3	B. Change Log
+api/registry/types.md	3	20	2	Status of this Document
+api/registry/types.md	21	26	2	Abstract
+api/registry/types.md	27	38	2	1. Introduction
+api/registry/types.md	31	34	3	1.1. Disclaimer
+api/registry/types.md	35	38	3	1.2. Inclusion Process
+api/registry/types.md	39	40	2	2. Requirements for Inclusion
+api/registry/types.md	41	46	2	3. Registry
+api/registry/types.md	47	57	2	Appendices
+api/registry/types.md	49	52	3	A. Acknowledgements
+api/registry/types.md	53	57	3	B. Change Log
+api/registry/viewingDirections.md	3	20	2	Status of this Document
+api/registry/viewingDirections.md	21	26	2	Abstract
+api/registry/viewingDirections.md	27	38	2	1. Introduction
+api/registry/viewingDirections.md	31	34	3	1.1. Disclaimer
+api/registry/viewingDirections.md	35	38	3	1.2. Inclusion Process
+api/registry/viewingDirections.md	39	40	2	2. Requirements for Inclusion
+api/registry/viewingDirections.md	41	46	2	3. Registry
+api/registry/viewingDirections.md	47	57	2	Appendices
+api/registry/viewingDirections.md	49	52	3	A. Acknowledgements
+api/registry/viewingDirections.md	53	57	3	B. Change Log
+api/presentation/2.1.md	3	26	2	Status of this Document
+api/presentation/2.1.md	27	65	2	1. Introduction
+api/presentation/2.1.md	39	55	3	1.1. Objectives and Scope
+api/presentation/2.1.md	56	61	3	1.2. Motivating Use Cases
+api/presentation/2.1.md	62	65	3	1.3. Terminology
+api/presentation/2.1.md	66	121	2	2. Resource Type Overview
+api/presentation/2.1.md	70	94	3	2.1. Basic Types
+api/presentation/2.1.md	79	82	5	Manifest
+api/presentation/2.1.md	83	86	5	Sequence
+api/presentation/2.1.md	87	90	5	Canvas
+api/presentation/2.1.md	91	94	5	Content
+api/presentation/2.1.md	95	121	3	2.2. Additional Types
+api/presentation/2.1.md	102	105	5	Collection
+api/presentation/2.1.md	106	109	5	Annotation
+api/presentation/2.1.md	110	113	5	AnnotationList
+api/presentation/2.1.md	114	117	5	Layer
+api/presentation/2.1.md	118	121	5	Range
+api/presentation/2.1.md	122	378	2	3. Resource Properties
+api/presentation/2.1.md	130	171	4	3.1. Descriptive Properties
+api/presentation/2.1.md	132	144	5	label
+api/presentation/2.1.md	145	152	5	metadata
+api/presentation/2.1.md	153	160	5	description
+api/presentation/2.1.md	161	171	5	thumbnail
+api/presentation/2.1.md	172	193	4	3.2. Rights and Licensing Properties
+api/presentation/2.1.md	176	181	5	attribution
+api/presentation/2.1.md	182	187	5	license
+api/presentation/2.1.md	188	193	5	logo
+api/presentation/2.1.md	194	281	4	3.3. Technical Properties
+api/presentation/2.1.md	196	209	5	@id
+api/presentation/2.1.md	210	217	5	@type
+api/presentation/2.1.md	218	226	5	format
+api/presentation/2.1.md	227	234	5	height
+api/presentation/2.1.md	235	242	5	width
+api/presentation/2.1.md	243	258	5	viewingDirection
+api/presentation/2.1.md	259	274	5	viewingHint
+api/presentation/2.1.md	275	281	5	navDate
+api/presentation/2.1.md	282	328	4	3.4. Linking Properties
+api/presentation/2.1.md	284	289	5	related
+api/presentation/2.1.md	290	295	5	rendering
+api/presentation/2.1.md	296	301	5	service
+api/presentation/2.1.md	302	307	5	seeAlso
+api/presentation/2.1.md	308	314	5	within
+api/presentation/2.1.md	315	321	5	startCanvas
+api/presentation/2.1.md	322	328	5	contentLayer
+api/presentation/2.1.md	329	378	4	3.5. Paging Properties
+api/presentation/2.1.md	331	338	5	first
+api/presentation/2.1.md	339	346	5	last
+api/presentation/2.1.md	347	354	5	total
+api/presentation/2.1.md	355	362	5	next
+api/presentation/2.1.md	363	370	5	prev
+api/presentation/2.1.md	371	378	5	startIndex
+api/presentation/2.1.md	379	467	2	4. JSON-LD Considerations
+api/presentation/2.1.md	383	396	3	4.1. URI Representation
+api/presentation/2.1.md	397	410	3	4.2. Repeated Properties
+api/presentation/2.1.md	411	430	3	4.3. Language of Property Values
+api/presentation/2.1.md	431	448	3	4.4. HTML Markup in Property Values
+api/presentation/2.1.md	449	467	3	4.5. Linked Data Context and Extensions
+api/presentation/2.1.md	468	1113	2	5. Resource Structure
+api/presentation/2.1.md	472	572	3	5.1. Manifest
+api/presentation/2.1.md	573	626	3	5.2. Sequence
+api/presentation/2.1.md	627	678	3	5.3. Canvas
+api/presentation/2.1.md	679	724	3	5.4. Image Resources
+api/presentation/2.1.md	725	778	3	5.5. Annotation List
+api/presentation/2.1.md	779	869	3	5.6. Range
+api/presentation/2.1.md	793	796	5	ranges
+api/presentation/2.1.md	797	800	5	canvases
+api/presentation/2.1.md	801	869	5	members
+api/presentation/2.1.md	870	918	3	5.7. Layer
+api/presentation/2.1.md	919	1014	3	5.8. Collection
+api/presentation/2.1.md	944	947	5	collections
+api/presentation/2.1.md	948	951	5	manifests
+api/presentation/2.1.md	952	1014	5	members
+api/presentation/2.1.md	1015	1113	3	5.9. Paging
+api/presentation/2.1.md	1027	1079	5	Example Paged Layer
+api/presentation/2.1.md	1080	1113	5	Example Paged Collection
+api/presentation/2.1.md	1114	1433	2	6. Advanced Association Features
+api/presentation/2.1.md	1118	1193	3	6.1. Segments
+api/presentation/2.1.md	1194	1225	3	6.2. Embedded Content
+api/presentation/2.1.md	1226	1260	3	6.3. Choice of Alternative Resources
+api/presentation/2.1.md	1261	1289	3	6.4. Non Rectangular Segments
+api/presentation/2.1.md	1290	1317	3	6.5. Style
+api/presentation/2.1.md	1318	1373	3	6.6. Rotation
+api/presentation/2.1.md	1374	1412	3	6.7. Comment Annotations
+api/presentation/2.1.md	1413	1433	3	6.8. Hotspot Linking
+api/presentation/2.1.md	1434	1488	2	7. HTTP Requests and Responses
+api/presentation/2.1.md	1438	1460	3	7.1. Requests
+api/presentation/2.1.md	1461	1488	3	7.2. Responses
+api/presentation/2.1.md	1489	1494	2	8. Authentication
+api/presentation/2.1.md	1495	1809	2	Appendices
+api/presentation/2.1.md	1497	1510	3	A. Summary of Recommended URI Patterns
+api/presentation/2.1.md	1511	1610	3	B. Summary of Metadata Requirements
+api/presentation/2.1.md	1611	1784	3	C. Example Manifest Response
+api/presentation/2.1.md	1785	1790	3	D. Implementation Notes
+api/presentation/2.1.md	1791	1794	3	E. Versioning
+api/presentation/2.1.md	1795	1800	3	F. Acknowledgements
+api/presentation/2.1.md	1801	1809	3	G. Change Log
+api/presentation/3.0.md	3	26	2	Status of this Document
+api/presentation/3.0.md	27	68	2	1. Introduction
+api/presentation/3.0.md	39	56	3	1.1. Objectives and Scope
+api/presentation/3.0.md	57	68	3	1.2. Terminology
+api/presentation/3.0.md	69	116	2	2. Resource Type Overview
+api/presentation/3.0.md	75	96	3	2.1. Defined Types
+api/presentation/3.0.md	81	84	5	Collection
+api/presentation/3.0.md	85	88	5	Manifest
+api/presentation/3.0.md	89	92	5	Canvas
+api/presentation/3.0.md	93	96	5	Range
+api/presentation/3.0.md	97	116	3	2.2. Additional Types
+api/presentation/3.0.md	101	104	5	Annotation Page
+api/presentation/3.0.md	105	108	5	Annotation
+api/presentation/3.0.md	109	112	5	Content
+api/presentation/3.0.md	113	116	5	Annotation Collection
+api/presentation/3.0.md	117	1003	2	3. Resource Properties
+api/presentation/3.0.md	127	408	3	3.1. Descriptive Properties
+api/presentation/3.0.md	131	155	5	label
+api/presentation/3.0.md	156	183	5	metadata
+api/presentation/3.0.md	184	202	5	summary
+api/presentation/3.0.md	203	220	5	requiredStatement
+api/presentation/3.0.md	221	238	5	rights
+api/presentation/3.0.md	239	297	5	provider
+api/presentation/3.0.md	298	328	5	thumbnail
+api/presentation/3.0.md	329	349	5	navDate
+api/presentation/3.0.md	350	379	5	placeholderCanvas
+api/presentation/3.0.md	380	408	5	accompanyingCanvas
+api/presentation/3.0.md	409	647	3	3.2. Technical Properties
+api/presentation/3.0.md	413	427	5	id
+api/presentation/3.0.md	428	453	5	type
+api/presentation/3.0.md	454	470	5	format
+api/presentation/3.0.md	471	485	5	language
+api/presentation/3.0.md	486	500	5	profile
+api/presentation/3.0.md	501	517	5	height
+api/presentation/3.0.md	518	534	5	width
+api/presentation/3.0.md	535	551	5	duration
+api/presentation/3.0.md	552	577	5	viewingDirection
+api/presentation/3.0.md	578	628	5	behavior
+api/presentation/3.0.md	629	647	5	timeMode
+api/presentation/3.0.md	648	895	3	3.3. Linking Properties
+api/presentation/3.0.md	652	834	4	3.3.1. External Links
+api/presentation/3.0.md	654	679	5	homepage
+api/presentation/3.0.md	680	704	5	logo
+api/presentation/3.0.md	705	726	5	rendering
+api/presentation/3.0.md	727	778	5	service
+api/presentation/3.0.md	779	811	5	services
+api/presentation/3.0.md	812	834	5	seeAlso
+api/presentation/3.0.md	835	895	4	3.3.2. Internal Links
+api/presentation/3.0.md	837	849	5	partOf
+api/presentation/3.0.md	850	880	5	start
+api/presentation/3.0.md	881	895	5	supplementary
+api/presentation/3.0.md	896	988	3	3.4. Structural Properties
+api/presentation/3.0.md	900	934	5	items
+api/presentation/3.0.md	935	957	5	structures
+api/presentation/3.0.md	958	988	5	annotations
+api/presentation/3.0.md	989	1003	3	3.5. Values
+api/presentation/3.0.md	991	1003	5	Values for motivation
+api/presentation/3.0.md	1004	1143	2	4. JSON-LD Considerations
+api/presentation/3.0.md	1008	1011	3	4.1. Case Sensitivity
+api/presentation/3.0.md	1012	1028	3	4.2. Resource Representations
+api/presentation/3.0.md	1029	1044	3	4.3. Properties with Multiple Values
+api/presentation/3.0.md	1045	1079	3	4.4. Language of Property Values
+api/presentation/3.0.md	1080	1098	3	4.5. HTML Markup in Property Values
+api/presentation/3.0.md	1099	1123	3	4.6. Linked Data Context and Extensions
+api/presentation/3.0.md	1124	1139	3	4.7. Term Collisions between Contexts
+api/presentation/3.0.md	1140	1143	3	4.8. Keyword Mappings
+api/presentation/3.0.md	1144	1677	2	5. Resource Structure
+api/presentation/3.0.md	1148	1199	3	5.1. Collection
+api/presentation/3.0.md	1200	1401	3	5.2. Manifest
+api/presentation/3.0.md	1402	1453	3	5.3. Canvas
+api/presentation/3.0.md	1454	1527	3	5.4. Range
+api/presentation/3.0.md	1528	1559	3	5.5. Annotation Page
+api/presentation/3.0.md	1560	1587	3	5.6. Annotation
+api/presentation/3.0.md	1588	1634	3	5.7. Content Resources
+api/presentation/3.0.md	1635	1677	3	5.8. Annotation Collection
+api/presentation/3.0.md	1678	1716	2	6. HTTP Requests and Responses
+api/presentation/3.0.md	1682	1690	3	6.1. URI Recommendations
+api/presentation/3.0.md	1691	1694	3	6.2. Requests
+api/presentation/3.0.md	1695	1716	3	6.3. Responses
+api/presentation/3.0.md	1717	1722	2	7. Authentication
+api/presentation/3.0.md	1723	2139	2	Appendices
+api/presentation/3.0.md	1725	1823	3	A. Summary of Property Requirements
+api/presentation/3.0.md	1824	2119	3	B. Example Manifest Response
+api/presentation/3.0.md	2120	2123	3	C. Versioning
+api/presentation/3.0.md	2124	2129	3	D. Acknowledgements
+api/presentation/3.0.md	2130	2139	3	E. Change Log
+api/presentation/4.0.md	3	28	1	Status of this Document
+api/presentation/4.0.md	29	52	1	Introduction
+api/presentation/4.0.md	39	52	2	IIIF Use cases
+api/presentation/4.0.md	53	537	1	Foundations
+api/presentation/4.0.md	61	82	2	Manifests
+api/presentation/4.0.md	83	231	2	Containers
+api/presentation/4.0.md	91	127	3	Timeline
+api/presentation/4.0.md	128	168	3	Canvas
+api/presentation/4.0.md	169	231	3	Scene
+api/presentation/4.0.md	220	223	4	Lights
+api/presentation/4.0.md	224	227	4	Cameras
+api/presentation/4.0.md	228	231	4	Audio Emitters
+api/presentation/4.0.md	232	365	2	Annotations
+api/presentation/4.0.md	267	338	3	Annotation Page
+api/presentation/4.0.md	339	365	3	Annotation Collection
+api/presentation/4.0.md	366	457	2	Content Resources
+api/presentation/4.0.md	372	375	3	Containers as Content Resources
+api/presentation/4.0.md	376	406	3	Referencing Parts of Resources
+api/presentation/4.0.md	407	457	3	Specific Resource
+api/presentation/4.0.md	452	457	4	Transforms
+api/presentation/4.0.md	458	537	2	Navigational Resources
+api/presentation/4.0.md	462	498	3	Collection
+api/presentation/4.0.md	499	537	3	Range
+api/presentation/4.0.md	538	1184	1	Image Content
+api/presentation/4.0.md	540	731	2	Use Case 1: Artwork
+api/presentation/4.0.md	732	969	2	Use Case 2: Book
+api/presentation/4.0.md	970	1184	2	Use Case 3: Periodical
+api/presentation/4.0.md	1185	1482	1	Audio and Video Content
+api/presentation/4.0.md	1187	1349	2	Use Case 4: A 45 Single with 2 Tracks
+api/presentation/4.0.md	1350	1482	2	Use Case 5: Movie with Subtitles
+api/presentation/4.0.md	1483	1576	1	Nesting Containers
+api/presentation/4.0.md	1487	1576	2	Use Case 6: Reconstruction of a Separated Object
+api/presentation/4.0.md	1577	2744	1	3D Content
+api/presentation/4.0.md	1579	2744	2	Use Case 7: 3D Chessboard
+api/presentation/4.0.md	1581	1641	3	Basic Scene
+api/presentation/4.0.md	1642	1786	3	Configured Scene
+api/presentation/4.0.md	1787	2030	3	Multiple Objects
+api/presentation/4.0.md	2031	2434	3	Audio in 3D
+api/presentation/4.0.md	2435	2605	3	Painting a Scene into a Scene
+api/presentation/4.0.md	2606	2744	3	Painting a Canvas or Timeline into a Scene
+api/presentation/4.0.md	2745	3545	1	Annotations
+api/presentation/4.0.md	2749	3221	2	Use Case 8: Commenting on Specific Features
+api/presentation/4.0.md	2837	2925	3	Commenting about 3D sculpture
+api/presentation/4.0.md	2926	3221	3	3D Comments with Cameras
+api/presentation/4.0.md	3187	3221	4	Using Scope to Select a Camera
+api/presentation/4.0.md	3222	3545	2	Use Case 9: Linking and Activating
+api/presentation/4.0.md	3255	3433	3	Interactive 3D light switch
+api/presentation/4.0.md	3434	3526	3	Triggering Model Animations
+api/presentation/4.0.md	3527	3545	3	Interactivity, Guided Viewing and Storytelling
+api/presentation/4.0.md	3542	3545	4	The “sequence” behavior
+api/presentation/4.0.md	3546	3583	1	Accessibility
+api/presentation/4.0.md	3584	3650	1	Additional Features
+api/presentation/4.0.md	3586	3593	2	Services
+api/presentation/4.0.md	3594	3614	2	Content State
+api/presentation/4.0.md	3615	3650	2	Rotation of Image Resources
+api/presentation/4.0.md	3651	3671	1	Appendices
+api/presentation/4.0.md	3653	3666	2	Terminology
+api/presentation/4.0.md	3667	3668	2	Versioning
+api/presentation/4.0.md	3669	3670	2	Acknowledgements
+api/presentation/4.0.md	3671	3671	2	Change Log
+api/presentation/3.0/change-log.md	5	150	2	1. Breaking Changes
+api/presentation/3.0/change-log.md	7	16	3	1.1. External Specifications
+api/presentation/3.0/change-log.md	9	12	4	1.1.1. Use JSON-LD 1.1
+api/presentation/3.0/change-log.md	13	16	4	1.1.2. Use Web Annotation Data Model
+api/presentation/3.0/change-log.md	17	78	3	1.2. Property Naming and Semantics Changes
+api/presentation/3.0/change-log.md	21	24	4	1.2.1. Rename `@id` to `id`, `@type` to `type`
+api/presentation/3.0/change-log.md	25	28	4	1.2.2. Rename `viewingHint` to `behavior`
+api/presentation/3.0/change-log.md	29	32	4	1.2.3. Rename `attribution` to `requiredStatement`, allow `label`+`value`
+api/presentation/3.0/change-log.md	33	36	4	1.2.4. Consolidate structural properties to `items` where possible
+api/presentation/3.0/change-log.md	37	40	4	1.2.5. Rename `license` to `rights`
+api/presentation/3.0/change-log.md	41	44	4	1.2.6. Rename `description` to `summary`
+api/presentation/3.0/change-log.md	45	48	4	1.2.7. Rename `related` to `homepage`
+api/presentation/3.0/change-log.md	49	52	4	1.2.8. Rename `contentLayer` to `supplementary`
+api/presentation/3.0/change-log.md	53	56	4	1.2.9. Rename `startCanvas` to `start`, allow reference to part of a Canvas
+api/presentation/3.0/change-log.md	57	60	4	1.2.10. Rename `within` to `partOf`
+api/presentation/3.0/change-log.md	61	64	4	1.2.11. Specify interaction and inheritance model for `behavior` values
+api/presentation/3.0/change-log.md	65	68	4	1.2.12. Wrap `logo` in a structure with more information, introduce `provider` property
+api/presentation/3.0/change-log.md	69	74	4	1.2.13. Remove `otherContent` property, use `annotations` and `items` instead
+api/presentation/3.0/change-log.md	75	78	4	1.2.14. Update context for new major version
+api/presentation/3.0/change-log.md	79	108	3	1.3. Property Value Changes
+api/presentation/3.0/change-log.md	81	84	4	1.3.1. Allow long texts in `metadata` values
+api/presentation/3.0/change-log.md	85	88	4	1.3.2. Allow non-images in `thumbnail`
+api/presentation/3.0/change-log.md	89	92	4	1.3.3. Use language map pattern for `label`, `value`, `summary`
+api/presentation/3.0/change-log.md	93	96	4	1.3.4. Always require arrays if property can have multiple values
+api/presentation/3.0/change-log.md	97	100	4	1.3.5. Require a JSON object for all non-enumerable resources
+api/presentation/3.0/change-log.md	101	104	4	1.3.6. Canvases always include AnnotationPages, not Annotations directly
+api/presentation/3.0/change-log.md	105	108	4	1.3.7. Change requirements for `navDate` value
+api/presentation/3.0/change-log.md	109	130	3	1.4. Classes Changes
+api/presentation/3.0/change-log.md	111	114	4	1.4.1. Remove Sequence in favor of Ranges, `items`, and `behavior` value `sequence`
+api/presentation/3.0/change-log.md	115	118	4	1.4.2. Ranges express full extent
+api/presentation/3.0/change-log.md	119	122	4	1.4.3. Remove Layer, AnnotationList in favor of AnnotationCollection, AnnotationPage
+api/presentation/3.0/change-log.md	123	126	4	1.4.4. Remove paging functionality
+api/presentation/3.0/change-log.md	127	130	4	1.4.5. Move “advanced” Annotation features to cookbook
+api/presentation/3.0/change-log.md	131	150	3	1.5. Requirements Changes
+api/presentation/3.0/change-log.md	133	136	4	1.5.1. Establish client requirements per property
+api/presentation/3.0/change-log.md	137	140	4	1.5.2. Canvas should have `label`
+api/presentation/3.0/change-log.md	141	144	4	1.5.3. Resources referenced from Collections should have `thumbnail`
+api/presentation/3.0/change-log.md	145	150	4	1.5.4. Requirements of `id` and `type`
+api/presentation/3.0/change-log.md	151	234	2	2. Non-Breaking Changes
+api/presentation/3.0/change-log.md	153	186	3	2.1. Enable Audio and Video Content
+api/presentation/3.0/change-log.md	155	158	4	2.1.1. Allow Canvases to be treated as Content Resources
+api/presentation/3.0/change-log.md	159	162	4	2.1.2. Add `accompanyingCanvas`, `placeholderCanvas` for associated content
+api/presentation/3.0/change-log.md	163	166	4	2.1.3. Add `duration` on Canvas
+api/presentation/3.0/change-log.md	167	170	4	2.1.4. Add `timeMode` on Annotation
+api/presentation/3.0/change-log.md	171	174	4	2.1.5. Add `auto-advance`, `no-auto-advance` for `behavior`
+api/presentation/3.0/change-log.md	175	178	4	2.1.6. Add `thumbnail-nav` for `behavior`
+api/presentation/3.0/change-log.md	179	182	4	2.1.7. Add `repeat`, `no-repeat` for `behavior`
+api/presentation/3.0/change-log.md	183	186	4	2.1.8. Reference external Selectors
+api/presentation/3.0/change-log.md	187	212	3	2.2. Additional Features
+api/presentation/3.0/change-log.md	189	192	4	2.2.1. Add `language` on external resources
+api/presentation/3.0/change-log.md	193	196	4	2.2.2. Add `no-nav`, `unordered`, `hidden` for `behavior`
+api/presentation/3.0/change-log.md	197	200	4	2.2.3. Add `together` for `behavior`
+api/presentation/3.0/change-log.md	201	204	4	2.2.4. Add `supplementing` for `motivation`
+api/presentation/3.0/change-log.md	205	208	4	2.2.5. Allow `paged` behavior on Collections with `multi-part` behavior
+api/presentation/3.0/change-log.md	209	212	4	2.2.6. Add `services` property for Collections and Manifests
+api/presentation/3.0/change-log.md	213	234	3	2.3. Protocol Features
+api/presentation/3.0/change-log.md	215	218	4	2.3.1. Define JSON-LD profile for media type
+api/presentation/3.0/change-log.md	219	222	4	2.3.2. Remove per-class URI patterns, instead make general recommendations
+api/presentation/3.0/change-log.md	223	226	4	2.3.3. Allow external Ranges
+api/presentation/3.0/change-log.md	227	230	4	2.3.4. Recommend HEAD functionality
+api/presentation/3.0/change-log.md	231	234	4	2.3.5. Clarify content negotiation expectations
+api/presentation/3.0/change-log.md	235	283	2	3. Editorial Changes
+api/presentation/3.0/change-log.md	237	266	3	3.1. Clarifications
+api/presentation/3.0/change-log.md	239	242	4	3.1.1. Add explicit definition of `profile`
+api/presentation/3.0/change-log.md	243	246	4	3.1.2. Clarify “referenced” and “embedded”
+api/presentation/3.0/change-log.md	247	250	4	3.1.3. Clarify patterns for cross-version references
+api/presentation/3.0/change-log.md	251	254	4	3.1.4. Clarify `@graph` is just not allowed
+api/presentation/3.0/change-log.md	255	258	4	3.1.5. Clarify no interstitial pages for `rendering`
+api/presentation/3.0/change-log.md	259	262	4	3.1.6. Clarify `multi-part` collections can have sub-collections
+api/presentation/3.0/change-log.md	263	266	4	3.1.7. Clarify case-sensitivity of terms
+api/presentation/3.0/change-log.md	267	283	3	3.2. Style
+api/presentation/3.0/change-log.md	269	272	4	3.2.1. Restructure document
+api/presentation/3.0/change-log.md	273	276	4	3.2.2. Consistency
+api/presentation/3.0/change-log.md	277	280	4	3.2.3. Visual Appearance
+api/presentation/3.0/change-log.md	281	283	4	3.2.4. Examples Improved
+api/presentation/4.0/model.md	3	28	2	Status of this Document
+api/presentation/4.0/model.md	29	2875	1	IIIF Presentation API Data Model
+api/presentation/4.0/model.md	31	38	2	Introduction
+api/presentation/4.0/model.md	39	143	2	Technical Considerations
+api/presentation/4.0/model.md	43	54	3	Terminology
+api/presentation/4.0/model.md	55	58	3	Case Sensitivity
+api/presentation/4.0/model.md	59	74	3	Properties with Multiple Values
+api/presentation/4.0/model.md	75	107	3	Language of Property Values
+api/presentation/4.0/model.md	108	126	3	HTML Markup in Property Values
+api/presentation/4.0/model.md	127	143	3	Resource Availability on the Web
+api/presentation/4.0/model.md	144	997	2	Classes
+api/presentation/4.0/model.md	153	190	3	Collection
+api/presentation/4.0/model.md	176	190	4	Collection Page
+api/presentation/4.0/model.md	191	205	3	Manifest
+api/presentation/4.0/model.md	206	255	3	Container Classes
+api/presentation/4.0/model.md	222	230	4	Timeline
+api/presentation/4.0/model.md	231	240	4	Canvas
+api/presentation/4.0/model.md	241	255	4	Scene
+api/presentation/4.0/model.md	256	388	3	Annotation Classes
+api/presentation/4.0/model.md	260	278	4	Annotation
+api/presentation/4.0/model.md	279	295	4	Annotation Collection
+api/presentation/4.0/model.md	296	308	4	Annotation Page
+api/presentation/4.0/model.md	309	322	4	Specific Resource
+api/presentation/4.0/model.md	323	332	4	Textual Body
+api/presentation/4.0/model.md	333	345	4	Choice
+api/presentation/4.0/model.md	346	356	4	Composite
+api/presentation/4.0/model.md	357	367	4	List
+api/presentation/4.0/model.md	368	378	4	Independents
+api/presentation/4.0/model.md	379	388	4	CSS Stylesheet
+api/presentation/4.0/model.md	389	413	3	Content Resources
+api/presentation/4.0/model.md	414	570	3	Selectors
+api/presentation/4.0/model.md	421	432	4	Fragment Selector
+api/presentation/4.0/model.md	433	444	4	SVG Selector
+api/presentation/4.0/model.md	445	469	4	Point Selector
+api/presentation/4.0/model.md	470	489	4	WKT Selector
+api/presentation/4.0/model.md	490	506	4	Audio Content Selector
+api/presentation/4.0/model.md	507	523	4	Visual Content Selector
+api/presentation/4.0/model.md	524	540	4	Animation Selector
+api/presentation/4.0/model.md	541	570	4	IIIF Image API Selector
+api/presentation/4.0/model.md	571	585	3	Range
+api/presentation/4.0/model.md	586	901	3	Scene Components
+api/presentation/4.0/model.md	590	643	4	Cameras
+api/presentation/4.0/model.md	602	620	5	Orthographic Camera
+api/presentation/4.0/model.md	621	643	5	Perspective Camera
+api/presentation/4.0/model.md	644	766	4	Lights
+api/presentation/4.0/model.md	657	673	5	Ambient Light
+api/presentation/4.0/model.md	674	694	5	Directional Light
+api/presentation/4.0/model.md	695	721	5	Image-Based Light
+api/presentation/4.0/model.md	722	738	5	Point Light
+api/presentation/4.0/model.md	739	766	5	Spot Light
+api/presentation/4.0/model.md	767	845	4	Audio Emitters
+api/presentation/4.0/model.md	780	797	5	Ambient Audio
+api/presentation/4.0/model.md	798	815	5	Point Audio
+api/presentation/4.0/model.md	816	845	5	Spot Audio
+api/presentation/4.0/model.md	846	901	4	Transforms
+api/presentation/4.0/model.md	854	869	5	Rotate Transform
+api/presentation/4.0/model.md	870	885	5	Scale Transform
+api/presentation/4.0/model.md	886	901	5	Translate Transform
+api/presentation/4.0/model.md	902	997	3	Utility Classes
+api/presentation/4.0/model.md	904	942	4	Agent
+api/presentation/4.0/model.md	943	960	4	Quantity
+api/presentation/4.0/model.md	961	997	4	Service
+api/presentation/4.0/model.md	998	2789	2	Properties
+api/presentation/4.0/model.md	1000	1026	3	accompanyingContainer
+api/presentation/4.0/model.md	1027	1052	3	action
+api/presentation/4.0/model.md	1053	1067	3	angle
+api/presentation/4.0/model.md	1068	1096	3	annotations
+api/presentation/4.0/model.md	1097	1111	3	backgroundColor
+api/presentation/4.0/model.md	1112	1159	3	behavior
+api/presentation/4.0/model.md	1160	1178	3	body
+api/presentation/4.0/model.md	1179	1193	3	canonical
+api/presentation/4.0/model.md	1194	1212	3	color
+api/presentation/4.0/model.md	1213	1227	3	conformsTo
+api/presentation/4.0/model.md	1228	1244	3	duration
+api/presentation/4.0/model.md	1245	1262	3	environmentMap
+api/presentation/4.0/model.md	1263	1282	3	exclude
+api/presentation/4.0/model.md	1283	1295	3	far
+api/presentation/4.0/model.md	1296	1308	3	fieldOfView
+api/presentation/4.0/model.md	1309	1321	3	fileSize
+api/presentation/4.0/model.md	1322	1341	3	first
+api/presentation/4.0/model.md	1342	1368	3	format
+api/presentation/4.0/model.md	1369	1383	3	height
+api/presentation/4.0/model.md	1384	1411	3	homepage
+api/presentation/4.0/model.md	1412	1430	3	id
+api/presentation/4.0/model.md	1431	1443	3	instant
+api/presentation/4.0/model.md	1444	1462	3	intensity
+api/presentation/4.0/model.md	1463	1491	3	interactionMode
+api/presentation/4.0/model.md	1492	1532	3	items
+api/presentation/4.0/model.md	1533	1557	3	label
+api/presentation/4.0/model.md	1558	1570	3	language
+api/presentation/4.0/model.md	1571	1590	3	last
+api/presentation/4.0/model.md	1591	1615	3	logo
+api/presentation/4.0/model.md	1616	1641	3	lookAt
+api/presentation/4.0/model.md	1642	1669	3	metadata
+api/presentation/4.0/model.md	1670	1692	3	motivation
+api/presentation/4.0/model.md	1693	1713	3	navDate
+api/presentation/4.0/model.md	1714	1753	3	navPlace
+api/presentation/4.0/model.md	1754	1766	3	near
+api/presentation/4.0/model.md	1767	1784	3	next
+api/presentation/4.0/model.md	1785	1803	3	partOf
+api/presentation/4.0/model.md	1804	1831	3	placeholderContainer
+api/presentation/4.0/model.md	1832	1861	3	position
+api/presentation/4.0/model.md	1862	1881	3	prev
+api/presentation/4.0/model.md	1882	1905	3	profile
+api/presentation/4.0/model.md	1906	1964	3	provider
+api/presentation/4.0/model.md	1965	1989	3	provides
+api/presentation/4.0/model.md	1990	2002	3	quality
+api/presentation/4.0/model.md	2003	2015	3	quantityValue
+api/presentation/4.0/model.md	2016	2030	3	refinedBy
+api/presentation/4.0/model.md	2031	2043	3	region
+api/presentation/4.0/model.md	2044	2065	3	rendering
+api/presentation/4.0/model.md	2066	2083	3	requiredStatement
+api/presentation/4.0/model.md	2084	2101	3	rights
+api/presentation/4.0/model.md	2102	2114	3	rotation
+api/presentation/4.0/model.md	2115	2140	3	scope
+api/presentation/4.0/model.md	2141	2163	3	seeAlso
+api/presentation/4.0/model.md	2164	2184	3	selector
+api/presentation/4.0/model.md	2185	2224	3	service
+api/presentation/4.0/model.md	2225	2257	3	services
+api/presentation/4.0/model.md	2258	2270	3	size
+api/presentation/4.0/model.md	2271	2285	3	source
+api/presentation/4.0/model.md	2286	2307	3	spatialScale
+api/presentation/4.0/model.md	2308	2345	3	start
+api/presentation/4.0/model.md	2346	2360	3	startIndex
+api/presentation/4.0/model.md	2361	2381	3	structures
+api/presentation/4.0/model.md	2382	2396	3	styleClass
+api/presentation/4.0/model.md	2397	2416	3	stylesheet
+api/presentation/4.0/model.md	2417	2435	3	summary
+api/presentation/4.0/model.md	2436	2448	3	supplementary
+api/presentation/4.0/model.md	2449	2465	3	target
+api/presentation/4.0/model.md	2466	2489	3	temporalScale
+api/presentation/4.0/model.md	2490	2520	3	thumbnail
+api/presentation/4.0/model.md	2521	2539	3	timeMode
+api/presentation/4.0/model.md	2540	2556	3	total (totalItems)
+api/presentation/4.0/model.md	2557	2578	3	transform
+api/presentation/4.0/model.md	2579	2606	3	type
+api/presentation/4.0/model.md	2607	2625	3	unit
+api/presentation/4.0/model.md	2626	2645	3	value
+api/presentation/4.0/model.md	2646	2660	3	version
+api/presentation/4.0/model.md	2661	2673	3	via
+api/presentation/4.0/model.md	2674	2686	3	viewHeight
+api/presentation/4.0/model.md	2687	2710	3	viewingDirection
+api/presentation/4.0/model.md	2711	2729	3	volume
+api/presentation/4.0/model.md	2730	2744	3	width
+api/presentation/4.0/model.md	2745	2759	3	x
+api/presentation/4.0/model.md	2760	2774	3	y
+api/presentation/4.0/model.md	2775	2789	3	z
+api/presentation/4.0/model.md	2790	2825	2	Processing Model
+api/presentation/4.0/model.md	2792	2795	3	Scope
+api/presentation/4.0/model.md	2796	2803	3	Collections and Collection Pages
+api/presentation/4.0/model.md	2804	2811	3	Navigation within a Manifest
+api/presentation/4.0/model.md	2812	2817	3	Annotating Containers
+api/presentation/4.0/model.md	2818	2825	3	Dynamic Content
+api/presentation/4.0/model.md	2826	2875	2	JSON-LD and Extensions
+api/presentation/4.0/model.md	2828	2852	3	JSON-LD Contexts
+api/presentation/4.0/model.md	2853	2871	3	Term Collisions between Contexts
+api/presentation/4.0/model.md	2872	2875	3	Keyword Mappings
+api/presentation/4.0/model.md	2876	2917	1	Protocol
+api/presentation/4.0/model.md	2880	2888	2	URI Recommendations
+api/presentation/4.0/model.md	2889	2917	2	HTTP Requests and Responses
+api/presentation/4.0/model.md	2893	2896	3	Requests
+api/presentation/4.0/model.md	2897	2917	3	Responses
+get-started/how-iiif-works.md	3	10	2	Introduction
+get-started/how-iiif-works.md	11	18	2	The basics
+get-started/how-iiif-works.md	19	41	2	The Image and Presentation APIs
+get-started/how-iiif-works.md	23	30	3	Delivering objects
+get-started/how-iiif-works.md	31	41	3	Viewing objects
+get-started/how-iiif-works.md	42	50	2	Advanced use cases
+get-started/how-iiif-works.md	51	60	2	Putting it all together
+get-started/iiif-viewers.md	11	102	2	Image viewers
+get-started/iiif-viewers.md	13	22	3	[Universal Viewer](https://universalviewer.io/)
+get-started/iiif-viewers.md	23	32	3	[Mirador](https://projectmirador.org/)
+get-started/iiif-viewers.md	33	42	3	[OpenSeadragon](https://openseadragon.github.io/examples/tilesource-iiif/)
+get-started/iiif-viewers.md	43	52	3	[Tify](https://tify.rocks/)
+get-started/iiif-viewers.md	53	60	3	[IIIF Curation Viewer](http://codh.rois.ac.jp/software/iiif-curation-viewer/)
+get-started/iiif-viewers.md	61	68	3	[Annona](https://ncsu-libraries.github.io/annona/)
+get-started/iiif-viewers.md	69	76	3	[Clover](https://samvera-labs.github.io/clover-iiif/)
+get-started/iiif-viewers.md	77	84	3	[Micrio SHOW](https://micr.io/products/)
+get-started/iiif-viewers.md	85	94	3	[Glycerine Viewer](https://glycerine.io/)
+get-started/iiif-viewers.md	95	102	3	[Diva.js](https://diva.simssa.ca)
+get-started/iiif-viewers.md	103	112	2	Audio/visual materials viewers
+get-started/image-servers.md	5	8	3	[Cantaloupe](https://cantaloupe-project.github.io/)
+get-started/image-servers.md	9	12	3	[IIPImage Server](http://iipimage.sourceforge.net/documentation/server/)
+get-started/image-servers.md	13	17	3	[Serverless-iiif](https://github.com/nulib/serverless-iiif)
+get-started/image-servers.md	18	24	3	[Loris](https://github.com/loris-imageserver/loris)
+get-started/image-servers.md	25	35	2	Make a existing image server IIIF compatible
+get-started/image-servers.md	29	32	3	[Shimmy](https://github.com/mejackreed/shimmy)
+get-started/image-servers.md	33	35	3	[Flask-IIIF](https://github.com/inveniosoftware/flask-iiif)
+get-started/tools.md	11	21	3	Platforms
+get-started/tools.md	22	39	3	Exhibition and guided viewing
+get-started/tools.md	40	44	3	Manifest generation and templates
+get-started/vendors.md	3	15	2	Hosting services
+get-started/vendors.md	16	50	2	Digital asset management (DAMs), collections management, and repository tools that support IIIF
+get-started/why-iiif.md	7	10	2	Rich image delivery
+get-started/why-iiif.md	11	14	2	Plug and play software
+get-started/why-iiif.md	15	18	2	Publish once, reuse often
+get-started/why-iiif.md	19	22	2	Remix content
+get-started/why-iiif.md	23	26	2	Annotate
+get-started/why-iiif.md	27	34	2	Cite and share
+get-started/why-iiif.md	31	34	3	Support for attribution and access control
+get-started/why-iiif.md	35	38	2	Global network
+get-started/why-iiif.md	39	46	2	Spread the word
+get-started/why-iiif.md	47	67	2	Next steps
+get-started/why-iiif.md	51	56	3	Get started
+get-started/why-iiif.md	57	62	3	Guides
+get-started/why-iiif.md	63	67	3	Talks
+get-started/explainers/using_iiif_resources.md	5	10	2	What is a IIIF Manifest?
+get-started/explainers/using_iiif_resources.md	11	30	2	Finding a IIIF Manifest URL
+get-started/explainers/using_iiif_resources.md	31	140	2	Tools for viewing IIIF Manifests
+get-started/explainers/using_iiif_resources.md	35	70	3	Mirador
+get-started/explainers/using_iiif_resources.md	41	58	4	Mirador 2
+get-started/explainers/using_iiif_resources.md	59	70	4	Mirador 3
+get-started/explainers/using_iiif_resources.md	71	88	3	Universal Viewer (UV)
+get-started/explainers/using_iiif_resources.md	89	102	3	Tify
+get-started/explainers/using_iiif_resources.md	103	120	3	IIIF Curation Viewer
+get-started/explainers/using_iiif_resources.md	121	128	3	Diva.js
+get-started/explainers/using_iiif_resources.md	129	140	3	Glycerine Viewer
+get-started/explainers/using_iiif_resources.md	141	151	2	Quick links

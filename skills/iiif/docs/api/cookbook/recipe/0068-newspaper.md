@@ -1,0 +1,99 @@
+<!-- source: https://iiif.io/api/cookbook/recipe/0068-newspaper/ -->
+
+## Use Case
+
+Digitized Newspapers are more complicated than some other types of content as the hierarchy of Titles, Volumes and Issues are important in making them accessible. The date of publication and providing access to OCR data are also important to the viewing experience. This recipe gives an example of a basic Newspaper with two issues and links to text generated from Optical Character Recognition (OCR) software. The aim is to give a good outline of common mapping solutions for Newspapers.
+
+## Implementation notes
+
+This recipe was put together by Nuno Freire from Europeana and was discussed by the IIIF Newspaper Community Group. The example is a cut down Newspaper with two issues containing two pages. The OCR is at page level rather than article level. The example is for a German newspaper called the ‘Berliner Tageblatt’ and is hosted by Europeana. In the IIIF domain a newspaper title is considered to be a [IIIF Collection](0032-collection.md "Simple Collection") and points to each issue, represented as **IIIF Manifests**, in a member of the `items` element. An issue in this example is considered to be the unit or edition that was published on a particular date. For a more complete discussion on Newspaper hierarchies and how they map to IIIF see “Newspapers and IIIF Structures” below.
+
+### Navigate by Date
+
+(For a full discussion of navigation by chronological order, see [Navigation by Chronology](0230-navdate.md "Navigation by Chronology").)
+
+One important feature of newspapers is their publication date, which IIIF manifests can provide to viewers to allow navigation of issues by chronology. To achieve this we use the `navDate` property. This property should be added both to the items in a collection and to each issue’s manifest. Viewers are not required to make use of `navDate`, and viewers that do have date-aware navigation available may not default to that navigation interface.
+
+Because manifests have no enforced truth relation to digital objects, an arbitrary temporal value can be inserted to enforce navigation order for newspaper editions. You could, for instance, use `T06:00:00+00:00` in the timestamp portion of a `navDate` property value for a morning edition and `T17:00:00+00:00` for an evening edition just to provide browse order. If you can insert the actual publication time and time zone or time zone offset for an edition, so much the better.
+
+### Linking to OCR Text
+
+#### As Annotations
+
+Digitized newspapers often have associated OCR text. To make this available inside a IIIF viewer, it needs to be in the form of one or more Annotations in the appropriate manifest, structured substantially similarly to [the captions or subtitles of an A/V file](0219-using-caption-file.md "Using Caption and Subtitle Files with Video Content"). Each OCR file should correspond to a Canvas, and should be an Annotation in an Annotation Page, with
+
+- a `motivation` of `supplementing`,
+- the URI of the OCR file in the `id` property of the Annotation body, and
+- the `target` set to the applicable Canvas.
+
+If an OCR file does not represent the entire Canvas, the Annotation’s `target` should include a fragment in [\#xywh Fragment Selector syntax](https://www.w3.org/TR/annotation-model/#fragment-selector) of the portion of the Canvas the OCR represents. For more detail, see this cookbook’s entry for [Transcripts, Captions, and Subtitles — General Considerations](0231-transcript-meta-recipe.md "Transcripts, Captions, and Subtitles - General Considerations").
+
+#### Linking Directly to an ALTO File
+
+As well as linking to Annotations, it is a common use case with newspapers to link to other formats of the content, including the open XML Schema [ALTO](https://www.loc.gov/standards/alto/). This is achieved by using a `rendering` property on the Canvas, as the ALTO content is a alternative representation of the page. ALTO content differs from OCR in that it is a representation of a portion of a newspaper object, not an alternative format of the content of a portion of a newspaper. For more detail on using additional files connected to a newspaper, see the [Providing Alternative Representations](0046-rendering.md "Providing Alternative Representations") recipe.
+
+### Newspapers and IIIF Structures
+
+Members of the IIIF community have arrived at the following as the best correspondences between real-world newspaper components and IIIF structures. At a minimum, a newspaper rendered as IIIF should have a title, issue, and page.
+
+| Newspaper | IIIF |
+|----|----|
+| Summary Title / Collection Title / Curated Title / Collection (a locally defined value for user access and to address title changes per serials cataloging) | Collection |
+| Title (usually the masthead title) | Collection |
+| Volume | Collection (often more useful for provenance than user interaction and presentation) |
+| Issue | Manifest (`navDate` recommended for presentation browsing experience) |
+| Edition | Manifest (`navDate` recommended for presentation browsing experience) |
+| Section | Range |
+| Page | Canvas |
+| Page Text (OCR) | Annotation List |
+| Article | Range |
+| Illustration | Range |
+| Supplement | Manifest or Range |
+
+## Example
+
+To demonstrate the files that might be included in even a basic newspaper presentation, we’ve included a number of manifests:
+
+1.  Newspaper Title IIIF Collection - [newspaper_title-collection.json](0068-newspaper/newspaper_title-collection.json)
+2.  Issue 1 Manifest - [newspaper_issue_1-manifest.json](0068-newspaper/newspaper_issue_1-manifest.json)
+    - Page 1
+      - Annotations - [newspaper_issue_1-anno_p1.json](0068-newspaper/newspaper_issue_1-anno_p1.json)
+      - Linked ALTO - [newspaper_issue_1-alto_p1.xml](https://iiif.io/api/cookbook/recipe/0068-newspaper/newspaper_issue_1-alto_p1.xml)
+    - Page 2
+      - Annotations - [newspaper_issue_1-anno_p2.json](0068-newspaper/newspaper_issue_1-anno_p2.json)
+      - Linked ALTO - [newspaper_issue_1-alto_p2.xml](https://iiif.io/api/cookbook/recipe/0068-newspaper/newspaper_issue_1-alto_p2.xml)
+3.  Issue 2 Manifest - [newspaper_issue_2-manifest.json](0068-newspaper/newspaper_issue_2-manifest.json)
+    - Page 1
+      - Annotations - [newspaper_issue_2-anno_p1.json](0068-newspaper/newspaper_issue_2-anno_p1.json)
+      - Linked ALTO - [newspaper_issue_2-alto_p1.xml](https://iiif.io/api/cookbook/recipe/0068-newspaper/newspaper_issue_2-alto_p2.xml)
+    - Page 2
+      - Annotations - [newspaper_issue_2-anno_p2.json](0068-newspaper/newspaper_issue_2-anno_p2.json)
+      - Linked ALTO - [newspaper_issue_2-alto_p2.xml](https://iiif.io/api/cookbook/recipe/0068-newspaper/newspaper_issue_2-alto_p2.xml)
+
+We won’t display all of these here, to keep the recipe readable. However, we’ve inclued the Manifest for the title (structured as a IIIF Collection), thinking it will provide the best initial utility. Notable lines of the Manifest are highlighted.
+
+Viewer support for any particular feature will depend on the viewer and any customizations or extensions. Below is a table showing viewer support as of May 2024 for features noted in this recipe.
+
+| IIIF component | Viewer Support (May 2024) |
+|----|----|
+| Collection | Mirador, Annona, Universal Viewer, Clover, Glycerine Viewer, Theseus |
+| Manifest per issue | Mirador, Annona, Universal Viewer, Clover, Glycerine Viewer, Theseus |
+| `navDate` | Universal Viewer, Theseus |
+| OCR in Annotations | Annona, Glycerine Viewer, Theseus |
+| ALTO via `rendering` | Glycerine Viewer, Theseus |
+| `seeAlso` for dataset version | Annona, Mirador, Glycerine Viewer, Theseus |
+
+Similarly, the quality of the OCR as well as the formatting and positioning data of the Annotations containing it will determine how useful it is. IIIF Presentation v3 only provides a standard for structuring it and communicating layout to a viewer.
+
+[JSON-LD](0068-newspaper/newspaper_title-collection.json)
+
+``` line-numbers
+```
+
+## Related recipes
+
+- [Simplest Collection](0032-collection.md "Simple Collection") for a focused view of the Collection structure basics
+- [Multi-volume Work with Individually-bound Volumes](0030-multi-volume.md "Multi-volume Work with Individually-bound Volumes") for a comparative use of Collection
+- [Providing Alternative Representations](0046-rendering.md "Providing Alternative Representations") for thinking through how to connect additional files relating to newspaper content
+- [Transcripts, Captions, and Subtitles — General Considerations](0231-transcript-meta-recipe.md "Transcripts, Captions, and Subtitles - General Considerations") for a discussion parallel to how to treat alternate forms of a digitized newspaper’s content
+- [Navigation by Chronology](0230-navdate.md "Navigation by Chronology")

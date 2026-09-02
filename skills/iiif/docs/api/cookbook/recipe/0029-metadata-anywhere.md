@@ -1,0 +1,37 @@
+<!-- source: https://iiif.io/api/cookbook/recipe/0029-metadata-anywhere/ -->
+
+## Use Case
+
+Often it is useful to provide descriptive metadata about a resource, such as information on creators, dates, subject headings, and physical or contextual descriptions, that a client will display to the end user. This metadata might describe the entire resource, but may also be applied at more granular levels to provide information on parts of the resource, such as a single image or page, a region of a page, or an annotation.
+
+## Implementation notes
+
+The `metadata` property is used to provide an ordered list of descriptive metadata as an array, with each entry given as a pair of human readable `label` and `value` arrays. The values of both the `label` and `value` properties must be JSON objects. These values will be displayed to the user as label/value pairs by the client. For more information, see the IIIF Presentation API [Metadata](../../presentation/3.0.md#metadata) section.
+
+## Restrictions
+
+All descriptive properties intended for presentation to the user must use language maps as outlined in the [Language of Property Values](../../presentation/3.0.md#44-language-of-property-values) section and demonstrated in the [Internationalization and Multi-language Values](0006-text-language.md "Internationalization and Multi-language Values") recipe.
+
+The content of these entries is intended for presentation only; descriptive semantics should not be inferred. For information on how to include structured metadata that can support discovery, see the [Linking to Structured Metadata](0053-seeAlso.md "Linking to Structured Metadata") recipe.
+
+## Example
+
+In this example, we have two Canvases, each with a different photograph of the same painting: one using natural light and the other an x-ray image. Metadata is provided at the Manifest level to convey information about the resource and additional metadata is provided on each Canvas to provide image-specific details.
+
+Note: Clover supports Metadata at the Manifest level but not down at the Canvas.
+
+Credit: *John Dee performing an experiment before Queen Elizabeth I*. Oil painting by Henry Gillard Glindoni. Credit: Wellcome Collection. Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
+
+[JSON-LD](0029-metadata-anywhere/manifest.json)
+
+Code samples: [Python: iiif-prezi3](https://iiif-prezi.github.io/iiif-prezi3/recipes/0029-metadata-anywhere/)
+
+``` line-numbers
+```
+
+# Related recipes
+
+- [Internationalization and Multi-language Values](0006-text-language.md "Internationalization and Multi-language Values")
+- [Displaying Multiple Values with Language Maps](0118-multivalue.md "Displaying Multiple Values with Language Maps")
+- [Linking to Structured Metadata](0053-seeAlso.md "Linking to Structured Metadata")
+- [Linking to Web Page of an Object](0047-homepage.md "Linking to Web Page of an Object")

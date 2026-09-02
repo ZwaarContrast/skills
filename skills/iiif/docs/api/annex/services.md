@@ -1,0 +1,232 @@
+<!-- source: https://iiif.io/api/annex/services/ -->
+
+## Status of this Document
+
+This document is not subject to [semantic versioning](notes/semver.md "Versioning of APIs"). Changes will be tracked within the document.
+
+**Editors**
+
+- **[Benjamin Albritton](https://orcid.org/0000-0001-8774-7964)** [![ORCID iD](https://iiif.io/assets/uploads/orcid_16x16.png)](https://orcid.org/0000-0001-8774-7964), [*Stanford University*](http://www.stanford.edu)
+- **[Michael Appleby](https://orcid.org/0000-0002-1266-298X)** [![ORCID iD](https://iiif.io/assets/uploads/orcid_16x16.png)](https://orcid.org/0000-0002-1266-298X), [*Yale University*](http://www.yale.edu/)
+- **[Robert Sanderson](https://orcid.org/0000-0003-4441-6852)** [![ORCID iD](https://iiif.io/assets/uploads/orcid_16x16.png)](https://orcid.org/0000-0003-4441-6852), [*Stanford University*](http://www.stanford.edu/)
+- **[Jon Stroop](https://orcid.org/0000-0002-0367-1243)** [![ORCID iD](https://iiif.io/assets/uploads/orcid_16x16.png)](https://orcid.org/0000-0002-0367-1243), [*Princeton University Library*](https://library.princeton.edu/)
+- **[Simeon Warner](https://orcid.org/0000-0002-7970-7855)** [![ORCID iD](https://iiif.io/assets/uploads/orcid_16x16.png)](https://orcid.org/0000-0002-7970-7855), [*Cornell University*](https://www.cornell.edu/)
+
+*Copyright © 2012-2026 Editors and contributors. Published by the IIIF Consortium under the [CC-BY](http://creativecommons.org/licenses/by/4.0/ "Creative Commons — Attribution 4.0 International") license, see [disclaimer](https://iiif.io/api/annex/notes/disclaimer/).*
+
+## Abstract
+
+This document describes the set of related services that have been identified as useful to reference from the IIIF APIs. The services may be defined by the IIIF community, or outside of it.
+
+Please send feedback to <iiif-discuss@googlegroups.com>
+
+## 1. Introduction
+
+There are many additional features that could be included in descriptions beyond those already defined in the [Presentation API](https://iiif.io/api/presentation/ "IIIF Presentation API") or the information request in the [Image API](../image/3.0.md "Image API"). In order to keep the current APIs manageable and lean enough to be understood, implemented, and validated, any feature which is not able to be justified as universally applicable will be imported as a service from an external resource. The adoption of [JSON-LD](https://www.w3.org/TR/json-ld/ "JSON-LD 1.0") is paramount in this respect, as it provides a basis for interoperability and disambiguation between systems.
+
+The inclusion of services in this document that are outside of the IIIF domain *must not* be interpreted as endorsement, support, or approval from the editors, the IIIF community or any individual. This annex is provided as a registry of services to advertise their existence and attempt to ensure some consistency between implementations for common but not universal requirements.
+
+## 2. Requirements
+
+Service information included in the API responses *must* be both valid JSON-LD, and include a service-specific `@context`. Services *should* have an `@id` that can be dereferenced, and if so, the representation retrieved from that URI *should* be JSON-LD. The service at the URI in `@id` *may* require additional parameters, generate representations other than JSON-LD, or have no JSON-LD representation at all.
+
+Services *should* have a `profile` URI which can be used to determine the type of service, especially for services that do not provide a JSON-LD representation. The representation retrieved from the `profile` URI *should* be a human or machine readable description of the service. Services *may* have a `label` property to provide a human readable string to display to the user in the situation that the service has to be selected or manually linked to rather than automatically processed.
+
+Services *may* be included either by reference or embedded within the response. The decision as to whether to embed or reference is left up to the implementer, however embedded descriptions should be kept as short as possible. If the only properties of the object are `@context`, `@id`, `profile` and/or `label`, then the client *should* retrieve the resource from the URI given in `@id`.
+
+``` highlight
+{
+  "service": {
+    "@context": "http://example.org/ns/jsonld/context.json",
+    "@id": "http://example.org/service/example.json",
+    "profile": "http://example.org/docs/example-service.html",
+    "label": "Example Service"
+    // Additional keys may be embedded here, if not then the @id should be retrieved
+  }
+}
+```
+
+## 3. Services
+
+This table summarizes the services available and which APIs they may be used in. The ‘NOT ALLOWED’ icon means that the service is not to be used in the API. The ‘RECOMMENDED’ icon means that the service can be used in the API.
+
+| Service | Image API | Presentation API |
+|----|:--:|:--:|
+| [Image Information](#image-information) | OPTIONAL | RECOMMENDED |
+| [GeoJSON](#geojson) | NOT ALLOWED | RECOMMENDED |
+| [Physical Dimensions](#physical-dimensions) | RECOMMENDED | RECOMMENDED |
+
+The following names have been added as of version 3.0 of the Image and Presentation APIs in order to facilitate cross-version compatibility. These names are used in the `type` or `@type` field for the service.
+
+| Value | Specification |
+|----|----|
+| ImageService1 | [Image API version 1](https://iiif.io/api/image/1.1/ "Image API 1.1") |
+| ImageService2 | [Image API version 2](../image/2.1.md "Image API 2.1") |
+| SearchService1 | [Search API version 1](../search/1.0.md) |
+| AutoCompleteService1 | [Search API version 1](../search/1.0.md#autocomplete) |
+| AuthCookieService1 | [Authentication API version 1](../auth/1.0.md#access-cookie-service "IIIF Authentication Cookie Service") |
+| AuthTokenService1 | [Authentication API version 1](../auth/1.0.md#access-token-service "IIIF Authentication Access Token Service") |
+| AuthLogoutService1 | [Authentication API version 1](../auth/1.0.md#logout-service "IIIF Authentication Logout Service") |
+
+### 3.1 Image Information
+
+*Added: 2014-05-20*
+
+The Image Information service allows the [Presentation API](https://iiif.io/api/presentation/ "IIIF Presentation API"), and potentially other APIs, to reference content to be displayed via the [Image API](../image/3.0.md "Image API"). The JSON-LD content to be referenced or embedded is the Image Information document, also known as `info.json`. The service *must* have the `@context`, `@id` and `profile` keys, pointing to the context document, service base URI and compliance level profile respectively.
+
+``` highlight
+{
+  "service": {
+    "@context" : "http://iiif.io/api/image/2/context.json",
+    "@id" : "http://www.example.org/image-service/abcd1234",
+    "profile": "http://iiif.io/api/image/2/level2.json"
+  }
+}
+```
+
+The service *may* have additional information embedded from the Image Information document to avoid the need to retrieve and parse it separately. In this case, the profile *may* also point to the profile of what functionality is supported, as described in the Image API.
+
+``` highlight
+{
+  "service": {
+    "@context" : "http://iiif.io/api/image/2/context.json",
+    "@id" : "http://www.example.org/image-service/abcd1234",
+    "protocol": "http://iiif.io/api/image",
+    "width" : 6000,
+    "height" : 4000,
+    "sizes" : [
+      {"width" : 150, "height" : 100},
+      {"width" : 600, "height" : 400},
+      {"width" : 3000, "height": 2000}
+    ],
+    "tiles": [
+      {"width" : 512, "scaleFactors" : [1,2,4,8,16]}
+    ],
+    "profile" : [
+      "http://iiif.io/api/image/2/level2.json",
+      {
+        "formats" : [ "gif", "pdf" ],
+        "qualities" : [ "color", "gray" ],
+        "supports" : [
+            "canonicalLinkHeader", "rotationArbitrary", "http://example.com/feature"
+        ]
+      }
+    ]
+  }
+}
+```
+
+With the `logo` property added to the Image Information description in version 2.1 of the Image API, it is possible and reasonable for one `info.json` response to embed another using this pattern. In this case, the second service is related to the icon that should be displayed when a client renders the image described by the main response.
+
+``` highlight
+{
+  "@context" : "http://iiif.io/api/image/2/context.json",
+  "@id" : "http://www.example.org/image-service/baseImage",
+  "protocol" : "http://iiif.io/api/image",
+
+  "attribution" : "Provided by Example Organization",
+  "logo" : {
+    "@id": "http://example.org/image-service/logo/full/full/0/default.png",
+    "service": {
+      "@id": "http://example.org/image-service/logo",
+      "protocol": "http://iiif.io/api/image",
+      "profile": "http://iiif.io/api/image/2/level2.json"
+    }
+  }
+}
+```
+
+### 3.2 GeoJSON
+
+*Added: 2014-05-20*, *Latest Revision: 2017-03-29*
+
+[GeoJSON](http://geojson.org/ "GeoJSON") provides the ability to associate a geographical place with a resource, in order to drive a map-based user interface or visualization tool. This might be a location associated with the provenance of the object such as where it was created, or where it is currently held. The location might also be related to the content of the resource, such as a city mentioned in the text or the landmark depicted in a photograph. It is not appropriate to use this feature for tagging of time, people, events, and other semantic metadata outside of the scope of the Presentation API.
+
+The [JSON-LD representation](http://geojson.org/geojson-ld/ "GeoJSON-LD") of GeoJSON, with `@context` `http://geojson.org/geojson-ld/geojson-context.jsonld` *should* be used. See the GeoJSON documentation for a full description of the functionality available.
+
+An external reference example for tagging a place, where the URI would return a GeoJSON description of the city of Paris, France:
+
+``` highlight
+{
+  "service": {
+    "@context" : "http://geojson.org/geojson-ld/geojson-context.jsonld",
+    "@id" : "http://www.example.org/geojson/paris.json"
+  }
+}
+```
+
+Or embedding the content:
+
+``` highlight
+{
+  "service": {
+    "@context" : "http://geojson.org/geojson-ld/geojson-context.jsonld",
+    "@id" : "http://www.example.org/geojson/paris.json",
+    "type": "Feature",
+    "properties": {"name": "Paris"},
+    "geometry": {
+      "type": "Point",
+      "coordinates" : [48.8567,2.3508]
+    }
+  }
+}
+```
+
+### 3.3 Physical Dimensions
+
+*Added: 2014-05-20*, *Latest Revision: 2015-12-04*
+
+For digitized objects, it is often useful to know the physical dimensions of the object. When available, they allow a client to present a ruler, or other rendition of physical scale, to the user. However, implementers are warned that while this information may be available, frequently:
+
+- It is not available at all.
+- It is unreliable when it is recorded.
+- It is different for every view of an object.
+- When used with the Presentation API, the Canvas might not be sized to depict only the physical object, but might also include a ruler, color bar, the scanning bed or other background objects. In these cases, the Canvas height and width will not be representative of the main object.
+
+As the Presentation API already includes an aspect ratio for the Canvas, and the Image API includes the height and width of the Image, the physical dimensions service need only report two additional pieces of information: the scale factor to multiply the dimensions by to calculate the physical dimensions, and the units for those generated physical dimensions. It is *recommended* that the information always be embedded rather than requiring the client to retrieve it with an additional HTTP request, however some implementers *may wish to* keep the information separate.
+
+When used with the Image API, it allows a client to calculate the pixels per inch (often abbreviated as PPI or DPI) of the image it is associated with. When used with the Presentation API, it gives the size of the object that the Canvas is a surrogate for.
+
+The physical dimensions description includes the following properties:
+
+| Property | Required? | Description |
+|----|----|----|
+| `@context` | Required | The string “http://iiif.io/api/annex/services/physdim/1/context.json”. |
+| `@id` | Optional | A URI that will return the information, perhaps generated dynamically from the image. |
+| `profile` | Required | The string “http://iiif.io/api/annex/services/physdim”. |
+| `physicalScale` | Required | The floating point ratio by which the digital resource’s height and width are multipled in order to determine the depicted scene’s height and width. |
+| `physicalUnits` | Required | The physical units for the generated height and width. Possible values are: “mm”, “cm”, in”. |
+
+The following example demonstrates the resulting structure, as embedded within the [Presentation API](https://iiif.io/api/presentation/ "IIIF Presentation API") response:
+
+``` highlight
+{
+  "service": {
+    "@context": "http://iiif.io/api/annex/services/physdim/1/context.json",
+    "profile": "http://iiif.io/api/annex/services/physdim",
+    "physicalScale": 0.0025,
+    "physicalUnits": "in"
+  }
+}
+```
+
+If the above example was associated with a Canvas of width 4000 and height 6000, then the physical object would be 4000 \* 0.0025 = 10 inches wide, and 15 inches high. If it was associated with an image with width 4000 and height 6000, then it would mean the image was 4000 pixels for 10 inches, or 400 pixels per inch.
+
+**Note:** There is a proposal to add a confidence label or value to this service to allow clients to either determine if they should use the information, or to display an appropriate warning or description when using it. This proposal is currently deferred until additional experience and use cases have been explored. Any interest in this feature should be brought up on [iiif-discuss](mailto:iiif-discuss@googlegroups.com "Email Discussion List").
+
+## Appendices
+
+### A. Acknowledgements
+
+The production of this document was generously supported by a grant from the [Andrew W. Mellon Foundation](http://www.mellon.org/ "The Andrew W. Mellon Foundation").
+
+Thanks to the members of the [IIIF](https://iiif.io/community/ "IIIF Community") for their continuous engagement, innovative ideas and feedback.
+
+### B. Change Log
+
+| Date       | Description                                    |
+|------------|------------------------------------------------|
+| 2019-11-27 | Add 3.0 table of services, use links includes  |
+| 2017-03-29 | Fix externally changed context URI for GeoJSON |
+| 2015-12-04 | Fix link for physical dimensions context       |
+| 2014-06-01 | Version 1.0                                    |

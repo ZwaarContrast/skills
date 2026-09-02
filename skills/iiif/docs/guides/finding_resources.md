@@ -1,0 +1,87 @@
+<!-- source: https://iiif.io/guides/finding_resources/ -->
+
+This is a brief guide to finding IIIF Manifest URLs from members of the IIIF community. These guides begin from a record page, so do not include how to search or view an individual record.
+
+Once you have a manifest URL you can use the [How to use IIIF Resources and Viewers](using_iiif_resources.md) guide to open it in one of the many IIIF Viewers.
+
+This site is a work in progress, and heavily inspired by the initial work done by St Andrew’s University to compile the initial [IIIF Resources List](https://www.st-andrews.ac.uk/assets/university/library/documents/IIF%20resources.pdf).
+
+“Copy this link” is the final step in many of the guides and this involves right-clicking and “copy link address” or similar. Alternatively left click to open the link, then copy the address in the address bar.
+
+## Contribution and corrections
+
+If you notice a correction or would like to add to this list please either submit a pull request to [the repository](https://github.com/IIIF/guides) or fill in [this Google form](https://forms.gle/S6LLjBy2o4iEBR8C9) and the IIIF Staff will add your entry. If you are submitting through GitHub please read the [Contributing](https://iiif.io/guides/CONTRIBUTING/) guide.
+
+## Collections
+
+- [Bavarian State Library (BSB) / Munich Digitization Centre (MDZ)](https://iiif.io/guides/guides/digitale-sammlungen.de/)
+- [Bibliothèque nationale de France (BnF)](https://iiif.io/guides/guides/gallica.bnf.fr/)
+- [Biblissima](https://iiif.io/guides/guides/biblissima.fr/)
+- [Blavatnik Archive](https://iiif.io/guides/guides/blavatnikarchive.org/)
+- [Bodmer Lab](https://iiif.io/guides/guides/bodmerlab.unige.ch/)
+- [British Library](https://iiif.io/guides/guides/bl.uk/)
+- [Brown University Digital Repository](https://iiif.io/guides/guides/repository.library.brown.edu/)
+- [Cardiff University](https://iiif.io/guides/guides/librarysearch.cardiff.ac.uk/)
+- [Cultural Japan](https://iiif.io/guides/guides/cultural.jp/)
+- [David Rumsey Map Collection](https://iiif.io/guides/guides/davidrumsey.com/)
+- [Digital Commonwealth](https://iiif.io/guides/guides/digitalcommonwealth.org/)
+- [Digital Repository of Ireland](https://iiif.io/guides/guides/repository.dri.ie/)
+- [Durham University](https://iiif.io/guides/guides/discover.durham.ac.uk/)
+- [e-codices - Virtual Manuscript Library of Switzerland](https://iiif.io/guides/guides/e-codices.ch/)
+- [e-manuscripta (Manuscript material from Swiss libraries and archives)](https://iiif.io/guides/guides/e-manuscripta.ch/)
+- [e-rara (digitized rare books from Swiss institutions)](https://iiif.io/guides/guides/e-rara.ch/)
+- [Ecole Polytechnique Fédérale de Lausanne (EPFL)](https://iiif.io/guides/guides/plume.epfl.ch/)
+- [Europeana](https://iiif.io/guides/guides/europeana.eu/)
+- [Folger Shakespeare Library](https://iiif.io/guides/guides/collections.folger.edu/)
+- [Fragmentarium - Digital Research Laboratory for Medieval Manuscript Fragments](https://iiif.io/guides/guides/fragmentarium.ms/)
+- [Ghent University](https://iiif.io/guides/guides/lib.ugent.be/)
+- [Guide to IIIF personas](https://iiif.io/guides/guides/personas/)
+- [Göttingen University Collections](https://iiif.io/guides/guides/gdz.sub.uni-goettingen.de/)
+- [Harvard Art Museum](https://iiif.io/guides/guides/harvardartmuseums.org/)
+- [Harvard University Digital Collections](https://iiif.io/guides/guides/library.harvard.edu/)
+- [Huntington Digital Library](https://iiif.io/guides/guides/hdl.huntington.org/)
+- [Indigenous Digital Archive](https://iiif.io/guides/guides/omeka.dlcs-ida.org/)
+- [Internet Archive](https://iiif.io/guides/guides/archive.org/)
+- [J. Paul Getty Trust](https://iiif.io/guides/guides/search.getty.edu/)
+- [KU Leuven](https://iiif.io/guides/guides/kuleuven.limo.libis.be/)
+- [Lancaster University Library](https://iiif.io/guides/guides/digitalcollections.lancaster.ac.uk/)
+- [Leiden University](https://iiif.io/guides/guides/universiteitleiden.nl/)
+- [Library of Congress](https://iiif.io/guides/guides/loc.gov/)
+- [National Gallery of Art Library](https://iiif.io/guides/guides/library.nga.gov/)
+- [National Library of Finland (Finna.fi)](https://iiif.io/guides/guides/finna.fi/)
+- [National Library of Scotland](https://iiif.io/guides/guides/digital.nls.uk/)
+- [National Library of Wales](https://iiif.io/guides/guides/discover.library.wales/)
+- [National Palace Museum (Taiwan)](https://iiif.io/guides/guides/digitalarchive.npm.gov.tw/)
+- [North Carolina State University Libraries](https://iiif.io/guides/guides/d.lib.ncsu.edu/)
+- [Northwestern University](https://iiif.io/guides/guides/digitalcollections.library.northwestern.edu/)
+- [Parliamentary Archives - UK](https://iiif.io/guides/guides/archives.parliament.uk/)
+- [Princeton University Art Museum](https://iiif.io/guides/guides/artmuseum.princeton.edu/)
+- [Princeton University Libraries](https://iiif.io/guides/guides/dpul.princeton.edu/)
+- [Qatar National Library](https://iiif.io/guides/guides/qdl.qa/)
+- [Radboud University Library](https://iiif.io/guides/guides/bijzonderecollecties.ubn.ru.nl/)
+- [Smithsonian Institution](https://iiif.io/guides/guides/collections.si.edu/)
+- [Smithsonian National Zoo](https://iiif.io/guides/guides/nationalzoo.si.edu/)
+- [Stanford University](https://iiif.io/guides/guides/searchworks.stanford.edu/)
+- [UCLA Library Digital Collections](https://iiif.io/guides/guides/digital.library.ucla.edu/)
+- [Universitaet Jena](https://iiif.io/guides/guides/collections.thulb.uni-jena.de/)
+- [University College Dublin Libraries](https://iiif.io/guides/guides/digital.ucd.ie/)
+- [University of Cambridge](https://iiif.io/guides/guides/cudl.lib.cam.ac.uk/)
+- [University of Leeds Libraries' Cultural Collections](https://iiif.io/guides/guides/library.leeds.ac.uk/)
+- [University of Leicester Library](https://iiif.io/guides/guides/specialcollections.le.ac.uk/)
+- [University of North Texas Libraries](https://iiif.io/guides/guides/digital.library.unt.edu/)
+- [University of Oxford (Digital Bodleian)](https://iiif.io/guides/guides/digital.bodleian.ox.ac.uk/)
+- [University of St. Andrews](https://iiif.io/guides/guides/st-andrews.ac.uk/)
+- [University of Toronto](https://iiif.io/guides/guides/library.utoronto.ca/)
+- [University of Washington Libraries](https://iiif.io/guides/guides/content.lib.washington.edu/)
+- [Using the navPlace Extension With Leaflet](https://iiif.io/guides/guides/navplace/)
+- [Utrecht University Library](https://iiif.io/guides/guides/objects.library.uu.nl/)
+- [Vatican Library](https://iiif.io/guides/guides/vatlib.it/)
+- [Villanova University](https://iiif.io/guides/guides/digital.library.villanova.edu/)
+- [Wellcome Collection](https://iiif.io/guides/guides/wellcomelibrary.org/)
+- [Wikidata](https://iiif.io/guides/guides/www.wikidata.org/)
+- [Wikipedia](https://iiif.io/guides/guides/wikipedia.org/)
+- [World Digitial Library](https://iiif.io/guides/guides/wdl.org/)
+- [Yale Center for British Art](https://iiif.io/guides/guides/collections.britishart.yale.edu/)
+- [Yale Peabody Museum](https://iiif.io/guides/guides/collections.peabody.yale.edu/)
+- [Yale University Art Gallery](https://iiif.io/guides/guides/artgallery.yale.edu/)
+- [Yale University Library](https://iiif.io/guides/guides/collections.library.yale.edu/)
