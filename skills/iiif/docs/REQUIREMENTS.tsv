@@ -101,7 +101,7 @@ Canvas	behavior	OPTIONAL
 Canvas	behavior:auto-advance	OPTIONAL
 Canvas	behavior:continuous	NOT ALLOWED
 Canvas	behavior:facing-pages	OPTIONAL
-Canvas	behavior:hidden *	NOT ALLOWED
+Canvas	behavior:hidden	NOT ALLOWED
 Canvas	behavior:individuals	NOT ALLOWED
 Canvas	behavior:multi-part	NOT ALLOWED
 Canvas	behavior:no-auto-advance	OPTIONAL
@@ -149,7 +149,7 @@ Collection	behavior	OPTIONAL
 Collection	behavior:auto-advance	OPTIONAL
 Collection	behavior:continuous	OPTIONAL
 Collection	behavior:facing-pages	NOT ALLOWED
-Collection	behavior:hidden *	NOT ALLOWED
+Collection	behavior:hidden	NOT ALLOWED
 Collection	behavior:individuals	OPTIONAL
 Collection	behavior:multi-part	OPTIONAL
 Collection	behavior:no-auto-advance	OPTIONAL
@@ -229,7 +229,7 @@ Manifest	behavior	OPTIONAL
 Manifest	behavior:auto-advance	OPTIONAL
 Manifest	behavior:continuous	OPTIONAL
 Manifest	behavior:facing-pages	NOT ALLOWED
-Manifest	behavior:hidden *	NOT ALLOWED
+Manifest	behavior:hidden	NOT ALLOWED
 Manifest	behavior:individuals	OPTIONAL
 Manifest	behavior:multi-part	NOT ALLOWED
 Manifest	behavior:no-auto-advance	OPTIONAL
@@ -277,7 +277,7 @@ Range	behavior	OPTIONAL
 Range	behavior:auto-advance	OPTIONAL
 Range	behavior:continuous	OPTIONAL
 Range	behavior:facing-pages	NOT ALLOWED
-Range	behavior:hidden *	NOT ALLOWED
+Range	behavior:hidden	NOT ALLOWED
 Range	behavior:individuals	OPTIONAL
 Range	behavior:multi-part	NOT ALLOWED
 Range	behavior:no-auto-advance	OPTIONAL

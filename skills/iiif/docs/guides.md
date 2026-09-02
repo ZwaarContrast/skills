@@ -87,7 +87,7 @@ IIIF is a set of open standards for delivering high-quality, attributed digital 
 - [How IIIF Works](get-started/how-iiif-works.md)
 - [APIs & Documentation](api.md)
 - [Demos](https://iiif.io/demos)
-- [Tutorials & Guides](guides.md)
+- [Tutorials & Guides](https://iiif.io/guides)
 - [Privacy policy](https://iiif.io/privacy)
 
 #### Stay Connected

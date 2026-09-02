@@ -187,7 +187,11 @@ IGNORE = re.compile(r"""^(
 
 def sitemap():
     """{page: lastmod} for the whole site, one request."""
-    return dict(SITEMAP.findall(get(BASE + "sitemap.xml")))
+    try:
+        return dict(SITEMAP.findall(get(BASE + "sitemap.xml")))
+    except Exception as e:
+        sys.exit(f"cannot reach {BASE}sitemap.xml ({e}); "
+                 f"the corpus on disk is unchanged and still usable")
 
 
 def rules_id():
@@ -391,11 +395,15 @@ def relink():
     have = {os.path.relpath(p, DOCS)[:-3] for p in md_files()}
     hits = misses = 0
     for path in md_files():
+        rel = os.path.relpath(path, DOCS)[:-3]
         here = os.path.dirname(os.path.relpath(path, DOCS)) or "."
 
         def sub(m):
             nonlocal hits, misses
             target, frag = m.group(1).strip("/"), m.group(2) or ""
+            if target == rel and not frag:   # a page linking to itself goes nowhere
+                misses += 1
+                return m.group(0)
             if target not in have:
                 misses += 1
                 return m.group(0)
@@ -530,7 +538,7 @@ def write_requirements():
         if header is None:
             continue
         row = cells(line)
-        label = row[0]
+        label = row[0].rstrip("* ").strip()   # appendix A footnotes its labels
         if label in LEVELS or not label:              # the icon legend, not data
             continue
         for col, value in zip(header[1:], row[1:]):

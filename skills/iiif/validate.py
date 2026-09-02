@@ -39,6 +39,13 @@ LANG_MAP = ["label", "summary"]
 INFO_REQUIRED = ["@context", "id", "type", "protocol", "profile", "width", "height"]
 CHILDREN = {"items", "structures", "annotations", "body", "start",
             "placeholderCanvas", "accompanyingCanvas"}
+# Presentation 3.0 section 4.2: a link to a resource is "a JSON object with the
+# `id` and `type` properties" and nothing more is owed. Appendix A describes a
+# resource's full representation, so it cannot be held against a reference.
+# A Collection's items and a Range's items are always links; `start` is a link;
+# and a Range under `structures` announces that it must be dereferenced by
+# omitting `items` (section 5.4).
+REFERENCE_OF = {("Collection", "items"), ("Range", "items")}
 
 
 def rules():
@@ -78,17 +85,24 @@ def kind(doc):
     return "unknown"
 
 
-def walk(doc, path="$"):
-    """Every typed resource in the tree, with the JSON path that reaches it."""
+def walk(doc, path="$", parent=None, prop=None, ref=False):
+    """Every typed resource in the tree, with the JSON path that reaches it and
+    whether it is a reference rather than the resource itself."""
     if isinstance(doc, dict):
-        if "type" in doc:
-            yield path, doc
+        # `id` alone is enough to be a resource here: a link that forgot its
+        # `type` is exactly the mistake worth catching
+        if "type" in doc or "id" in doc:
+            here = ref or prop == "start" or (parent, prop) in REFERENCE_OF
+            if prop == "structures" and "items" not in doc:
+                here = True
+            yield path, doc, here
+            parent, ref = doc.get("type"), here
         for k, v in doc.items():
             if k in CHILDREN:
-                yield from walk(v, f"{path}.{k}")
+                yield from walk(v, f"{path}.{k}", parent, k, ref)
     elif isinstance(doc, list):
         for i, v in enumerate(doc):
-            yield from walk(v, f"{path}[{i}]")
+            yield from walk(v, f"{path}[{i}]", parent, prop, ref)
 
 
 def check_prez(doc):
@@ -105,9 +119,19 @@ def check_prez(doc):
         return ["error: docs/REQUIREMENTS.tsv is missing — run `python3 refresh.py`"], []
 
     errors, warnings = [], []
-    for path, res in walk(doc):
+    advice = {}
+    for path, res, is_ref in walk(doc):
         t = res.get("type")
+        if t is None:
+            errors.append(f"{path}: no `type` — "
+                          + ("a link needs `id` and `type`" if is_ref
+                             else "every resource states its type"))
+            continue
         if t not in CHECKED:
+            continue
+        if is_ref:
+            if "id" not in res:
+                errors.append(f"{path} (link to a {t}): a link needs `id`")
             continue
         for prop, level in spec.get(t, {}).items():
             if prop.startswith("behavior:"):
@@ -118,7 +142,7 @@ def check_prez(doc):
             elif level == "NOT ALLOWED" and prop in res:
                 errors.append(f"{path} ({t}): `{prop}` is not allowed on {t}")
             elif level == "RECOMMENDED" and prop not in res:
-                warnings.append(f"{path} ({t}): no `{prop}` — recommended, and viewers use it")
+                advice.setdefault((path, t), []).append(prop)
         for prop in LANG_MAP:
             v = res.get(prop)
             if v is not None and not is_lang_map(v):
@@ -134,6 +158,11 @@ def check_prez(doc):
             errors.append(f"{path} ({t}): `id` must be an http(s) URI, not {res['id']!r}")
         if t == "Canvas" and not (("height" in res and "width" in res) or "duration" in res):
             errors.append(f"{path} (Canvas): needs height and width, or duration, or both")
+    # one line per resource: a warning per missing property buries the document
+    # that is genuinely thin under the ones that merely omit a Canvas label
+    for (path, t), props in advice.items():
+        warnings.append(f"{path} ({t}): no " + ", ".join(f"`{p}`" for p in sorted(props))
+                        + " — recommended, and viewers use them")
     return errors, warnings
 
 
@@ -236,8 +265,27 @@ def self_test():
     e, _ = check_prez(prez(label="not a language map"))
     assert any("must be a language map" in x for x in e), e
 
+    # section 5.4: a Range under `structures` omits `items` exactly to say it
+    # must be dereferenced, so that is a link, not an incomplete resource
     e, _ = check_prez(prez(structures=[{"id": "https://x/r", "type": "Range"}]))
+    assert e == [], e
+    # ...but the Range's own document owes the full representation
+    standalone = {"@context": "http://iiif.io/api/presentation/3/context.json",
+                  "id": "https://x/r", "type": "Range", "label": {"en": ["R"]}}
+    e, _ = check_prez(standalone)
     assert any("Range): missing required property `items`" in x for x in e), e
+    # a Collection lists Manifests as links; they owe id and type, nothing else
+    coll = {"@context": "http://iiif.io/api/presentation/3/context.json",
+            "id": "https://x/c", "type": "Collection", "label": {"en": ["C"]},
+            "items": [{"id": "https://x/m", "type": "Manifest", "label": {"en": ["M"]}}]}
+    assert check_prez(coll)[0] == [], check_prez(coll)[0]
+    coll["items"][0].pop("type")
+    assert any("a link needs `id` and `type`" in x for x in check_prez(coll)[0]), check_prez(coll)[0]
+    # a Range's items are links to Canvases, which owe no dimensions
+    e, _ = check_prez(prez(structures=[{"id": "https://x/r", "type": "Range",
+                                        "label": {"en": ["R"]},
+                                        "items": [{"id": "https://x/c1", "type": "Canvas"}]}]))
+    assert e == [], e
 
     e, _ = check_prez(prez(items=[{"id": "https://x/c", "type": "Canvas",
                                    "height": 1, "width": 1, "behavior": ["paged"]}]))
@@ -263,13 +311,30 @@ def self_test():
     e, _ = check_info(info)
     assert any("`height`" in x for x in e) and any("level9" in x for x in e), e
 
+    # The Cookbook is 101 documents the spec's own editors publish as correct.
+    # Any error reported against them is a bug in these rules, not in them —
+    # this is what caught full-resource rules being applied to bare links.
+    rec = os.path.join(DOCS, "api/cookbook/recipe")
+    checked = 0
+    for dp, _, fns in os.walk(rec):
+        for fn in sorted(fns):
+            if not fn.endswith(".json"):
+                continue
+            doc = json.load(open(os.path.join(dp, fn), encoding="utf-8"))
+            if kind(doc) != "presentation" or prez_version(doc) != "3":
+                continue
+            e, _ = check_prez(doc)
+            assert not e, f"{fn} is a published Cookbook document: {e[:2]}"
+            checked += 1
+    assert checked > 90, f"only {checked} cookbook documents checked — is the corpus there?"
+
     v2 = {"@context": "http://iiif.io/api/presentation/2/context.json",
           "@id": "https://x/m", "@type": "sc:Manifest"}
     errors, notes = check_prez(v2)
     assert errors is None, "a version the rules do not cover reports no verdict"
     assert os.path.exists(os.path.join(DOCS, "api/presentation/2.1.md"))
     assert any("2.1.md" in n for n in notes), notes
-    print("self-test ok")
+    print(f"self-test ok ({checked} cookbook documents clean)")
 
 
 if __name__ == "__main__":

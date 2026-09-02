@@ -32,7 +32,7 @@ IIIF also supports the use of Web Annotation model Selectors, such as `FragmentS
 
 ### 2.1 IIIF Image API Selector
 
-The [Image API Selector](selectors.md) is used to describe the operations available via the Image API in order to retrieve a particular image representation. In this case the resource is the abstract image as identified by the [IIIF Image API](../image/3.0.md "Image API") base URI plus identifier, and the retrieval process involves adding the correct parameters after that base URI. For example, the top left hand quadrant of an image has the region parameter of `pct:0,0,50,50` which must be put into the requested URI to obtain the appropriate representation.
+The [Image API Selector](https://iiif.io/api/registry/selectors/) is used to describe the operations available via the Image API in order to retrieve a particular image representation. In this case the resource is the abstract image as identified by the [IIIF Image API](../image/3.0.md "Image API") base URI plus identifier, and the retrieval process involves adding the correct parameters after that base URI. For example, the top left hand quadrant of an image has the region parameter of `pct:0,0,50,50` which must be put into the requested URI to obtain the appropriate representation.
 
 In order to make this as easy as possible for the situations when a IIIF Image API endpoint exists, we introduce a new Selector class called `ImageApiSelector`. It has properties that give the parameter values needed to fill out the URL structure in the request. If the property is not given, then a default should be used.
 
