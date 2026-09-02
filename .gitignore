@@ -24,3 +24,7 @@ yarn-error.log*
 agent/
 .claude/skills/
 skills-lock.json
+
+# Python
+__pycache__/
+*.pyc
