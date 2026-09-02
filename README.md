@@ -32,7 +32,13 @@ npx skills add ZwaarContrast/skills --skill clean-room # just one
   a user's words, then send in a worker that gets only the goal and the URL.
   The browser's trace records what it really did, not what it says it did.
 
-They all use real boundaries as measuring instruments rather than asking an
+- **iiif** — implement IIIF against the specs rather than from memory: the whole
+  of iiif.io crawled into a local corpus, indexed by section so a property
+  lookup reads thirty lines instead of a four-thousand-line spec, with the
+  Cookbook's working manifests, a validator, and a sitemap-driven check for
+  what changed upstream.
+
+The first five use real boundaries as measuring instruments rather than asking an
 agent to pretend: an enforced context wall, a committed-only clone, a rerun
 exploit, the browser's own counters, or a tester who has never seen the code.
 
