@@ -1,4 +1,7 @@
 file	start	end	depth	heading
+NOTICE.md	1	37	1	Notice
+NOTICE.md	7	23	2	What IIIF states
+NOTICE.md	24	37	2	What was changed
 api.md	3	13	2	Current specifications
 api.md	14	23	2	Draft specifications
 api.md	20	23	3	Feedback requested

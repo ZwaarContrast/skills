@@ -150,8 +150,9 @@ for its image.
 
 ## Keeping the corpus current
 
-`docs/` is a crawl of iiif.io. Its date is the `# crawled:` header of
-`docs/CRAWL.tsv`; check it before trusting the corpus on a recent change.
+`docs/` is a crawl of iiif.io, kept under CC-BY — see `docs/NOTICE.md`. Its
+date is the `# crawled:` header of `docs/CRAWL.tsv`; check that before trusting
+the corpus on a recent change.
 
 ```bash
 python3 <skill-dir>/refresh.py --check    # what changed upstream; writes nothing
