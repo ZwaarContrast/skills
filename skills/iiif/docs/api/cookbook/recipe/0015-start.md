@@ -16,9 +16,9 @@ For more on the `start` property, see: [Start Property](../../presentation/3.0.m
 
 ### About selector classes:
 
-Selectors in Annotation targets are used to describe how to retrieve a given part of a resource. There are three Selector classes defined in the IIIF specification, but only the [`PointSelector`](https://iiif.io/api/annex/openannotation/#point-selector "PointSelector") class is appropriate for this use case. The `PointSelector` class defines a specific point either spatially (`x`, `y`) and/or temporally (`t`).
+Selectors in Annotation targets are used to describe how to retrieve a given part of a resource. There are three Selector classes defined in the IIIF specification, but only the [`PointSelector`](../../annex/openannotation.md#point-selector "PointSelector") class is appropriate for this use case. The `PointSelector` class defines a specific point either spatially (`x`, `y`) and/or temporally (`t`).
 
-For more information on other Selector classes, see: [IIIF Open/Web Annotation Extensions](https://iiif.io/api/annex/openannotation "IIIF Open/Web Annotation Extensions") and [W3C Web Annotation Selectors](https://www.w3.org/TR/annotation-model/#selectors).
+For more information on other Selector classes, see: [IIIF Open/Web Annotation Extensions](../../annex/openannotation.md "IIIF Open/Web Annotation Extensions") and [W3C Web Annotation Selectors](https://www.w3.org/TR/annotation-model/#selectors).
 
 ## Example
 

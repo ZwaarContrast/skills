@@ -77,6 +77,21 @@ guides/using_iiif_resources.md	89	102	3	Tify
 guides/using_iiif_resources.md	103	120	3	IIIF Curation Viewer
 guides/using_iiif_resources.md	121	132	3	Diva.js
 guides/using_iiif_resources.md	133	142	2	Quick links
+guides/guides/navplace.md	5	8	2	Why Leaflet?
+guides/guides/navplace.md	9	12	2	The `navPlace` Property
+guides/guides/navplace.md	13	170	2	Set up a HTML Page with Leaflet
+guides/guides/navplace.md	171	181	2	Quick links
+guides/guides/personas.md	9	23	2	What are personas?
+guides/guides/personas.md	24	93	2	IIIF personas
+guides/guides/personas.md	32	46	3	Gatherers
+guides/guides/personas.md	47	62	3	Adopters
+guides/guides/personas.md	63	78	3	Educators
+guides/guides/personas.md	79	93	3	Builders
+guides/guides/personas.md	94	109	2	Research Insights
+guides/guides/personas.md	110	140	2	Methodology & Background
+guides/guides/personas.md	122	129	3	Research questions
+guides/guides/personas.md	130	134	3	Methodology
+guides/guides/personas.md	135	140	3	About the Participants
 api/cookbook.md	12	19	2	Viewer Support
 api/cookbook.md	20	23	2	Presentation API Versions
 api/cookbook.md	24	27	2	Code samples
@@ -812,6 +827,30 @@ api/cookbook/recipe/matrix.md	88	107	3	Audio/Visual Recipes
 api/cookbook/recipe/matrix.md	108	123	3	Annotation Recipes
 api/cookbook/recipe/matrix.md	124	134	3	Recipes involving Content State
 api/cookbook/recipe/matrix.md	135	144	3	Geo Recipes
+api/annex/openannotation.md	3	16	2	Status of this Document
+api/annex/openannotation.md	17	22	2	Abstract
+api/annex/openannotation.md	23	26	2	1. Introduction
+api/annex/openannotation.md	27	73	2	2. Selectors
+api/annex/openannotation.md	31	73	3	2.1. IIIF Image API Selector
+api/annex/openannotation.md	74	97	2	2.2. Point Selector
+api/annex/openannotation.md	98	111	2	2.3. Content Selectors
+api/annex/openannotation.md	112	125	2	Appendices
+api/annex/openannotation.md	114	119	3	A. Acknowledgements
+api/annex/openannotation.md	120	125	3	B. Change Log
+api/annex/rest.md	3	16	2	Status of this Document
+api/annex/rest.md	17	22	2	Abstract
+api/annex/rest.md	23	38	2	1. Overview
+api/annex/rest.md	39	127	2	2. Requests
+api/annex/rest.md	47	64	3	2.1 GET
+api/annex/rest.md	65	74	3	2.2 HEAD
+api/annex/rest.md	75	97	3	2.3 PUT
+api/annex/rest.md	98	115	3	2.4 POST
+api/annex/rest.md	116	127	3	2.5 DELETE
+api/annex/rest.md	128	152	2	3. Response Codes
+api/annex/rest.md	132	139	3	3.1 Successful Requests
+api/annex/rest.md	140	152	3	3.2 Error Conditions
+api/annex/rest.md	153	176	2	4. Extension Context
+api/annex/rest.md	177	179	2	5. Authorization, Authentication and Security
 api/annex/services.md	3	16	2	Status of this Document
 api/annex/services.md	17	22	2	Abstract
 api/annex/services.md	23	28	2	1. Introduction
@@ -947,6 +986,18 @@ api/image/validator.md	9	19	3	Technical Note
 api/image/validator.md	20	21	3	Image Validator
 api/image/validator.md	22	35	2	IIIF Server to Validate
 api/image/validator.md	36	36	2	Tests
+api/image/2.1/compliance.md	3	8	2	Status of this Document
+api/image/2.1/compliance.md	9	12	2	1. Introduction
+api/image/2.1/compliance.md	13	18	2	2. Compliance
+api/image/2.1/compliance.md	19	81	2	3. Image Parameters
+api/image/2.1/compliance.md	21	31	3	3.1 Region
+api/image/2.1/compliance.md	32	51	3	3.2 Size
+api/image/2.1/compliance.md	52	60	3	3.3 Rotation
+api/image/2.1/compliance.md	61	69	3	3.4 Quality
+api/image/2.1/compliance.md	70	81	3	3.5 Format
+api/image/2.1/compliance.md	82	91	2	4. HTTP Features
+api/image/2.1/compliance.md	92	117	2	5. Indicating Compliance
+api/image/2.1/compliance.md	108	117	3	5.1 Level 0 Compliance
 api/image/3.0/change-log.md	5	118	2	1. Breaking Changes
 api/image/3.0/change-log.md	9	28	3	1.1. Image Request Changes
 api/image/3.0/change-log.md	11	16	4	1.1.1. Remove size `full` in favor of `max`

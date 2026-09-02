@@ -65,7 +65,7 @@ In Georeference Annotations, these steps are encoded as follows:
 
 | Data | Georeference Annotation |
 |----|----|
-| Resource and selector | IIIF Presentation API Canvas or Image API Image Service with an optional [SVG Selector](https://www.w3.org/TR/annotation-model/#svg-selector) or [Image API Selector](https://iiif.io/api/annex/openannotation/#iiif-image-api-selector) |
+| Resource and selector | IIIF Presentation API Canvas or Image API Image Service with an optional [SVG Selector](https://www.w3.org/TR/annotation-model/#svg-selector) or [Image API Selector](../annex/openannotation.md#iiif-image-api-selector) |
 | GCPs | A GeoJSON Feature Collection where each GCP is stored as a GeoJSON Feature with Point geometry and a `resourceCoords` property in the Feature’s `properties` object |
 | Transformation algorithm | A `transformation` property defined on the GeoJSON Feature Collection that holds the GCPs |
 
@@ -117,7 +117,7 @@ Example of a Georeference Annotation `target` that is an entire Canvas:
 
 #### 3.3.2 Targeting a Specific Region of the Resource
 
-When a [Specific Resource](https://www.w3.org/TR/annotation-model/#specific-resources) is used as a `target`, the `source` property supplies the resource and the `selector` property indicates the region of the resource that the annotation applies to. To select a rectangular or polygonal region, a [IIIF Image API Selector](https://iiif.io/api/annex/openannotation/#iiif-image-api-selector) or an [SVG Selector](https://www.w3.org/TR/annotation-model/#svg-selector) can be used. An SVG Selector can be used on both Canvas and ImageService resources and is the preferred technique.
+When a [Specific Resource](https://www.w3.org/TR/annotation-model/#specific-resources) is used as a `target`, the `source` property supplies the resource and the `selector` property indicates the region of the resource that the annotation applies to. To select a rectangular or polygonal region, a [IIIF Image API Selector](../annex/openannotation.md#iiif-image-api-selector) or an [SVG Selector](https://www.w3.org/TR/annotation-model/#svg-selector) can be used. An SVG Selector can be used on both Canvas and ImageService resources and is the preferred technique.
 
 Example of a Georeference Annotation `target` with a [SVG Selector](https://www.w3.org/TR/annotation-model/#svg-selector) on a Canvas:
 
@@ -214,7 +214,7 @@ An example of a Feature with the `resourceCoords` property:
 ```
 
 **Coordinate System of GCP Resource Coordinates**\
-The `resourceCoords` property uses the same cartesian coordinate system as the targeted IIIF resource. When the Georeference Annotation’s targeted resource is the full resource or a selected region of the resource via an SVG selector, the `resourceCoords` value (x, y) corresponds to coordinates (x, y) of that resource. However, when an [Image API Selector](https://iiif.io/api/annex/openannotation/#iiif-image-api-selector) is used instead of an SVG Selector the `resourceCoords` value (x, y) corresponds to the *translated*, *resized* and *rotated* coordinates according to the Selector’s [region](../image/3.0.md#41-region), [size](../image/3.0.md#42-size) and [rotation](../image/3.0.md#43-rotation) parameters.
+The `resourceCoords` property uses the same cartesian coordinate system as the targeted IIIF resource. When the Georeference Annotation’s targeted resource is the full resource or a selected region of the resource via an SVG selector, the `resourceCoords` value (x, y) corresponds to coordinates (x, y) of that resource. However, when an [Image API Selector](../annex/openannotation.md#iiif-image-api-selector) is used instead of an SVG Selector the `resourceCoords` value (x, y) corresponds to the *translated*, *resized* and *rotated* coordinates according to the Selector’s [region](../image/3.0.md#41-region), [size](../image/3.0.md#42-size) and [rotation](../image/3.0.md#43-rotation) parameters.
 
 ### 3.6 The `transformation` Property
 

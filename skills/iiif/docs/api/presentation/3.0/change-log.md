@@ -182,7 +182,7 @@ The `repeat` `behavior` indicates that the playback order of a Collection or Man
 
 #### 2.1.8. Reference external Selectors
 
-New content type specific Selectors for the Web Annotation Data Model are needed in order to refer to points (rather than ranges) within image, audio and video content. Similarly, there is a need to select all Audio or Visual content from within a multi-media resource. These Selectors (`PointSelector`, `AudioContentSelector`, `VideoContentSelector`) are defined in an [annex](https://iiif.io/api/annex/openannotation/), and referenced from the specification. See issue [\#1593](https://github.com/IIIF/api/issues/1593).
+New content type specific Selectors for the Web Annotation Data Model are needed in order to refer to points (rather than ranges) within image, audio and video content. Similarly, there is a need to select all Audio or Visual content from within a multi-media resource. These Selectors (`PointSelector`, `AudioContentSelector`, `VideoContentSelector`) are defined in an [annex](../../annex/openannotation.md), and referenced from the specification. See issue [\#1593](https://github.com/IIIF/api/issues/1593).
 
 ### 2.2. Additional Features
 

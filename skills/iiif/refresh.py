@@ -28,7 +28,7 @@ BASE = "https://iiif.io/"
 PAGES = """
 api/ api/cookbook/ api/cookbook/recipe/ api/cookbook/recipe/code/ api/cookbook/recipe/matrix/ api/cookbook/recipe/matrix-v4/ api/extension/ api/registry/ guides/ get-started/
 api/image/3.0/ api/image/3.0/change-log/ api/image/3.0/compliance/
-api/image/3.0/implementation/ api/image/2.1/ api/image/validator/
+api/image/3.0/implementation/ api/image/2.1/ api/image/2.1/compliance/ api/image/validator/
 api/presentation/3.0/ api/presentation/3.0/change-log/
 api/presentation/4.0/ api/presentation/4.0/model/ api/presentation/2.1/
 api/auth/2.0/ api/auth/2.0/change-log/ api/auth/1.0/ api/auth/1.0/implementation/
@@ -40,8 +40,10 @@ api/registry/motivations/ api/registry/profiles/ api/registry/rights/
 api/registry/selectors/ api/registry/services/ api/registry/timeModes/
 api/registry/types/ api/registry/viewingDirections/
 api/annex/notes/design_principles/ api/annex/notes/jsonld/ api/annex/notes/semver/
-api/annex/notes/apache/ api/annex/services/
+api/annex/notes/apache/ api/annex/notes/rotation/ api/annex/services/
+api/annex/openannotation/ api/annex/rest/
 guides/guide_for_implementers/ guides/using_iiif_resources/
+guides/guides/navplace/ guides/guides/personas/
 guides/finding_resources/ guides/IIIF-and-SEO/
 get-started/how-iiif-works/ get-started/why-iiif/ get-started/iiif-viewers/
 get-started/image-servers/ get-started/tools/ get-started/vendors/
@@ -176,9 +178,14 @@ IGNORE = re.compile(r"""^(
   | api/(discovery|content-state)/0\.\d/ | api/(metadata|model)/
   | api/presentation/(usecases|validator)/ | api/image/validator/(download|results)/
   | api/(image|presentation)/\d\.\d/(change-log-211|compliance/index\.html)
-  | api/annex/notes/$ | api/annex/(openannotation|rest)/ | api/annex/notes/(disclaimer|rotation)/
-  | api/registry/process/ | guides/guides/ | guides/CONTRIBUTING/
-  | api/(image|presentation)/2\.1/(change-log|compliance|zones)/ | api/search/0\.9/
+  | api/annex/notes/$ | api/annex/notes/disclaimer/
+  | api/registry/process/ | guides/CONTRIBUTING/
+  # guides/guides/ is 74 per-institution "where to find the manifest"
+  # walkthroughs whose content is screenshots, plus a contributor template.
+  # The two real guides there are in PAGES above.
+  | guides/guides/(?!navplace/$|personas/$)
+  | api/(image|presentation)/2\.1/(change-log|zones)/ | api/image/2\.1/change-log-211/
+  | api/presentation/2\.1/change-log-211/ | api/search/0\.9/
   | api/cookbook/recipe/(all|0118_multivalue)/   # a duplicate aggregate and a stale alias
   | (api/annex|get-started/explainers)/$   # bare index pages
   | get-started/(cookbook|non-english|talks|training)/ | 404\.html

@@ -42,7 +42,7 @@ This brief guide will lead you through some of considerations related to what, i
 
 This guide will show how to use the navPlace property to connect geographic coordinates with IIIF Manifests.
 
-[Learn more \>](https://iiif.io/guides/guides/navplace/)
+[Learn more \>](guides/guides/navplace.md)
 
 ## Guides on UX and design elements
 
@@ -50,7 +50,7 @@ This guide will show how to use the navPlace property to connect geographic coor
 
 How to understand your users through IIIF personas.
 
-[Learn more \>](https://iiif.io/guides/guides/personas/)
+[Learn more \>](guides/guides/personas.md)
 
 ## Other tutorials and guides of interest
 

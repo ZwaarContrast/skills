@@ -93,16 +93,19 @@ Paths are relative to `<skill-dir>/docs/`.
 | Which properties are required, recommended or forbidden on which type | `REQUIREMENTS.tsv` — `type <TAB> property <TAB> requirement`, read out of appendix A. Prose and examples: `api/presentation/3.0.md` section "A. Summary of Property Requirements" |
 | Which `behavior` values a type accepts | `REQUIREMENTS.tsv`, the `behavior:<value>` rows — `grep 'behavior:paged' REQUIREMENTS.tsv` |
 | What each `behavior`, `viewingDirection`, `timeMode` or `motivation` value means | the property's own section in `api/presentation/3.0.md` |
-| Image URL syntax, `info.json`, compliance levels | `api/image/3.0.md` |
+| Image URL syntax, `info.json`, compliance levels | `api/image/3.0.md`, with `api/image/3.0/compliance.md` (v2 services: `api/image/2.1/compliance.md`) |
 | Terms registered *outside* the spec | `api/registry/`. Populated: `accessibility`, `motivations`, `profiles`, `rights`, `selectors`, `services`. Empty because iiif.io publishes them empty, not because the crawl failed: `behaviors`, `image-extensions`, `timeModes`, `types`, `viewingDirections` |
 | Which `rights` URIs are allowed | `api/registry/rights.md`, and the `rights` section of `api/presentation/3.0.md` |
 | `navPlace`, `georeference`, text granularity | `api/extension/` |
+| Putting `navPlace` coordinates on a map | `guides/guides/navplace.md` — worked Leaflet example |
+| Who your users are and what they need from a viewer | `guides/guides/personas.md` |
 | Search within an object | `api/search/2.0.md` (deployed services are mostly `api/search/1.0.md`) |
 | Access control, probe and token services | `api/auth/2.0.md` (deployed services are mostly `api/auth/1.0.md`) |
 | Publishing an activity stream of changes | `api/discovery/1.0.md` |
 | Linking to a specific view — a canvas, a region, a time | `api/content-state/1.0.md` |
 | What a client is allowed to assume, and why the spec is shaped this way | `api/annex/notes/design_principles.md` |
 | JSON-LD rules the spec relies on | `api/annex/notes/jsonld.md` |
+| Implementation notes: Apache config, rotation maths, Open Annotation, the REST extension | `api/annex/` |
 | Choosing an image server, a viewer, a library | `get-started/image-servers.md`, `get-started/iiif-viewers.md`, `get-started/tools.md` |
 | Deciding what to publish at all | `guides/guide_for_implementers.md` |
 | Raw JSON-LD contexts | `context/` |
@@ -154,6 +157,11 @@ for its image.
 python3 <skill-dir>/refresh.py --check    # what changed upstream; writes nothing
 python3 <skill-dir>/refresh.py            # fetch what changed, rebuild the indexes
 ```
+
+The corpus holds everything iiif.io's own API index presents as current, draft
+or approved, plus the superseded versions that index still points at. It leaves
+out earlier drafts, and the 74 per-institution "where to find the manifest"
+walkthroughs under `guides/guides/`, whose content is screenshots.
 
 `--check` compares each page against the `lastmod` in iiif.io's sitemap, reports
 documentation pages the corpus does not hold, and says whether the pages on disk
