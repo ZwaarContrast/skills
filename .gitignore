@@ -28,3 +28,6 @@ skills-lock.json
 # Python
 __pycache__/
 *.pyc
+
+# Field feedback, kept local
+skills/*/FEEDBACK.md
