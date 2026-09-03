@@ -968,7 +968,7 @@ For cross-version consistency, this specification defines the following values f
 
 | Value | Specification |
 |----|----|
-| `ImageService1` | [Image API version 1](https://iiif.io/api/image/1.1/ "Image API 1.1") |
+| `ImageService1` | [Image API version 1](../../image/1.1.md "Image API 1.1") |
 | `ImageService2` | [Image API version 2](../../image/2.1.md "Image API 2.1") |
 | `SearchService1` | [Search API version 1](../../search/1.0.md) |
 | `AutoCompleteService1` | [Search API version 1](../../search/1.0.md#autocomplete) |

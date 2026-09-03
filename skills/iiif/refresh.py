@@ -29,6 +29,7 @@ PAGES = """
 api/ api/cookbook/ api/cookbook/recipe/ api/cookbook/recipe/code/ api/cookbook/recipe/matrix/ api/cookbook/recipe/matrix-v4/ api/extension/ api/registry/ guides/ get-started/
 api/image/3.0/ api/image/3.0/change-log/ api/image/3.0/compliance/
 api/image/3.0/implementation/ api/image/2.1/ api/image/2.1/compliance/ api/image/validator/
+api/image/1.1/ api/image/1.1/compliance/
 api/presentation/3.0/ api/presentation/3.0/change-log/
 api/presentation/4.0/ api/presentation/4.0/model/ api/presentation/2.1/
 api/auth/2.0/ api/auth/2.0/change-log/ api/auth/1.0/ api/auth/1.0/implementation/
@@ -52,6 +53,17 @@ get-started/explainers/using_iiif_resources/
 
 CONTEXTS = ["presentation/3", "presentation/2", "image/3", "image/2",
             "auth/2", "search/2", "discovery/1"]
+
+# The libraries most IIIF code is written against. Their own docs, held offline
+# for the same reason the specifications are: the upgrade path from v2 is the
+# first thing anyone writes, and getting it wrong is quiet.
+ECOSYSTEM = {
+    "parser": ("IIIF-Commons/parser", "main", ["README.md"]),
+    "helpers": ("IIIF-Commons/iiif-helpers", "main",
+                ["README.md", "SEARCH.md"] + [f"docs/{d}.md" for d in (
+                    "annotation-targets", "content-state", "events", "i18n",
+                    "objects", "styles", "thumbnails")]),
+}
 
 
 def get(url, binary=False):
@@ -174,7 +186,8 @@ WATCH = re.compile(r"^(api|guides|get-started)/")
 # ...except superseded spec versions, per-institution how-tos, and the site's
 # own furniture, which the corpus deliberately leaves out.
 IGNORE = re.compile(r"""^(
-    api/(image|presentation)/(1\.\d|2\.0)/ | api/auth/0\.9/
+    api/image/1\.0/ | api/presentation/1\.\d/ | api/(image|presentation)/2\.0/
+  | api/image/1\.1/(change-log|compliance/index\.html)/? | api/auth/0\.9/
   | api/(discovery|content-state)/0\.\d/ | api/(metadata|model)/
   | api/presentation/(usecases|validator)/ | api/image/validator/(download|results)/
   | api/(image|presentation)/\d\.\d/(change-log-211|compliance/index\.html)
@@ -333,6 +346,36 @@ def fetch_recipe_json(fresh):
     print(f"recipe json: {got} fetched" +
           (f", {len(failed)} FAILED: {', '.join(failed)}" if failed else ""))
     return failed
+
+
+def fetch_ecosystem():
+    """Library docs, and the npm versions they were current for."""
+    out = os.path.join(DOCS, "ecosystem")
+    os.makedirs(out, exist_ok=True)
+    got = 0
+    for pkg, (repo, branch, files) in ECOSYSTEM.items():
+        try:
+            meta = json.loads(get(f"https://registry.npmjs.org/@iiif%2F{pkg}"))
+            latest = meta["dist-tags"]["latest"]
+            peers = meta["versions"][latest].get("peerDependencies") or {}
+        except Exception as e:
+            print(f"ecosystem {pkg}: npm lookup FAILED ({e})")
+            latest, peers = "?", {}
+        body = [f"<!-- source: https://github.com/{repo} -->", "",
+                f"# @iiif/{pkg}", "",
+                f"`@iiif/{pkg}` {latest} on npm, from <https://github.com/{repo}>.",
+                (f"Peer dependencies: " + ", ".join(f"`{k}` {v}" for k, v in peers.items())
+                 if peers else "No peer dependencies."), ""]
+        for f in files:
+            try:
+                body += [f"## {f}", "", get(f"https://raw.githubusercontent.com/"
+                                            f"{repo}/{branch}/{f}"), ""]
+            except Exception as e:
+                print(f"ecosystem {pkg}/{f}: FAILED ({e})")
+        with open(os.path.join(out, pkg + ".md"), "w", encoding="utf-8") as fh:
+            fh.write("\n".join(body))
+        got += 1
+    print(f"ecosystem: {got} package(s)")
 
 
 def fetch_contexts():
@@ -655,6 +698,7 @@ if __name__ == "__main__":
         print("pages: already current")
     failed += fetch_recipe_json(args.fresh)
     fetch_contexts()
+    fetch_ecosystem()
     clean()
     relink()
     repoint()

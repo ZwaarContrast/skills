@@ -77,7 +77,7 @@ Current IIIF specifications *should* be used for all new work. Old versions are 
 | [Change Discovery API 0.9.2](https://iiif.io/api/discovery/0.9/ "IIIF Change Discovery API") | Published 2021-04-28 |
 | [Image API 2.1](api/image/2.1.md "Image API 2.1") | Published 2016-05-12, updated 2017-06-09 |
 | [Image API 2.0](https://iiif.io/api/image/2.0/ "Image API v2.0") | Published 2014-09-11 |
-| [Image API 1.1](https://iiif.io/api/image/1.1/ "Image API 1.1") | Published 2013-09-17 |
+| [Image API 1.1](api/image/1.1.md "Image API 1.1") | Published 2013-09-17 |
 | [Image API 1.0](https://iiif.io/api/image/1.0/ "Image API v1.0") | Published 2012-08-10 |
 | [Presentation API 2.1](api/presentation/2.1.md "IIIF Presentation API 2.1") | Published 2016-05-12, updated 2017-06-09 |
 | [Presentation API 2.0](https://iiif.io/api/presentation/2.0/ "IIIF Presentation API 2.0") | Published 2014-08-12 |

@@ -53,6 +53,109 @@ guides.md	69	74	3	Non-English IIIF Resources
 guides.md	75	99	3	IIIF image playground
 guides.md	85	92	4	About
 guides.md	93	99	4	Stay Connected
+ecosystem/helpers.md	3	9	1	@iiif/helpers
+ecosystem/helpers.md	8	9	2	README.md
+ecosystem/helpers.md	10	1308	1	`@iiif/helpers`
+ecosystem/helpers.md	22	36	2	What The Library Covers
+ecosystem/helpers.md	37	59	2	Installation
+ecosystem/helpers.md	60	86	2	Import Strategy
+ecosystem/helpers.md	87	126	2	Presentation 3 Quick Start
+ecosystem/helpers.md	127	158	2	Entry Points
+ecosystem/helpers.md	159	1144	2	Package Reference
+ecosystem/helpers.md	161	186	3	`@iiif/helpers`
+ecosystem/helpers.md	187	248	3	`@iiif/helpers/annotation-targets`
+ecosystem/helpers.md	249	302	3	`@iiif/helpers/content-state`
+ecosystem/helpers.md	303	341	3	`@iiif/helpers/events`
+ecosystem/helpers.md	342	357	3	`@iiif/helpers/fetch`
+ecosystem/helpers.md	358	397	3	`@iiif/helpers/i18n`
+ecosystem/helpers.md	398	464	3	`@iiif/helpers/image-service`
+ecosystem/helpers.md	465	515	3	`@iiif/helpers/nav-date`
+ecosystem/helpers.md	516	566	3	`@iiif/helpers/painting-annotations`
+ecosystem/helpers.md	567	618	3	`@iiif/helpers/ranges`
+ecosystem/helpers.md	619	658	3	`@iiif/helpers/search1`
+ecosystem/helpers.md	659	688	3	`@iiif/helpers/search2`
+ecosystem/helpers.md	689	732	3	`@iiif/helpers/sequences`
+ecosystem/helpers.md	733	767	3	`@iiif/helpers/styles`
+ecosystem/helpers.md	768	825	3	`@iiif/helpers/thumbnail`
+ecosystem/helpers.md	826	882	3	`@iiif/helpers/transcriptions`
+ecosystem/helpers.md	883	940	3	`@iiif/helpers/vault`
+ecosystem/helpers.md	941	968	3	`@iiif/helpers/vault-4`
+ecosystem/helpers.md	969	991	3	`@iiif/helpers/vault-node`
+ecosystem/helpers.md	992	1034	3	`@iiif/helpers/vault/actions`
+ecosystem/helpers.md	1035	1084	3	`@iiif/helpers/vault/store`
+ecosystem/helpers.md	1085	1125	3	`@iiif/helpers/vault/utility`
+ecosystem/helpers.md	1126	1144	3	`@iiif/helpers/vault/global-vault`
+ecosystem/helpers.md	1145	1157	2	Choosing The Right Package
+ecosystem/helpers.md	1158	1170	2	Repo Docs And Demos
+ecosystem/helpers.md	1171	1282	2	Presentation 4
+ecosystem/helpers.md	1175	1184	3	Choose a Vault Contract
+ecosystem/helpers.md	1185	1203	3	Existing Presentation 3 applications
+ecosystem/helpers.md	1204	1218	3	Presentation 4 applications
+ecosystem/helpers.md	1219	1235	3	Load Reports
+ecosystem/helpers.md	1236	1250	3	Explicit Page Loading
+ecosystem/helpers.md	1251	1254	3	Helper Compatibility
+ecosystem/helpers.md	1255	1282	3	Deliberate Scene and Activation Support
+ecosystem/helpers.md	1283	1302	2	Development
+ecosystem/helpers.md	1303	1306	2	License
+ecosystem/helpers.md	1307	1308	2	SEARCH.md
+ecosystem/helpers.md	1309	1543	1	Search 1 Helper
+ecosystem/helpers.md	1331	1351	2	Finding the Search Service
+ecosystem/helpers.md	1352	1442	2	Search Store
+ecosystem/helpers.md	1378	1400	3	Search query
+ecosystem/helpers.md	1401	1417	3	Search store state
+ecosystem/helpers.md	1418	1426	3	Search store actions
+ecosystem/helpers.md	1427	1442	3	Highlighting results
+ecosystem/helpers.md	1443	1509	2	Autocomplete Store
+ecosystem/helpers.md	1472	1490	3	Autocomplete query
+ecosystem/helpers.md	1491	1503	3	Autocomplete store state
+ecosystem/helpers.md	1504	1509	3	Autocomplete store actions
+ecosystem/helpers.md	1510	1518	2	Implementation Notes
+ecosystem/helpers.md	1519	1541	2	Minimal Example
+ecosystem/helpers.md	1542	1543	2	docs/annotation-targets.md
+ecosystem/helpers.md	1544	1823	1	Annotation targets
+ecosystem/helpers.md	1559	1605	3	expandTarget()
+ecosystem/helpers.md	1606	1631	3	parseSelector()
+ecosystem/helpers.md	1632	1821	2	Supported targets
+ecosystem/helpers.md	1691	1710	3	BoxSelector
+ecosystem/helpers.md	1711	1728	3	PointSelector
+ecosystem/helpers.md	1729	1780	3	SVG Selector
+ecosystem/helpers.md	1781	1799	3	TemporalSelector
+ecosystem/helpers.md	1800	1821	3	TemporalBoxSelector
+ecosystem/helpers.md	1822	1823	2	docs/content-state.md
+ecosystem/helpers.md	1824	1996	1	Content State
+ecosystem/helpers.md	1841	1867	3	parseContentState(state)
+ecosystem/helpers.md	1868	1933	3	normaliseContentState(stateString, isAsync)
+ecosystem/helpers.md	1934	1947	3	serialiseContentState(state)
+ecosystem/helpers.md	1948	1961	3	encodeContentState(stateString)
+ecosystem/helpers.md	1962	1974	3	decodeContentState(encodedContentState)
+ecosystem/helpers.md	1975	1994	3	validateContentState(state)
+ecosystem/helpers.md	1995	1996	2	docs/events.md
+ecosystem/helpers.md	1997	2034	1	Events helper
+ecosystem/helpers.md	2025	2032	3	Supported events
+ecosystem/helpers.md	2033	2034	2	docs/i18n.md
+ecosystem/helpers.md	2035	2100	1	i18n
+ecosystem/helpers.md	2043	2053	3	getValue()
+ecosystem/helpers.md	2054	2073	3	buildLocaleString()
+ecosystem/helpers.md	2074	2098	3	getClosestLanguage()
+ecosystem/helpers.md	2099	2100	2	docs/objects.md
+ecosystem/helpers.md	2101	2170	1	Objects
+ecosystem/helpers.md	2105	2128	2	Loading resources
+ecosystem/helpers.md	2129	2168	2	Resource API
+ecosystem/helpers.md	2169	2170	2	docs/styles.md
+ecosystem/helpers.md	2171	2214	1	Styles helper
+ecosystem/helpers.md	2213	2214	2	docs/thumbnails.md
+ecosystem/helpers.md	2215	2252	1	Thumbnails
+ecosystem/parser.md	3	9	1	@iiif/parser
+ecosystem/parser.md	8	9	2	README.md
+ecosystem/parser.md	10	338	1	IIIF Parser
+ecosystem/parser.md	33	69	3	Command line
+ecosystem/parser.md	70	324	3	Features
+ecosystem/parser.md	74	103	4	Type Modules and DX Helpers
+ecosystem/parser.md	104	136	4	IIIF Presentation 3
+ecosystem/parser.md	137	187	4	IIIF Presentation 2
+ecosystem/parser.md	188	252	4	IIIF Presentation 4
+ecosystem/parser.md	253	324	4	Image 3
+ecosystem/parser.md	325	338	3	Upgrader standalone
 guides/IIIF-and-SEO.md	7	27	2	**IIIF and SEO**
 guides/IIIF-and-SEO.md	15	18	3	**Ensure your information is in the page, not only in the data.**
 guides/IIIF-and-SEO.md	19	22	3	**Ensure your URLs are granular and descriptive.**
@@ -909,6 +1012,32 @@ api/annex/notes/jsonld.md	45	50	2	Frames
 api/annex/notes/jsonld.md	51	56	2	Image API Frame
 api/annex/notes/jsonld.md	57	69	2	Presentation API Frames
 api/annex/notes/jsonld.md	70	87	2	Sample Usage
+api/image/1.1.md	21	26	2	Abstract
+api/image/1.1.md	27	49	2	Table of Contents
+api/image/1.1.md	50	55	2	Appendices
+api/image/1.1.md	56	63	2	1. Audience [](#toc "Back to Table of Contents")
+api/image/1.1.md	64	120	2	2. URL Syntax [](#toc "Back to Table of Contents")
+api/image/1.1.md	83	100	3	2.1. Image Request URL Syntax [](#toc "Back to Table of Contents")
+api/image/1.1.md	101	120	3	2.2 Image Information Request URL Syntax [](#toc "Back to Table of Contents")
+api/image/1.1.md	121	124	2	3. Identifier [](#toc "Back to Table of Contents")
+api/image/1.1.md	125	252	2	4. Image Request Parameters [](#toc "Back to Table of Contents")
+api/image/1.1.md	129	152	3	4.1. Region [](#toc "Back to Table of Contents")
+api/image/1.1.md	153	180	3	4.2. Size [](#toc "Back to Table of Contents")
+api/image/1.1.md	181	198	3	4.3. Rotation [](#toc "Back to Table of Contents")
+api/image/1.1.md	199	218	3	4.4. Quality [](#toc "Back to Table of Contents")
+api/image/1.1.md	219	237	3	4.5. Format [](#toc "Back to Table of Contents")
+api/image/1.1.md	238	252	3	4.6. Order of Implementation [](#toc "Back to Table of Contents")
+api/image/1.1.md	253	279	2	5. Image Information Request [](#toc "Back to Table of Contents")
+api/image/1.1.md	280	301	2	6. Server Responses [](#toc "Back to Table of Contents")
+api/image/1.1.md	282	285	3	6.1. Successful Responses [](#toc "Back to Table of Contents")
+api/image/1.1.md	286	301	3	6.2. Error Conditions [](#toc "Back to Table of Contents")
+api/image/1.1.md	302	313	2	7. Authentication [](#toc "Back to Table of Contents")
+api/image/1.1.md	314	323	2	8. Compliance Levels [](#toc "Back to Table of Contents")
+api/image/1.1.md	324	347	2	9. URL Encoding and Decoding [](#toc "Back to Table of Contents")
+api/image/1.1.md	348	355	2	10. Security Considerations [](#toc "Back to Table of Contents")
+api/image/1.1.md	356	363	2	A. Implementation Notes [](#toc "Back to Table of Contents")
+api/image/1.1.md	364	375	2	B. Acknowledgments [](#toc "Back to Table of Contents")
+api/image/1.1.md	376	388	2	C. Change Log [](#toc "Back to Table of Contents")
 api/image/2.1.md	3	26	2	Status of this Document
 api/image/2.1.md	27	46	2	1. Introduction
 api/image/2.1.md	33	42	3	1.1. Audience and Scope
@@ -989,6 +1118,13 @@ api/image/validator.md	9	19	3	Technical Note
 api/image/validator.md	20	21	3	Image Validator
 api/image/validator.md	22	35	2	IIIF Server to Validate
 api/image/validator.md	36	36	2	Tests
+api/image/1.1/compliance.md	5	333	1	Image API Compliance, 1.1
+api/image/1.1/compliance.md	7	14	2	Table of Contents
+api/image/1.1/compliance.md	15	18	2	1. Introduction [](#toc "Back to Table of Contents")
+api/image/1.1/compliance.md	19	307	2	2. Compliance Level Summary [](#toc "Back to Table of Contents")
+api/image/1.1/compliance.md	308	320	2	3. Level 0 Compliance [](#toc "Back to Table of Contents")
+api/image/1.1/compliance.md	321	326	2	4. Level 1 Compliance [](#toc "Back to Table of Contents")
+api/image/1.1/compliance.md	327	333	2	5. Level 2 Compliance [](#toc "Back to Table of Contents")
 api/image/2.1/compliance.md	3	8	2	Status of this Document
 api/image/2.1/compliance.md	9	12	2	1. Introduction
 api/image/2.1/compliance.md	13	18	2	2. Compliance

@@ -1,4 +1,4 @@
-# crawled: 2026-09-02  rules: bb25909cc146
+# crawled: 2026-09-03  rules: bb25909cc146
 page	lastmod
 api/	2026-05-21
 api/annex/notes/apache/	2026-05-21
@@ -101,6 +101,8 @@ api/extension/georef/	2026-05-21
 api/extension/georef/vocab/georef-terms/	2026-05-21
 api/extension/navplace/	2026-05-21
 api/extension/text-granularity/	2026-05-21
+api/image/1.1/	2026-05-21
+api/image/1.1/compliance/	2026-05-21
 api/image/2.1/	2026-05-21
 api/image/2.1/compliance/	2026-05-21
 api/image/3.0/	2026-05-21

@@ -1,6 +1,6 @@
 ---
 name: iiif
-description: Implement, serve, parse or review IIIF against a local copy of the specifications, indexed so looking up a property costs one command and thirty lines instead of a two-thousand-line spec. Covers Presentation (manifests, collections, canvases, ranges, annotations, behaviors), Image API (URL syntax, info.json, compliance levels), Auth, Content Search, Change Discovery, Content State, the extensions and registries, and 76 Cookbook recipes with their working JSON. Use when writing or debugging a manifest, choosing a property or its allowed values, building image URLs, consuming someone else's IIIF, or checking that a document is spec-correct.
+description: Implement, serve, parse or review IIIF against a local copy of the specifications, indexed so looking up a property costs one command and thirty lines. Covers Presentation (manifests, collections, canvases, ranges, annotations, behaviors), Image API 1.1/2.1/3.0 (URL syntax, info.json, compliance levels), Auth, Content Search, Change Discovery, Content State, the extensions and registries, 76 Cookbook recipes with working JSON, and the @iiif npm libraries. Use when writing or debugging a manifest, choosing a property or its allowed values, building image URLs, consuming someone else's IIIF, checking a document is spec-correct, or checking a published one keeps its promises — that every URI it publishes answers to an anonymous reader.
 ---
 
 # IIIF
@@ -44,6 +44,12 @@ awk -F'\t' '$1=="api/presentation/3.0.md" && $4<=3' SECTIONS.tsv
 sed -n '578,628p' api/presentation/3.0.md
 ```
 
+Normative statements are not all under headings. Auth 2.0's caching rule — "each
+version of a resource must have a distinct URI to prevent web caches from
+providing the wrong version" — is a bullet in §1, so `look.py cache` cannot find
+it. When a lookup comes back empty, read the specification's introduction before
+concluding it says nothing.
+
 When the term is not a heading — a value, an error code, a media type — grep the
 one file that owns it rather than the tree:
 
@@ -83,6 +89,26 @@ property name means different things across them.
 A v2 document announces itself with `@context …/presentation/2/context.json` and
 `@id`/`@type`; v3 uses `id`/`type`.
 
+Three dialects of the Image API are live at once, and getting this wrong is
+silent — lenient servers answer the wrong request anyway, so it works in testing
+and fails on the strict one:
+
+| Image API | Full size | Default quality | `type` in a Presentation 3 document |
+|---|---|---|---|
+| 1.1 | `full` | `native` | `ImageService1` |
+| 2.x | `full` | `default` | `ImageService2` |
+| 3.0 | `max` | `default` | `ImageService3` |
+
+The `ImageService1`/`ImageService2` names come from `api/presentation/3.0.md`
+§`service`, under "For cross-version consistency". A service typed that way may
+be written with `@id`/`@type` rather than `id`/`type`. All three specs are held:
+`api/image/1.1.md`, `api/image/2.1.md` and `api/image/3.0.md`.
+
+**`@iiif/parser`'s `convertPresentation2` mutates the document you hand it** — it
+strips `@id` from nested resources as it upgrades, so a raw v2 document kept as
+provenance and converted in the same breath becomes something the source never
+served. Clone before converting. See `ecosystem/parser.md`.
+
 ## Where the rest lives
 
 Paths are relative to `<skill-dir>/docs/`.
@@ -97,6 +123,8 @@ Paths are relative to `<skill-dir>/docs/`.
 | Terms registered *outside* the spec | `api/registry/`. Populated: `accessibility`, `motivations`, `profiles`, `rights`, `selectors`, `services`. Empty because iiif.io publishes them empty, not because the crawl failed: `behaviors`, `image-extensions`, `timeModes`, `types`, `viewingDirections` |
 | Which `rights` URIs are allowed | `api/registry/rights.md`, and the `rights` section of `api/presentation/3.0.md` |
 | `navPlace`, `georeference`, text granularity | `api/extension/` |
+| `total`, `startIndex`, `next`/`prev` on an Annotation Collection | `api/search/2.0.md` §Annotation Collection and `api/cookbook/recipe/0309-annotation-collection.md`. Presentation 3 borrows this vocabulary from the W3C Web Annotation model and never defines it — `total` is the count of *annotations*, not of pages |
+| The libraries: `@iiif/parser`, `@iiif/helpers` | `ecosystem/` — their own docs, with the npm version and peer dependencies recorded |
 | Putting `navPlace` coordinates on a map | `guides/guides/navplace.md` — worked Leaflet example |
 | Who your users are and what they need from a viewer | `guides/guides/personas.md` |
 | Search within an object | `api/search/2.0.md` (deployed services are mostly `api/search/1.0.md`) |
@@ -113,7 +141,7 @@ Paths are relative to `<skill-dir>/docs/`.
 Links between documents are local paths, so follow them with `cat` and `sed`.
 Every page keeps its origin in a `<!-- source: -->` comment on line 1.
 
-## Check the work
+## Check the work: the shape
 
 Any IIIF you wrote or changed gets validated before you report it done.
 
@@ -132,7 +160,7 @@ exit can never be mistaken for a check that did not happen:
 | `ERROR` | 1 | a spec violation, or the hosted validator was unreachable |
 | `UNCHECKED` | 2 | no rule in this skill applies — a v2 document, or not IIIF at all |
 
-- Validating a **URL** is the strongest test: it also catches a manifest that is
+- Validating a **URL** is the stronger test: it also catches a manifest that is
   correct on disk but served with the wrong content-type, or whose `id` does not
   resolve.
 - **`--local`** skips the hosted validator and says so. It applies
@@ -144,9 +172,67 @@ a manifest that validates while omitting `thumbnail`, `summary`, `metadata` and
 `provider` is valid and close to useless to a viewer, so account for each one
 rather than clearing the list by reflex.
 
-The validator does not know what you meant to build. It cannot tell you that a
-Range structure describes the wrong chapters, or that a Canvas is the wrong size
-for its image.
+## Check the work: the promises
+
+**A validator checks a document against a schema. Most real defects are a promise
+the document made that nothing kept.** A thumbnail that answers 401 to the reader
+it was published for, a `partOf` naming a parent nobody can fetch, a painting body
+whose `id` is an image service base so it returns HTML while declaring
+`image/jpeg`, a service typed `ImageService3` over an Image API 1.1 server — none
+of these is a schema violation, and every one passes both validators above.
+
+```bash
+python3 <skill-dir>/follow.py https://example.org/iiif/manifest
+python3 <skill-dir>/follow.py https://example.org/iiif/collection --reachable
+python3 <skill-dir>/follow.py https://example.org/iiif/manifest --expect-restricted
+```
+
+Four checks find most of it:
+
+1. **Follow every URI the document publishes, as the reader it was published to.**
+   Fetch anonymously, never as the owner — the owner can read everything, so the
+   owner's view proves nothing about a published document.
+2. **Decide "must this answer?" structurally, not by URL shape** — the rule
+   below. A list of path patterns only excuses the shapes somebody thought of.
+3. **Fetch everything `info.json` advertises,** and measure the pixels that come
+   back rather than the status code: a 200 at the wrong dimensions is invisible
+   to a status check and is what makes a deep-zoom viewer tile crookedly. The
+   obligation is in `api/image/3.0/compliance.md`, not the spec — "an image
+   service whose Image Information response includes the `sizes` property must
+   support requests for the sizes listed", and likewise for `tiles`.
+4. **Check reachability, not just resolvability.** A document nothing links to
+   from the root Collection is not published, whatever its visibility flag says,
+   because the only way anyone finds it is by being told the URL.
+
+And for anything access-controlled: **a refusal is a result, not a failure.** A
+checker that reports a restricted manifest's 401 as a defect buries the real
+signal in dozens of false ones. Assert the refusal instead — under
+`--expect-restricted` a 200 is the finding.
+
+### Embedded or referenced
+
+The rule that makes check 2 mechanical. `api/presentation/3.0.md` §`id`:
+
+> If the resource with the `id` property is embedded, it *may* also be
+> dereferenceable. If the resource is referenced, it *must* be dereferenceable.
+
+A resource is **embedded** when the document handed its content over, which is
+decidable from the JSON: it carries `items`, or a `body`, or — navPlace says so
+in its own words — `features`. Everything else carrying an `id` is a
+**reference**, and a reference has to answer. This is why a nested Range
+published as a bare link to a route nobody wrote is a defect, while the Range in
+`structures` that carries `items` is not.
+
+A reference to something the document already embedded elsewhere — a Range's
+`items` naming Canvases the Manifest carries — resolves within the document and
+is not a promise to the world.
+
+`follow.py` stops at 400 requests by default (`--budget`) so a 36-canvas
+manifest stays polite, and says the run was incomplete rather than reporting a
+clean pass. It prints what it deliberately did not check under `EXEMPT`, and
+treats a URI it has no probe for as a finding. A gap in the check must read as a gap,
+not as a clean run — a checker that cries wolf gets ignored, and the pass after
+that is worse than no pass.
 
 ## Keeping the corpus current
 
