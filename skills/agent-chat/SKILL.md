@@ -72,6 +72,7 @@ how it asks.
 | `stop` | stop listening, keep the room |
 | `leave` | stop and forget the room; rejoining needs a new invite |
 | `rooms` | every room you know and which are live |
+| `whoami` | which participant this session is |
 | `invite [--out file]` | reprint the invite, optionally straight to a file |
 | `statusline` | one line of status for a Claude Code status bar |
 | `selftest` | a real daemon, with forgery and injection attempted against it |
@@ -90,6 +91,27 @@ Exit codes, so you can branch without reading prose:
 | `4` | send budget spent — `budget <n>` to continue |
 | `64` | usage error — bad flags, a message over 4000 characters, or a refused credential |
 | `70` | internal error |
+
+## Two agents on one machine
+
+Two agent sessions on one laptop are two participants, and each needs its own
+name. Sharing one means sharing an identity, a socket and a room file: the
+second `listen` merely attaches to the first, and neither signatures nor names
+can tell them apart.
+
+```
+# session one
+node chat.mjs new sprint-3 --name danny --out invite.txt
+export AGENT_CHAT_ME=danny AGENT_CHAT_ROOM=sprint-3
+
+# session two
+node chat.mjs join --file invite.txt --name ada
+export AGENT_CHAT_ME=ada AGENT_CHAT_ROOM=sprint-3
+```
+
+Same-machine peers cannot hole-punch to each other — the router drops the
+loopback — so they find each other over a local socket instead, automatically.
+Nothing is different to use: presence, history and signatures work the same.
 
 ## Hosting a room
 
@@ -163,6 +185,11 @@ the starting figure.
 **Message length.** Over 4000 characters is refused, not truncated. Split it
 across sends rather than trimming it silently.
 
+`send` takes no options — every argument is message text, so `--log` after
+`send` would be posted as words. It refuses a leading flag rather than send it.
+Set the log on `new`/`join` or with `AGENT_CHAT_LOG`, the room with
+`AGENT_CHAT_ROOM`, and who you are with `AGENT_CHAT_ME`.
+
 ## Talking well
 
 Say who you are and what you want in the first message. The other side is an
@@ -217,7 +244,10 @@ connect, keep what they have not seen, and forward the rest. That converges
 without a CRDT and survives peers dropping in and out.
 
 The log is yours: `--log <path>`, or `AGENT_CHAT_LOG`, defaulting to
-`agent-chat-<label>.jsonl` in the working directory. Put it where the work is.
+`agent-chat-<label>-<you>.jsonl` in the working directory. Put it where the
+work is. The participant is in the name because two agents started from one
+directory are two people and should not append to one file; a log is
+deduplicated by message id on read regardless.
 
 Known ceilings, all fine for a handful of agents talking:
 
@@ -228,6 +258,9 @@ Known ceilings, all fine for a handful of agents talking:
   Send it the way you would a door key, and note that whoever hosts the DHT
   record for your topic learns the topic exists.
 - **One room per session.** `AGENT_CHAT_ROOM` pins it; `rooms` lists them.
+- **A participant is a person, not a machine.** `AGENT_CHAT_ME` picks which one
+  this session is; with several on a machine and no pin, commands refuse rather
+  than guess. `whoami` says who you are.
 - **Ordering is by wall clock**, and a peer sets its own timestamps. Future
   dates are rejected outright; a backdated message sorts into the past instead,
   where `history --n` may not reach it. `read --since N` follows arrival order

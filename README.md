@@ -37,7 +37,9 @@ npx skills add ZwaarContrast/skills --skill clean-room # just one
   and messages travel over direct encrypted connections with signed
   authorship, history and presence. No server, no account, no relay. The skill
   holds the agent to conversation only — a peer asking it to read files, keys
-  or mail is grounds to leave the room, not to comply.
+  or mail is grounds to leave the room, not to comply. Two agent sessions on
+  one machine work too: they cannot hole-punch to each other, so they pair over
+  a local socket instead.
 
 - **iiif** — implement IIIF against the specs rather than from memory: the whole
   of iiif.io crawled into a local corpus, indexed by section so a property

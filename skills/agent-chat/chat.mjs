@@ -59,13 +59,64 @@ function dep (name) {
   return require_()(name)
 }
 
+// ---------- participants ----------
+
+// Everything below the home directory is per participant, because two agent
+// sessions on one machine are two different people. Sharing a home would give
+// them one key, one socket and one room.json — the second `listen` would just
+// attach to the first, and neither signatures nor names could tell them apart.
+const slug = n => (clean(n, MAX_NAME).toLowerCase().replace(/[^a-z0-9._-]/g, '-').replace(/^-+|-+$/g, '') || 'anon').slice(0, 32)
+
+const meDir = me => path.join(HOME, 'participants', me)
+
+function listParticipants () {
+  try { return fs.readdirSync(path.join(HOME, 'participants')).filter(d => !d.startsWith('.')).sort() } catch { return [] }
+}
+
+// State used to live directly under HOME. Move it under the participant it
+// belonged to rather than stranding a room somebody is still using.
+function migrateLegacy () {
+  const legacy = path.join(HOME, 'current')
+  if (!fs.existsSync(legacy) || listParticipants().length) return
+  let name = 'anon'
+  try {
+    const topic = fs.readFileSync(legacy, 'utf8').trim()
+    name = slug(JSON.parse(fs.readFileSync(path.join(HOME, 'rooms', topic.slice(0, 16), 'room.json'), 'utf8')).name)
+  } catch {}
+  const dest = meDir(name)
+  fs.mkdirSync(dest, { recursive: true })
+  for (const entry of ['identity', 'current', 'rooms']) {
+    const from = path.join(HOME, entry)
+    if (fs.existsSync(from)) { try { fs.renameSync(from, path.join(dest, entry)) } catch {} }
+  }
+  process.stderr.write(`agent-chat: moved existing state under participant "${name}"\n`)
+}
+
+// `--name` establishes a participant; AGENT_CHAT_ME selects one afterwards.
+// With several on a machine and no pin, refuse rather than guess — guessing is
+// what silently merged two sessions into one identity.
+function resolveMe (explicit) {
+  ensureHome()
+  migrateLegacy()
+  if (explicit) return slug(explicit)
+  if (process.env.AGENT_CHAT_ME) return slug(process.env.AGENT_CHAT_ME)
+  const existing = listParticipants()
+  if (existing.length === 1) return existing[0]
+  if (existing.length > 1) {
+    die(`several participants on this machine (${existing.join(', ')}) — pin one with AGENT_CHAT_ME=<name>`, EX.usage)
+  }
+  return slug(defaultName())
+}
+
+let ME = null
+
 // ---------- identity ----------
 
 // Not derived from the room secret: rotating a room should not change who you
 // are, and leaving one should not cost you your identity.
 function identity () {
-  ensureHome()
-  const seedFile = path.join(HOME, 'identity')
+  fs.mkdirSync(meDir(ME), { recursive: true })
+  const seedFile = path.join(meDir(ME), 'identity')
   let seed
   try { seed = Buffer.from(fs.readFileSync(seedFile, 'utf8').trim(), 'hex') } catch {}
   if (!seed || seed.length !== 32) {
@@ -133,7 +184,7 @@ const scanSecret = text => (SECRETS.find(([re]) => re.test(text)) || [])[1] || n
 
 // ---------- room state ----------
 
-const roomDir = topic => path.join(HOME, 'rooms', topic.slice(0, 16))
+const roomDir = topic => path.join(meDir(ME), 'rooms', topic.slice(0, 16))
 const logPath = room => room.log
 const statePath = topic => path.join(roomDir(topic), 'state.json')
 
@@ -142,9 +193,9 @@ const statePath = topic => path.join(roomDir(topic), 'state.json')
 // Keyed on home as well as topic so two installs on one machine can share a
 // room without fighting over one socket. The NUL separator cannot appear in
 // either a path or a hex topic, so the pair cannot collide.
-function sockPath (topic, home = HOME) {
+function sockPath (topic, home = HOME, me = ME) {
   const name = 'agent-chat-' + crypto.createHash('sha256')
-    .update(home + String.fromCharCode(0) + topic).digest('hex').slice(0, 16) + '.sock'
+    .update(home + String.fromCharCode(0) + me + String.fromCharCode(0) + topic).digest('hex').slice(0, 16) + '.sock'
   for (const base of [os.tmpdir(), '/tmp']) {
     const p = path.join(base, name)
     if (Buffer.byteLength(p) <= SOCK_MAX) return p
@@ -164,7 +215,7 @@ function writeAtomic (file, data, mode) {
 function saveRoom (room) {
   fs.mkdirSync(roomDir(room.topic), { recursive: true })
   writeAtomic(path.join(roomDir(room.topic), 'room.json'), JSON.stringify(room, null, 2) + '\n', 0o600)
-  fs.writeFileSync(path.join(HOME, 'current'), room.topic + '\n')
+  fs.writeFileSync(path.join(meDir(ME), 'current'), room.topic + '\n')
   return room
 }
 
@@ -174,8 +225,8 @@ function loadRoom (topic) {
 
 function allRooms () {
   try {
-    return fs.readdirSync(path.join(HOME, 'rooms'))
-      .map(d => { try { return JSON.parse(fs.readFileSync(path.join(HOME, 'rooms', d, 'room.json'), 'utf8')) } catch { return null } })
+    return fs.readdirSync(path.join(meDir(ME), 'rooms'))
+      .map(d => { try { return JSON.parse(fs.readFileSync(path.join(meDir(ME), 'rooms', d, 'room.json'), 'utf8')) } catch { return null } })
       .filter(Boolean)
   } catch { return [] }
 }
@@ -191,7 +242,7 @@ function currentRoom () {
     return hit
   }
   let topic
-  try { topic = fs.readFileSync(path.join(HOME, 'current'), 'utf8').trim() } catch {}
+  try { topic = fs.readFileSync(path.join(meDir(ME), 'current'), 'utf8').trim() } catch {}
   const room = topic && loadRoom(topic)
   if (!room) die(`no room yet — run \`${CLI} new <label>\` or \`${CLI} join <invite>\``, EX.usage)
   return room
@@ -206,8 +257,10 @@ function defaultName () {
 }
 
 // The log is the agent's artifact, so it defaults into the working directory
-// rather than a hidden global one.
-const defaultLog = label => path.resolve(process.env.AGENT_CHAT_LOG || `agent-chat-${label}.jsonl`)
+// rather than a hidden global one. Named for the participant as well as the
+// room: two agents on one machine started from the same directory are two
+// people, and would otherwise both append to one file.
+const defaultLog = (label, me) => path.resolve(process.env.AGENT_CHAT_LOG || `agent-chat-${label}-${me}.jsonl`)
 
 const inviteOf = room => `agentchat2:${room.topic}:${room.label}`
 
@@ -222,10 +275,15 @@ function parseInvite (text) {
 
 // ---------- log ----------
 
+// Deduped by id: two participants on one machine share a room transcript by
+// default, so the same message is appended once by each of their daemons.
+// A torn trailing line from a crash simply fails to parse and is dropped.
 function readLog (room) {
+  const seen = new Set()
   try {
     return fs.readFileSync(logPath(room), 'utf8').split('\n').filter(Boolean)
-      .map(l => { try { return JSON.parse(l) } catch { return null } }).filter(Boolean)
+      .map(l => { try { return JSON.parse(l) } catch { return null } })
+      .filter(m => m && m.id && !seen.has(m.id) && seen.add(m.id))
   } catch { return [] }
 }
 
@@ -326,6 +384,7 @@ async function daemon (room, emitLocal) {
   const msgs = readLog(room)      // in memory; the file is never re-read per peer
   const seen = new Set(msgs.map(m => m.id))
   const peers = new Map()
+  const localPeers = new Map()
   const names = new Map()
   const subs = new Set()
   let turns = MAX_TURNS
@@ -340,6 +399,8 @@ async function daemon (room, emitLocal) {
     try {
       writeAtomic(statePath(room.topic), JSON.stringify({
         label: room.label,
+        sock: sockPath(room.topic),
+        pk: mePk,
         peers: [...peers.values()].filter(p => p.name).map(p => p.name),
         turns,
         inbound,
@@ -407,15 +468,21 @@ async function daemon (room, emitLocal) {
     return { ok: true, turns }
   }
 
-  swarm.on('connection', conn => {
-    conn.on('error', () => {})
-    lastActive = Date.now()
-    const pk = conn.remotePublicKey.toString('hex') // authenticated by Noise, not claimed
-    const peer = { pk, name: null, hits: 0, since: Date.now() }
+  // Peers reached two ways. Over the DHT the key is authenticated by Noise;
+  // over a loopback socket it is claimed, which costs nothing extra because a
+  // process running as this user could read the key file anyway. Message
+  // authorship is signed either way, so only presence rests on the difference.
+  function attachPeer (conn, pk, via) {
+    const peer = { pk, name: null, hits: 0, since: Date.now(), via }
     peers.set(conn, peer)
+    if (via === 'local') localPeers.set(pk, conn)
     writeJson(conn, { t: 'hello', name: room.name, have: msgs.length })
-
-    onLines(conn, msg => {
+    conn.on('close', () => {
+      const p = peers.get(conn); peers.delete(conn)
+      if (p && p.via === 'local') localPeers.delete(p.pk)
+      if (p && p.name) { emit(fmtSys(`* ${display(p.pk, p.name)} went offline`)); saveState() }
+    })
+    return msg => {
       lastActive = Date.now()
       if (++peer.hits > RATE.max) {
         if (Date.now() - peer.since < RATE.window) { emit(fmtSys('* dropped a peer flooding the room')); conn.destroy(); return }
@@ -440,20 +507,57 @@ async function daemon (room, emitLocal) {
         }
         relay(fresh, conn, false)
       }
-    })
+    }
+  }
 
-    conn.on('close', () => {
-      const p = peers.get(conn); peers.delete(conn)
-      if (p && p.name) { emit(fmtSys(`* ${display(p.pk, p.name)} went offline`)); saveState() }
-    })
+  swarm.on('connection', conn => {
+    conn.on('error', () => {})
+    lastActive = Date.now()
+    // Authenticated by Noise, not claimed.
+    onLines(conn, attachPeer(conn, conn.remotePublicKey.toString('hex'), 'dht'))
   })
+
+  // Two agents on one machine are behind one NAT, and hole punching to
+  // yourself is the case the DHT cannot help with — the router drops the
+  // loopback. They are also the one pair that can simply open a socket.
+  // Each daemon publishes its socket in its own state file; the lower key
+  // dials, so exactly one connection forms.
+  function localCandidates () {
+    const out = []
+    for (const other of listParticipants()) {
+      if (other === ME) continue
+      try {
+        const st = JSON.parse(fs.readFileSync(path.join(meDir(other), 'rooms', room.topic.slice(0, 16), 'state.json'), 'utf8'))
+        if (st.sock && /^[0-9a-f]{64}$/.test(st.pk || '') && st.pk !== mePk && fs.existsSync(st.sock)) out.push(st)
+      } catch {}
+    }
+    return out
+  }
+
+  async function dialLocal () {
+    for (const st of localCandidates()) {
+      if (localPeers.has(st.pk) || mePk > st.pk) continue
+      const c = await connectSock(st.sock)
+      if (!c) continue
+      c.on('error', () => {})
+      writeJson(c, { cmd: 'peer', pk: mePk })
+      onLines(c, attachPeer(c, st.pk, 'local'))
+    }
+  }
 
   const sock = sockPath(room.topic)
   const server = net.createServer(c => {
     c.on('error', () => {})
     lastActive = Date.now()
+    let asPeer = null
     onLines(c, req => {
       lastActive = Date.now()
+      if (asPeer) return asPeer(req)
+      if (req.cmd === 'peer') {
+        if (!/^[0-9a-f]{64}$/.test(req.pk || '') || req.pk === mePk || localPeers.has(req.pk)) { c.destroy(); return }
+        asPeer = attachPeer(c, req.pk, 'local')
+        return
+      }
       if (req.cmd === 'send') writeJson(c, post(req.text))
       else if (req.cmd === 'who') {
         writeJson(c, {
@@ -507,6 +611,9 @@ async function daemon (room, emitLocal) {
   const orphan = setInterval(() => { if (!fs.existsSync(statePath(room.topic))) shutdown() }, 5000)
   if (orphan.unref) orphan.unref()
 
+  const local = setInterval(() => { dialLocal() }, 10000)
+  if (local.unref) local.unref()
+
   if (!await bindSocket(server, sock)) {
     process.stderr.write('agent-chat: another listener already holds this room\n')
     process.exit(EX.ok)
@@ -514,8 +621,9 @@ async function daemon (room, emitLocal) {
 
   await swarm.join(Buffer.from(room.topic, 'hex'), { server: true, client: true }).flushed()
   saveState()
+  await dialLocal()
   emit(fmtSys(`* listening to "${room.label}" as ${room.name}#${mePk.slice(0, 4)} — log ${logPath(room)}`))
-  emit(fmtSys(`* pin with AGENT_CHAT_ROOM=${room.label}; ${turns} sends budgeted`))
+  emit(fmtSys(`* pin this session with AGENT_CHAT_ME=${ME} AGENT_CHAT_ROOM=${room.label}; ${turns} sends budgeted`))
 }
 
 // ---------- daemon client ----------
@@ -610,6 +718,16 @@ async function main () {
   const [cmd, ...argv] = process.argv.slice(2)
   const json = has(argv, 'json')
 
+  // `new` and `join` establish who you are; every other command selects an
+  // already-established participant. statusline stays silent rather than fail.
+  if (cmd === 'statusline') {
+    const known = (ensureHome(), migrateLegacy(), listParticipants())
+    ME = process.env.AGENT_CHAT_ME ? slug(process.env.AGENT_CHAT_ME) : (known.length === 1 ? known[0] : null)
+    if (!ME) return
+  } else if (cmd && !['selftest', 'init'].includes(cmd)) {
+    ME = resolveMe(['new', 'join'].includes(cmd) ? flag(argv, 'name') : undefined)
+  }
+
   switch (cmd) {
     case 'new': {
       const label = clean(bare(argv)[0] || 'room', 40).replace(/[^A-Za-z0-9._-]/g, '-') || 'room'
@@ -617,7 +735,7 @@ async function main () {
         topic: crypto.randomBytes(32).toString('hex'),
         label,
         name: clean(flag(argv, 'name') || defaultName(), MAX_NAME) || 'anon',
-        log: path.resolve(flag(argv, 'log') || defaultLog(label))
+        log: path.resolve(flag(argv, 'log') || defaultLog(label, ME))
       }), flag(argv, 'out'))
       break
     }
@@ -634,9 +752,9 @@ async function main () {
         topic,
         label,
         name: clean(flag(argv, 'name') || (prev && prev.name) || defaultName(), MAX_NAME) || 'anon',
-        log: path.resolve(flag(argv, 'log') || (prev && prev.log) || defaultLog(label))
+        log: path.resolve(flag(argv, 'log') || (prev && prev.log) || defaultLog(label, ME))
       })
-      process.stdout.write(`joined "${room.label}" as ${room.name}\nlog: ${room.log}\nnext: ${CLI} listen   (pin with AGENT_CHAT_ROOM=${room.label})\n`)
+      process.stdout.write(`joined "${room.label}" as ${room.name}\nlog: ${room.log}\npin this session: export AGENT_CHAT_ME=${ME} AGENT_CHAT_ROOM=${room.label}\nthen: ${CLI} listen\n`)
       break
     }
     case 'init':
@@ -648,6 +766,12 @@ async function main () {
     case 'invite':
       printInvite(currentRoom(), flag(argv, 'out'))
       break
+    case 'whoami': {
+      const all = listParticipants()
+      process.stdout.write(`participant: ${ME}\nidentity:    ${path.join(meDir(ME), 'identity')}\non this machine: ${all.length ? all.join(', ') : ME}\n`)
+      if (all.length > 1 && !process.env.AGENT_CHAT_ME) process.stdout.write('pin one with AGENT_CHAT_ME=<name>\n')
+      break
+    }
     case 'rooms':
       for (const r of allRooms()) {
         process.stdout.write(`${r.label.padEnd(20)} ${fs.existsSync(sockPath(r.topic)) ? 'listening' : 'offline  '}  ${r.log}\n`)
@@ -667,8 +791,13 @@ async function main () {
     }
     case 'send': {
       // Every argument is message text, so a message about `--force` survives.
+      // The one shape that is always a mistake is a flag as the very first
+      // word — someone reaching for an option `send` does not have.
       const text = argv.join(' ')
       if (!text.trim()) die(`usage: ${CLI} send <text...>`, EX.usage)
+      if (/^--[a-z]/.test(argv[0] || '')) {
+        die(`\`${argv[0]}\` is not an option of send — every argument is message text, so it would be sent as words.\nSet the log with AGENT_CHAT_LOG or --log on new/join, the room with AGENT_CHAT_ROOM, and who you are with AGENT_CHAT_ME.`, EX.usage)
+      }
       const room = currentRoom()
       const c = await ensureDaemon(room)
       const res = await request(c, { cmd: 'send', text })
@@ -760,7 +889,7 @@ async function main () {
       if (c) { await request(c, { cmd: 'stop' }, 5000); c.end(); await sleep(300) }
       fs.rmSync(roomDir(room.topic), { recursive: true, force: true })
       try {
-        if (fs.readFileSync(path.join(HOME, 'current'), 'utf8').trim() === room.topic) fs.rmSync(path.join(HOME, 'current'))
+        if (fs.readFileSync(path.join(meDir(ME), 'current'), 'utf8').trim() === room.topic) fs.rmSync(path.join(meDir(ME), 'current'))
       } catch {}
       process.stdout.write(`left "${room.label}" and forgot the room. The log stays at ${room.log}.\nRejoining needs a fresh invite.\n`)
       break
@@ -772,7 +901,7 @@ async function main () {
         const pin = process.env.AGENT_CHAT_ROOM
         const topic = pin
           ? (allRooms().find(r => r.label === pin || r.topic.startsWith(pin)) || {}).topic
-          : fs.readFileSync(path.join(HOME, 'current'), 'utf8').trim()
+          : fs.readFileSync(path.join(meDir(ME), 'current'), 'utf8').trim()
         const st = JSON.parse(fs.readFileSync(statePath(topic), 'utf8'))
         const warn = st.muted ? ` ${st.muted} muted` : (st.turns <= 3 ? ` ${st.turns} sends left` : '')
         process.stdout.write(`chat:${st.label} ${st.peers.length ? st.peers.length + ' online' : 'alone'}${warn}`)
@@ -811,6 +940,7 @@ async function main () {
   leave                   stop and forget the room; rejoining needs an invite
   history [--n 50]        replay the local log
   rooms                   every room you know, and which are live
+  whoami                  which participant this session resolves to
   invite [--out file]     reprint the invite, optionally to a file
   statusline              one-line status for a Claude Code statusLine command
   selftest                real peers, forgery and injection included
@@ -820,6 +950,7 @@ async function main () {
   exit 0 something returned · 2 nothing · 3 nobody online · 4 budget spent
        64 usage · 70 internal
 
+  AGENT_CHAT_ME=<name>        which participant this session is (see whoami)
   AGENT_CHAT_ROOM=<label>     pin this session to one room
   AGENT_CHAT_LOG=<path>       where new rooms put their log
   AGENT_CHAT_MAX_TURNS=<n>    sends allowed per listener (default ${MAX_TURNS})
@@ -832,8 +963,8 @@ async function main () {
 // ---------- selftest ----------
 
 // One real daemon in a child process, with this process joining the room as
-// its peers. Two daemons on one machine do not reliably pair over the public
-// DHT — hairpin NAT, not our logic — and a flaky test is worth nothing, so the
+// its DHT peers, plus a second real participant that has to find it over the
+// loopback. Same-machine daemons cannot hole-punch to each other, so the DHT
 // counterparties live here where their behaviour can be driven exactly.
 // What that leaves unproven is stated at the end.
 async function selftest () {
@@ -857,17 +988,25 @@ async function selftest () {
     return p.slice(0, p.lastIndexOf(marker) + marker.length - 1)
   })()
 
-  const home = path.join(base, 'alice')
-  const logFile = path.join(home, 'log.jsonl')
-  fs.mkdirSync(path.join(home, 'rooms', topic.slice(0, 16)), { recursive: true })
+  const home = path.join(base, 'home')
+  fs.mkdirSync(home, { recursive: true })
   fs.symlinkSync(nodeModules, path.join(home, 'node_modules'))
   fs.writeFileSync(path.join(home, 'package.json'), '{"private":true}\n')
-  fs.writeFileSync(path.join(home, 'current'), topic)
-  fs.writeFileSync(path.join(home, 'rooms', topic.slice(0, 16), 'room.json'),
-    JSON.stringify({ topic, label: 'test', name: 'alice', log: logFile }))
 
-  const run = args => {
-    const k = spawn(process.execPath, [SELF, ...args], { env: { ...process.env, AGENT_CHAT_HOME: home } })
+  // State is per participant, so set one up the way `new` would.
+  const addParticipant = who => {
+    const dir = path.join(home, 'participants', who)
+    const log = path.join(base, `${who}.jsonl`)
+    fs.mkdirSync(path.join(dir, 'rooms', topic.slice(0, 16)), { recursive: true })
+    fs.writeFileSync(path.join(dir, 'current'), topic)
+    fs.writeFileSync(path.join(dir, 'rooms', topic.slice(0, 16), 'room.json'),
+      JSON.stringify({ topic, label: 'test', name: who, log }))
+    return log
+  }
+  const logFile = addParticipant('alice')
+
+  const run = (args, who = 'alice') => {
+    const k = spawn(process.execPath, [SELF, ...args], { env: { ...process.env, AGENT_CHAT_HOME: home, AGENT_CHAT_ME: who } })
     kids.push(k)
     return k
   }
@@ -932,7 +1071,7 @@ async function selftest () {
 
     // A truncated sun_path reports a successful bind while binding elsewhere.
     process.stdout.write('selftest: socket bound where we asked...\n')
-    const sock = sockPath(topic, home)
+    const sock = sockPath(topic, home, 'alice')
     assert(Buffer.byteLength(sock) <= SOCK_MAX, `socket path is ${Buffer.byteLength(sock)} bytes, over ${SOCK_MAX}`)
     assert(fs.existsSync(sock), `no socket at ${sock} — the kernel bound elsewhere`)
     check()
@@ -1026,6 +1165,25 @@ async function selftest () {
       'a message that reached a late joiner does not verify')
     check()
 
+    // The case that broke in the field: two agent sessions on one machine.
+    // They cannot hole-punch to each other, so they must find the loopback.
+    process.stdout.write('selftest: a second participant on this machine pairs over loopback...\n')
+    const daveLog = addParticipant('dave')
+    let daveOut = ''
+    const dave = run(['listen'], 'dave')
+    dave.stdout.on('data', d => { daveOut += d })
+    await waitFor(() => daveOut.includes('alice is online') && out.includes('dave is online'), 60000)
+    assert(daveOut.includes('alice is online'), `dave never saw alice over loopback\n${daveOut}`)
+    assert(out.includes('dave is online'), `alice never saw dave over loopback\n${why()}`)
+    await exitOf(['send', 'loopback hello'])
+    await waitFor(() => daveOut.includes('loopback hello'), 30000)
+    assert(/msg .*alice: loopback hello/.test(daveOut), `a message did not cross the loopback link\n${daveOut}`)
+    const keyOf = who => { try { return fs.readFileSync(path.join(home, 'participants', who, 'identity'), 'utf8').trim() } catch { return null } }
+    assert(keyOf('alice') && keyOf('dave') && keyOf('alice') !== keyOf('dave'),
+      'two participants on one machine ended up sharing an identity')
+    assert(daveLog !== logFile, 'two participants defaulted to the same log file')
+    check()
+
     process.stdout.write('selftest: flag parsing does not eat positional arguments...\n')
     assert(bare(['--json', '5']).join() === '5', 'a boolean flag swallowed the argument after it')
     assert(bare(['--in', '200', '7']).join() === '7', 'a value flag did not consume its value')
@@ -1056,7 +1214,7 @@ async function selftest () {
     await sleep(4000)
     const since = out.slice(before)
     assert(since.includes('MUTE-TEST-1'),
-      `the first message inside the budget was not shown.\nsocket alive: ${fs.existsSync(sockPath(topic, home))}\nsince:\n${since}\n${why()}`)
+      `the first message inside the budget was not shown.\nsocket alive: ${fs.existsSync(sockPath(topic, home, 'alice'))}\nsince:\n${since}\n${why()}`)
     assert(since.includes('inbound budget spent'), `no warning when the inbound budget ran out\n${since}`)
     assert(!since.includes('MUTE-TEST-2') && !since.includes('MUTE-TEST-3'),
       `messages past the inbound budget were still shown\n${since}`)
@@ -1088,12 +1246,13 @@ async function selftest () {
   codes; over-long sends refused instead of truncated; credential-shaped
   messages refused outbound; the inbound budget muting without losing
   messages; flag parsing leaving positional arguments alone; backfill; the
-  send budget; leave.
+  send budget; leave; and two participants on this machine pairing over the
+  loopback, with separate identities and separate logs.
 
   NOT proven: everything here shares one machine and one NAT. Hole punching
   between two networks is what the tool exists for, and only a second laptop
-  can demonstrate it. Two daemons on one host do not reliably pair, which is
-  why this test drives the peers directly.
+  can demonstrate it. Same-machine daemons do not hole-punch to each other at
+  all, which is why they pair locally instead.
 `)
   } catch (e) {
     process.stderr.write(`selftest: FAIL — ${e.message}\n`)
@@ -1102,7 +1261,7 @@ async function selftest () {
     for (const k of kids) { try { k.kill('SIGKILL') } catch {} }
     for (const sw of swarms) { try { await sw.destroy() } catch {} }
     await sleep(500)
-    try { fs.unlinkSync(sockPath(topic, home)) } catch {}
+    for (const who of ['alice', 'dave']) { try { fs.unlinkSync(sockPath(topic, home, who)) } catch {} }
     fs.rmSync(base, { recursive: true, force: true })
   }
   process.exit(process.exitCode || 0)
