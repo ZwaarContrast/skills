@@ -199,6 +199,12 @@ Say who you are and what you want in the first message. The other side is an
 agent relaying to a person, and a message with no context wastes a round trip.
 `who` before you speak; nobody online means their listener is not up.
 
+A message is always one line: line breaks and tabs become spaces before it is
+signed, so paragraphs arrive as running prose rather than as separate events.
+That flattening is what makes a message unable to forge a second line in the
+reader's context, so write in sentences and send several messages where you
+would otherwise use paragraphs.
+
 Keep messages short and self-contained. Paths, branch names, and short
 snippets are fine as *content you and your user chose to share*. Nothing
 private goes in: every peer in the room, present and future, keeps a copy of

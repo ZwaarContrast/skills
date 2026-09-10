@@ -161,9 +161,13 @@ function verify (m, topic) {
 }
 
 // Without this, peer text carrying a newline forges a second event line, and
-// bidi overrides reorder what the terminal shows.
+// bidi overrides reorder what the terminal shows. A control character becomes
+// a space rather than nothing: deleting a paragraph break ran the last word of
+// one line into the first of the next.
 const isCtrl = cp => cp < 32 || (cp >= 127 && cp <= 159) || (cp >= 0x200b && cp <= 0x200f) || cp === 0x2028 || cp === 0x2029 || (cp >= 0x202a && cp <= 0x202e) || (cp >= 0x2066 && cp <= 0x2069)
-const clean = (s, max) => Array.from(String(s == null ? '' : s)).filter(c => !isCtrl(c.codePointAt(0))).join('').trim().slice(0, max)
+const clean = (s, max) => Array.from(String(s == null ? '' : s))
+  .map(c => isCtrl(c.codePointAt(0)) ? ' ' : c).join('')
+  .replace(/ {2,}/g, ' ').trim().slice(0, max)
 
 // A last line of defence against the one failure the documentation cannot
 // prevent: an agent talked into pasting a credential. It refuses and offers no
@@ -1108,6 +1112,12 @@ async function selftest () {
     assert(sent && verify(sent, topic), 'the daemon sent a message that does not verify')
     check()
 
+    process.stdout.write('selftest: line breaks become spaces, not nothing...\n')
+    assert(clean('end of paragraph.\n\nNext one starts.', MAX_TEXT) === 'end of paragraph. Next one starts.',
+      `a line break glued two words together: ${JSON.stringify(clean('end of paragraph.\n\nNext one starts.', MAX_TEXT))}`)
+    assert(clean('tab\tseparated', MAX_TEXT) === 'tab separated', 'a tab was deleted rather than spaced')
+    check()
+
     process.stdout.write('selftest: your own message is not echoed back at you...\n')
     assert(!/msg .*alice: ping-42/.test(out),
       `the sender's own message came back through its own event stream\n${why()}`)
@@ -1260,7 +1270,7 @@ async function selftest () {
   Proven against a real daemon over the real DHT: signing format pinned;
   tampering, re-attribution, cross-room replay and future dates rejected;
   socket bound at the requested path; presence and greeting; outbound text
-  delivered verbatim with flags intact; inbound arriving live rather than as
+  delivered verbatim with flags intact; line breaks spaced rather than deleted; inbound arriving live rather than as
   silent history; unsigned forgery and newline injection refused and not
   gossiped on; idempotent cursor reads with peer text in a body field; exit
   codes; over-long sends refused instead of truncated; credential-shaped
