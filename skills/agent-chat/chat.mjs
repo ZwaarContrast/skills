@@ -714,6 +714,30 @@ const flag = (argv, name, fallback) => {
   return i >= 0 && argv[i + 1] !== undefined ? argv[i + 1] : fallback
 }
 const has = (argv, name) => argv.includes('--' + name)
+const OPTIONS = {
+  new: ['name', 'log', 'out'],
+  join: ['name', 'log', 'file'],
+  invite: ['out'],
+  read: ['since', 'max', 'json'],
+  who: ['json'],
+  history: ['n', 'json'],
+  budget: ['in']
+}
+
+// `send` is exempt: every argument there is message text by design.
+function checkOptions (cmd, argv) {
+  if (cmd === 'send') return
+  const allowed = new Set(OPTIONS[cmd] || [])
+  for (const a of argv) {
+    if (!a.startsWith('--')) continue
+    const name = a.slice(2).split('=')[0]
+    if (allowed.has(name)) continue
+    die(allowed.size
+      ? `\`${a}\` is not an option of ${cmd} — it takes ${[...allowed].map(f => '--' + f).join(', ')}`
+      : `\`${a}\` is not an option of ${cmd}, which takes none`, EX.usage)
+  }
+}
+
 const BOOL_FLAGS = new Set(['--json'])
 const bare = argv => {
   const out = []
@@ -735,6 +759,8 @@ const asRecord = (m, name) => ({ type: 'message', id: m.id, from: name || m.from
 async function main () {
   const [cmd, ...argv] = process.argv.slice(2)
   const json = has(argv, 'json')
+
+  if (cmd) checkOptions(cmd, argv)
 
   // `new` and `join` establish who you are; every other command selects an
   // already-established participant. statusline stays silent rather than fail.
@@ -905,11 +931,19 @@ async function main () {
       const room = currentRoom()
       const c = await connectSock(sockPath(room.topic))
       if (c) { await request(c, { cmd: 'stop' }, 5000); c.end(); await sleep(300) }
+      // The topic lives only in room.json, and the log does not carry it, so
+      // without this a room everyone left could never be rejoined.
+      const keep = room.log + '.invite'
+      let kept = false
+      try { fs.mkdirSync(path.dirname(keep), { recursive: true }); fs.writeFileSync(keep, inviteOf(room) + '\n', { mode: 0o600 }); kept = true } catch {}
       fs.rmSync(roomDir(room.topic), { recursive: true, force: true })
       try {
         if (fs.readFileSync(path.join(meDir(ME), 'current'), 'utf8').trim() === room.topic) fs.rmSync(path.join(meDir(ME), 'current'))
       } catch {}
-      process.stdout.write(`left "${room.label}" and forgot the room. The log stays at ${room.log}.\nRejoining needs a fresh invite.\n`)
+      process.stdout.write(`left "${room.label}" and forgot the room. The log stays at ${room.log}.\n` +
+        (kept
+          ? `To come back you need an invite; one was kept at ${keep} — join with: ${CLI} join --file ${keep}\n`
+          : 'Rejoining needs a fresh invite from someone still in the room.\n'))
       break
     }
     case 'statusline': {
@@ -1259,8 +1293,19 @@ async function selftest () {
     assert(await exitOf(['send', 'over budget']) === EX.budget, 'a send past the budget was allowed')
     check()
 
-    process.stdout.write('selftest: leave forgets the room but keeps the log...\n')
+    process.stdout.write('selftest: an option a command does not have is refused...\n')
+    assert(await exitOf(['listen', '--log', '/tmp/nope.jsonl']) === EX.usage,
+      'listen silently accepted --log, which it ignores')
+    assert(await exitOf(['who', '--since', '3']) === EX.usage, 'who silently accepted --since')
+    assert(await exitOf(['read', '--since', '0', '--json']) === EX.ok, 'a valid option combination was refused')
+    check()
+
+    process.stdout.write('selftest: leave keeps an invite so the room can be rejoined...\n')
     await exitOf(['leave'])
+    const keptInvite = logFile + '.invite'
+    assert(fs.existsSync(keptInvite), 'leave left no way back into the room')
+    assert(/agentchat2:[0-9a-f]{64}:/.test(fs.readFileSync(keptInvite, 'utf8')),
+      'the invite kept on leave is not a usable token')
     assert(!fs.existsSync(path.join(home, 'rooms', topic.slice(0, 16))), 'leave did not forget the room')
     assert(fs.existsSync(logFile), 'leave destroyed the log')
     check()
