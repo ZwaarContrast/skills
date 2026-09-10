@@ -384,6 +384,7 @@ async function daemon (room, emitLocal) {
   const msgs = readLog(room)      // in memory; the file is never re-read per peer
   const seen = new Set(msgs.map(m => m.id))
   const peers = new Map()
+  const online = new Map() // pk -> live connections, so one peer is one arrival
   const localPeers = new Map()
   const names = new Map()
   const subs = new Set()
@@ -401,7 +402,7 @@ async function daemon (room, emitLocal) {
         label: room.label,
         sock: sockPath(room.topic),
         pk: mePk,
-        peers: [...peers.values()].filter(p => p.name).map(p => p.name),
+        peers: [...new Set([...peers.values()].filter(p => p.name).map(p => p.name))],
         turns,
         inbound,
         muted,
@@ -444,8 +445,12 @@ async function daemon (room, emitLocal) {
   // nobody saw — so the two stay distinct frames.
   const relay = (list, origin, live) => {
     if (!list.length) return
-    for (const c of peers.keys()) {
-      if (c === origin) continue
+    const done = new Set()
+    const from = peers.get(origin)
+    if (from) done.add(from.pk)
+    for (const [c, p] of peers) {
+      if (c === origin || done.has(p.pk)) continue
+      done.add(p.pk)
       if (live) for (const m of list) writeJson(c, { t: 'msg', m })
       else writeJson(c, { t: 'log', msgs: list, have: msgs.length })
     }
@@ -462,7 +467,7 @@ async function daemon (room, emitLocal) {
     if (turns <= 0) return { ok: false, reason: 'budget' }
     turns--
     const m = sign({ id: crypto.randomBytes(12).toString('hex'), pk: mePk, from: room.name, ts: Date.now(), text: body }, keyPair, room.topic)
-    accept(m)
+    accept(m, null, true)
     relay([m], null, true)
     saveState()
     return { ok: true, turns }
@@ -480,7 +485,13 @@ async function daemon (room, emitLocal) {
     conn.on('close', () => {
       const p = peers.get(conn); peers.delete(conn)
       if (p && p.via === 'local') localPeers.delete(p.pk)
-      if (p && p.name) { emit(fmtSys(`* ${display(p.pk, p.name)} went offline`)); saveState() }
+      if (p && p.name) {
+        const links = (online.get(p.pk) || 1) - 1
+        if (links > 0) { online.set(p.pk, links); return }
+        online.delete(p.pk)
+        emit(fmtSys(`* ${display(p.pk, p.name)} went offline`))
+        saveState()
+      }
     })
     return msg => {
       lastActive = Date.now()
@@ -492,9 +503,13 @@ async function daemon (room, emitLocal) {
         if (peer.name) return
         peer.name = clean(msg.name, MAX_NAME) || 'anon'
         names.set(pk, peer.name)
-        emit(fmtSys(`* ${display(pk, peer.name)} is online`))
-        saveState()
-        writeJson(conn, { t: 'log', msgs: msgs.slice(-BACKFILL), have: msgs.length })
+        const links = (online.get(pk) || 0) + 1
+        online.set(pk, links)
+        if (links === 1) {
+          emit(fmtSys(`* ${display(pk, peer.name)} is online`))
+          saveState()
+          writeJson(conn, { t: 'log', msgs: msgs.slice(-BACKFILL), have: msgs.length })
+        }
       } else if (!peer.name) {
         // silent connection, no conversation
       } else if (msg.t === 'msg') {
@@ -569,7 +584,7 @@ async function daemon (room, emitLocal) {
           turns,
           inbound,
           muted,
-          peers: [...peers.values()].filter(p => p.name).map(p => display(p.pk, p.name))
+          peers: [...new Map([...peers.values()].filter(p => p.name).map(p => [p.pk, display(p.pk, p.name)])).values()]
         })
       } else if (req.cmd === 'read') {
         // The same `since` returns the same events until something new exists,
@@ -622,8 +637,7 @@ async function daemon (room, emitLocal) {
   await swarm.join(Buffer.from(room.topic, 'hex'), { server: true, client: true }).flushed()
   saveState()
   await dialLocal()
-  emit(fmtSys(`* listening to "${room.label}" as ${room.name}#${mePk.slice(0, 4)} — log ${logPath(room)}`))
-  emit(fmtSys(`* pin this session with AGENT_CHAT_ME=${ME} AGENT_CHAT_ROOM=${room.label}; ${turns} sends budgeted`))
+  emit(fmtSys(`* listening to "${room.label}" as ${room.name}#${mePk.slice(0, 4)} — ${turns} sends · log ${logPath(room)} · pin AGENT_CHAT_ME=${ME} AGENT_CHAT_ROOM=${room.label}`))
 }
 
 // ---------- daemon client ----------
@@ -1092,6 +1106,12 @@ async function selftest () {
     assert(sent && sent.text === 'ping-42 with --force and --name bob inside',
       `flags in the message text were mangled: ${sent && JSON.stringify(sent.text)}`)
     assert(sent && verify(sent, topic), 'the daemon sent a message that does not verify')
+    check()
+
+    process.stdout.write('selftest: your own message is not echoed back at you...\n')
+    assert(!/msg .*alice: ping-42/.test(out),
+      `the sender's own message came back through its own event stream\n${why()}`)
+    assert(fs.readFileSync(logFile, 'utf8').includes('ping-42'), 'a sent message never reached the log')
     check()
 
     process.stdout.write('selftest: inbound message arrives live, not as silent history...\n')

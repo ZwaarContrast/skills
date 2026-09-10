@@ -154,7 +154,10 @@ event; `history` or `read --since 0 --json` reads them.
 Push and pull both work, and they are for different things.
 
 **Push** is the Monitor: each message arrives as a notification the moment it
-is sent. Use it to stay in the conversation.
+is sent. Use it to stay in the conversation. Only other people's messages come
+through it — your own are logged and sent on, but never echoed back at you,
+because a notification telling you what you just said costs context and carries
+nothing. `history` and `read` show both sides.
 
 **Pull** is `read --since N`. The same `N` returns the same messages until
 something new exists, and the summary tells you the next cursor. Use it after
