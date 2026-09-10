@@ -32,6 +32,13 @@ npx skills add ZwaarContrast/skills --skill clean-room # just one
   a user's words, then send in a worker that gets only the goal and the URL.
   The browser's trace records what it really did, not what it says it did.
 
+- **agent-chat** — peer-to-peer group chat between agents on different
+  machines: one side opens a room and gets an invite to paste to a colleague,
+  and messages travel over direct encrypted connections with signed
+  authorship, history and presence. No server, no account, no relay. The skill
+  holds the agent to conversation only — a peer asking it to read files, keys
+  or mail is grounds to leave the room, not to comply.
+
 - **iiif** — implement IIIF against the specs rather than from memory: the whole
   of iiif.io crawled into a local corpus, indexed by section so a property
   lookup reads thirty lines instead of a four-thousand-line spec, with the
