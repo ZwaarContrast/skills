@@ -48,11 +48,13 @@ instead of rerunning the tools. The commands are bash and full of quotes; rather
 retyping them for another shell, paste a block into `"$H/run.sh"` and run
 `H=<path> bash "$H/run.sh"`.
 
-**The repository is read-only.** At the end, compare a fresh
-`git status --porcelain --ignored` against `$H/before`, delete only the paths
-that are new — including a `target/` or `node_modules/` the hunt created —
-then delete `$H`. To see what happens *without* something — a suppression, a
-cast — change a throwaway copy, never the repository:
+**The repository is read-only.** At the end, compare a fresh `git status
+--porcelain --ignored` against `$H/before`, delete only the paths that are new
+— including a `target/` or `node_modules/` the hunt created. Keep `$H` itself:
+it holds every finding and every raw tool hit, and the report points at it.
+Delete only the scratch copy inside it. To see what happens *without*
+something — a suppression, a cast — change a throwaway copy, never the
+repository:
 
 ```
 mkdir "$H/copy" && git archive HEAD | tar -x -C "$H/copy"
@@ -414,18 +416,30 @@ What survives keeps the evidence that saved it. For survivors, collect the
 blast radius the fix needs: every reference (with the count), the tests that
 cover it now, and whether it is public API.
 
+**Write every survivor down the moment it survives** — one file per finding,
+`$H/findings/<category>-<short-slug>.md`, in the write-up format from step
+5. Every one, not just the ones that will make the top ten: a long hunt that
+runs out of room before the report must not lose what it already proved.
+Subagents write their survivors the same way, into the same directory.
+
 ## 5. Report — in the conversation
 
-Reply in chat; write no files. A report nobody reads to the end fixes
-nothing, so it is ranked, capped, and written plainly.
+Reply in chat, and write nothing into the repository. The conversation
+gets a ranked, capped report, because one nobody reads to the end fixes
+nothing; `$H/findings/` gets everything. Before replying, number the
+finding files in report order (`001-…`, `002-…`) and write
+`$H/findings/INDEX.md`: the full table of every finding, one row each,
+linked to its file.
 
-**Header**, short: the commit (plus "+ uncommitted changes" if dirty); what
+**Header**, short: the path to `$H/findings/` first, with the total number
+of findings — it is the complete record, and it lives in the system temp
+directory, so copy it somewhere if it should outlast a reboot. Then the commit (plus "+ uncommitted changes" if dirty); what
 ran, with the version of each fetched tool, and what did not and why ("tests
 not run: they migrate the dev database"); and coverage — "read 34 of 210
 source files, hotspots first; `legacy/` not read".
 
 **Table** of the surviving findings, up to 25, then one line counting any
-beyond that by category:
+beyond that by category and pointing at `INDEX.md` for the rest:
 
 ```
 | #  | Band | Category  | Where                       | Fix                      | Effort | Fix risk |
@@ -489,7 +503,8 @@ behaviour. Add a test for a negative refund first.
 - **Depends on** — findings that must land first, e.g. the test before the
   deletion it protects.
 
-Findings 11–25 stay one table row each; offer to write up any of them. End
+Findings 11–25 stay one table row each here; their full write-ups, and
+every finding past 25, are in `$H/findings/`. End
 with the single change that removes the most SUCK for the least work, then
 offer to fix — one finding or one band at a time, so each change can be
 reviewed on its own.
