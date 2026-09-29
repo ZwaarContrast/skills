@@ -420,16 +420,20 @@ cover it now, and whether it is public API.
 `$H/findings/<category>-<short-slug>.md`, in the write-up format from step
 5. Every one, not just the ones that will make the top ten: a long hunt that
 runs out of room before the report must not lose what it already proved.
-Subagents write their survivors the same way, into the same directory.
+Subagents write their survivors into the same directory, prefixed with their
+area — `$H/findings/<area>--<category>-<slug>.md` — so two of them can never
+pick the same name. They never number files and never write an index.
 
 ## 5. Report — in the conversation
 
 Reply in chat, and write nothing into the repository. The conversation
 gets a ranked, capped report, because one nobody reads to the end fixes
-nothing; `$H/findings/` gets everything. Before replying, number the
-finding files in report order (`001-…`, `002-…`) and write
-`$H/findings/INDEX.md`: the full table of every finding, one row each,
-linked to its file.
+nothing; `$H/findings/` gets everything. Once every subagent is done, the
+hunt's lead — and only the lead — consolidates it: merges files about the
+same code into one, keeping what is unique in each; deletes the merged-away
+files; numbers the rest once, in report order (`001-…`, `002-…`); and writes
+a single `$H/findings/INDEX.md`, the full table of every finding, one row
+each, linked to its file.
 
 **Header**, short: the path to `$H/findings/` first, with the total number
 of findings — it is the complete record, and it lives in the system temp
