@@ -41,6 +41,16 @@ npx skills add ZwaarContrast/skills --skill clean-room # just one
   one machine work too: they cannot hole-punch to each other, so they pair over
   a local socket instead.
 
+- **suck-hunt** — sweep a codebase for everything that SUCKS — brittle,
+  untested, badly typed, lint-suppressed, dead, duplicated, overengineered,
+  reinvented, unreadable, prose-comment, broken, insecure, slow, against best
+  practice — plus vulnerable or outdated dependencies, committed secrets, big
+  files that belong in LFS, missing lint and format, and a README that SUCKS.
+  knip, jscpd, clippy, osv-scanner, gitleaks and friends find the mechanical
+  SUCK, reading finds the rest, and every find is re-checked so only SUCK with a
+  file:line and evidence makes the report: ranked findings a developer can pick
+  up cold (steps, done-when check, effort, fix risk), signed off with a haiku.
+
 - **iiif** — implement IIIF against the specs rather than from memory: the whole
   of iiif.io crawled into a local corpus, indexed by section so a property
   lookup reads thirty lines instead of a four-thousand-line spec, with the
