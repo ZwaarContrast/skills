@@ -50,7 +50,7 @@ retyping them for another shell, paste a block into `"$H/run.sh"` and run
 
 **The repository is read-only.** At the end, compare a fresh `git status
 --porcelain --ignored` against `$H/before`, delete only the paths that are new
-— including a `target/` or `node_modules/` the hunt created. Keep `$H` itself:
+— including a `target/`, `node_modules/` or `vendor/` the hunt created. Keep `$H` itself:
 it holds every finding and every raw tool hit, and the report points at it.
 Delete only the scratch copy inside it. To see what happens *without*
 something — a suppression, a cast — change a throwaway copy, never the
@@ -71,9 +71,10 @@ exists. What cannot run safely is "not run" in the report header, with the
 reason; a skipped suite is an honest result, a wiped dev database is not.
 
 **The hunt fetches its tools.** The commands below download and run
-well-known tools through `npx`, `uvx` and `go run` — nothing is added to the
-project. Report the version of each one the project does not pin: `npx`
-and `uvx` tools print it with `--version`, and `go list -m <module>@latest`
+well-known tools through `npx`, `uvx` and `go run`, and PHP's through
+`composer` into `$H` — nothing is added to the
+project. Report the version of each one the project does not pin: `npx`,
+`uvx` and composer tools print it with `--version`, and `go list -m <module>@latest`
 names the version `go run …@latest` resolved — the binaries themselves often
 say "dev". osv-scanner
 sends package names and versions, not code, to osv.dev; if even the
@@ -97,7 +98,7 @@ git ls-files <src> | xargs wc -l | sort -rn | head -15 > "$H/big-files.txt"
 uvx lizard -w <src> > "$H/complexity.txt" 2>&1; uvx lizard <src> | tail -3 >> "$H/complexity.txt"
 grep -rnE 'verify=False|rejectUnauthorized: *false|InsecureSkipVerify: *true|shell=True|\beval\(|new Function\(|pickle\.loads?\(|yaml\.load\(|innerHTML *=|dangerouslySetInnerHTML|\bunsafe *\{' <src> > "$H/security.txt"
 grep -rnE 'console\.(log|debug)\(|debugger;|\bdbg!\(|breakpoint\(\)|pdb\.set_trace|^\s*print\(|fmt\.Print(ln|f)?\(' <src> > "$H/debug.txt"
-grep -rnE 'eslint-disable|oxlint-disable|biome-ignore|@ts-ignore|@ts-expect-error|@ts-nocheck|noqa|type: ?ignore|pyright: ?ignore|mypy: ?ignore-errors|pylint: ?disable|#!?\[(allow|expect)\(|//\s*nolint|//lint:ignore|#nosec|\.skip\(|xit\(|todo!|unimplemented!' <src> > "$H/suppressions.txt"
+grep -rnE 'eslint-disable|oxlint-disable|biome-ignore|stylelint-disable|@ts-ignore|@ts-expect-error|@ts-nocheck|noqa|type: ?ignore|pyright: ?ignore|mypy: ?ignore-errors|pylint: ?disable|#!?\[(allow|expect)\(|//\s*nolint|//lint:ignore|#nosec|\.skip\(|xit\(|todo!|unimplemented!' <src> > "$H/suppressions.txt"
 grep -rnE 'continue-on-error: *true|allow_failure: *true|\|\| *true' .github .gitlab-ci.yml .circleci > "$H/ci.txt" 2>/dev/null
 go run github.com/google/osv-scanner/v2/cmd/osv-scanner@latest scan source -r -f markdown . > "$H/osv.md" 2>/dev/null
 go run github.com/zricethezav/gitleaks/v8@latest git --no-banner --redact -f csv -r "$H/secrets.csv" . 2>/dev/null
@@ -143,7 +144,8 @@ the exported API of a package others import. A tool that
   material.
 - **Lint and format:** look for the project's config — `eslint.config.*` or
   `.eslintrc*`, `biome.json`, `.oxlintrc.json`, `.prettierrc*`, `[tool.ruff]`
-  in `pyproject.toml` — and for a script or CI job that runs it. Rust and Go
+  in `pyproject.toml`, `phpstan.neon*`, `phpcs.xml*`, `.php-cs-fixer*.php`,
+  `pint.json`, `.stylelintrc*` — and for a script or CI job that runs it. Rust and Go
   ship theirs; the language sections check them.
 - **README:** every command it tells you to run (`npm run x`, `make x`,
   `just x`) must exist in `package.json`, the `Makefile` or the `justfile`.
@@ -158,7 +160,9 @@ the exported API of a package others import. A tool that
   with its output pointed into `$H`. Without one: `node --test
   --experimental-test-coverage` prints and writes nothing;
   `COVERAGE_FILE="$H/.coverage" uvx coverage run --source=<pkg> -m pytest`
-  (or `-m unittest`) with the project's dependencies available. Otherwise, a
+  (or `-m unittest`) with the project's dependencies available; for PHP,
+  `XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text` with Xdebug or
+  PCOV loaded. Otherwise, a
   source file no test imports is untested.
 - **ast-grep** searches by syntax tree, so it finds shapes, not strings. The
   language sections have starters. When reading turns up a smell, write a
@@ -270,6 +274,174 @@ reports only vulnerabilities the code actually reaches, the standard
 library's included — a toolchain behind its patch release shows up here and
 nowhere else. Drop the `any` hits that sit in comments.
 
+### PHP
+
+```
+P="$H/php" && mkdir -p "$P" && composer require -q -d "$P" --no-plugins phpstan/phpstan:^2 shipmonk/dead-code-detector friendsofphp/php-cs-fixer icanhazstring/composer-unused maglnet/composer-require-checker
+composer install --no-scripts --no-plugins --no-interaction -q   # only if vendor/ is missing
+composer validate --strict --no-check-publish > "$H/composer-validate.txt" 2>&1
+composer audit --locked > "$H/audit.txt" 2>&1
+composer outdated --direct --locked > "$H/outdated.txt" 2>&1
+"$P/vendor/bin/composer-unused" --no-progress > "$H/unused-deps.txt" 2>&1
+"$P/vendor/bin/composer-require-checker" check > "$H/missing-deps.txt" 2>&1
+"$P/vendor/bin/phpstan" analyse --no-progress --error-format=raw <src> > "$H/phpstan.txt" 2>&1
+"$P/vendor/bin/phpstan" analyse --no-progress --error-format=raw -l max <src> > "$H/phpstan-max.txt" 2>&1
+printf 'includes:\n  - %s/vendor/shipmonk/dead-code-detector/rules.neon\n' "$P" > "$H/dead.neon"
+"$P/vendor/bin/phpstan" analyse --no-progress --error-format=raw -c "$H/dead.neon" -l 0 <src> tests > "$H/dead-php.txt" 2>&1
+"$P/vendor/bin/php-cs-fixer" check --using-cache=no --show-progress=none --rules=@PER-CS <src> > "$H/format.txt" 2>&1
+grep -rnE '\b(unserialize|extract|shell_exec|exec|system|passthru|proc_open|popen|create_function)\(|SSL_VERIFY(PEER|HOST)[^;]*(false|0)|\b(md5|sha1)\(' --include='*.php' <src> > "$H/security-php.txt"
+grep -rnE '\b(var_dump|print_r|var_export|dd|dump|ray)\(' --include='*.php' <src> > "$H/debug-php.txt"
+grep -rnE '@phpstan-ignore|@psalm-suppress|phpcs:(ignore|disable)|@codingStandardsIgnore|(^\s*|[=(,!] *)@[a-z_\\]+\(' --include='*.php' <src> > "$H/suppressions-php.txt"
+grep -hE '^\s+count: [0-9]+' phpstan-baseline.neon 2>/dev/null | awk '{s+=$2} END {print s+0, "errors in phpstan-baseline.neon"}' > "$H/baseline.txt"
+npx -y -p @ast-grep/cli ast-grep run -l php -p 'try { $$$ } catch ($$$) { }' <src> > "$H/swallowed-php.txt"
+```
+
+Every tool goes into `$H/php`; `--no-plugins` keeps composer plugins from
+running. The tools that read the project's classes need its `vendor/`:
+`--no-scripts --no-plugins` installs it without running project code, and
+the `vendor/` (and a `composer.lock` a library did not have) is new, so step
+1 deletes it. If the local PHP is not the one `composer.json` requires,
+add `--ignore-platform-reqs` — analysis only, say so in the report.
+
+- **PHPStan** picks up the project's `phpstan.neon(.dist)` on its own; with
+  none it runs at level 0. If the project ships its own PHPStan, use its
+  `vendor/bin/phpstan` for the first run — its config and extensions are
+  written for that version. The `-l max` run is the **typing** lead list:
+  group it by message ("no value type specified in iterable type array",
+  "mixed given") rather than reading it line by line. A
+  `phpstan-baseline.neon` is a suppression file; its total is the count of
+  errors the project decided to stop seeing.
+- **Dead code** (shipmonk) knows Symfony, Doctrine and PHPUnit entry
+  points, not a DI container wired by config, routes in a closure file or a
+  callback named in a string. Expect controllers and actions to show up
+  unused; step 4 refutes them.
+- **php-cs-fixer** with `@PER-CS` only stands in when the project has no
+  formatter of its own. If it has `.php-cs-fixer(.dist).php`, `pint.json`
+  or `phpcs.xml(.dist)`, run that through its `vendor/bin` instead: failing
+  it is **no guard rails**; disagreeing with PER-CS is taste. Its warning
+  about the PHP version is noise.
+- **composer-require-checker:** a class from a package the project does
+  not require is a real finding — it works until that dependency drops it.
+  So is an `ext-*` used and not required.
+- **The `@` grep** finds the error-suppression operator (`@unlink($f)`).
+  `md5`/`sha1` is a finding on passwords and tokens only, not on cache keys.
+- **Laravel:** without `larastan/larastan` PHPStan drowns in facades and
+  magic properties. Larastan boots the application, which runs project code
+  — step 1 decides.
+
+### WordPress
+
+On top of PHP. WordPress core, and the plugins and themes the project did
+not write, are vendored: skip their code, but list their versions. Run this
+as one script (the function does not survive a fresh shell):
+
+```
+P="$H/php"; composer require -q -d "$P" --no-plugins wp-coding-standards/wpcs:^3 phpcompatibility/phpcompatibility-wp:* szepeviktor/phpstan-wordpress
+V="$P/vendor"
+wpcs() { "$V/bin/phpcs" --runtime-set installed_paths "$V/wp-coding-standards/wpcs,$V/phpcsstandards/phpcsutils,$V/phpcsstandards/phpcsextra,$V/phpcompatibility/php-compatibility,$V/phpcompatibility/phpcompatibility-paragonie,$V/phpcompatibility/phpcompatibility-wp" -q --report=emacs --extensions=php --ignore="*/wp-config*.php" "$@"; }
+wpcs --standard=WordPress --sniffs=WordPress.Security.EscapeOutput,WordPress.Security.NonceVerification,WordPress.Security.ValidatedSanitizedInput,WordPress.Security.SafeRedirect,WordPress.Security.PluginMenuSlug,WordPress.DB.PreparedSQL,WordPress.DB.PreparedSQLPlaceholders,WordPress.WP.Capabilities <src> > "$H/wp-security.txt"
+wpcs --standard=WordPress --sniffs=WordPress.PHP.DontExtract,WordPress.PHP.NoSilencedErrors,WordPress.PHP.RestrictedPHPFunctions,WordPress.PHP.DiscouragedPHPFunctions,WordPress.PHP.DevelopmentFunctions,WordPress.PHP.StrictInArray,Universal.Operators.StrictComparisons,Universal.Operators.DisallowShortTernary,Generic.CodeAnalysis.AssignmentInCondition,WordPress.CodeAnalysis.AssignmentInTernaryCondition,Generic.PHP.BacktickOperator,Generic.PHP.DisallowShortOpenTag,Generic.PHP.DiscourageGoto,Squiz.PHP.Eval,WordPress.DB.DirectDatabaseQuery,WordPress.DB.RestrictedFunctions,WordPress.DB.SlowDBQuery,WordPress.WP.PostsPerPage,WordPress.WP.AlternativeFunctions,WordPress.WP.DeprecatedFunctions,WordPress.WP.DeprecatedClasses,WordPress.WP.DeprecatedParameters,WordPress.WP.DiscouragedFunctions,WordPress.WP.EnqueuedResources,WordPress.WP.GlobalVariablesOverride <src> > "$H/wp-practice.txt"
+wpcs --standard=PHPCompatibilityWP --runtime-set testVersion 7.4- <src> > "$H/php-compat.txt"   # the oldest PHP the plugin or theme claims
+printf 'includes:\n  - %s/szepeviktor/phpstan-wordpress/extension.neon\n' "$V" > "$H/wp.neon"
+printf '  - %s/szepeviktor/phpstan-wordpress/extension.neon\n' "$V" >> "$H/dead.neon"
+grep -rnE 'register_rest_route|permission_callback|wp_ajax_(nopriv_)?|admin_post_(nopriv_)?' --include='*.php' <src> > "$H/wp-endpoints.txt"
+grep -rnE 'add_(action|filter)\([^,]+, *(function|fn|static)\b' --include='*.php' <src> > "$H/wp-closure-hooks.txt"
+grep -lE 'Plugin Name:|Theme Name:' wp-content/plugins/*/*.php wp-content/themes/*/style.css 2>/dev/null | xargs grep -HiE '^\s*\*?\s*Version:' > "$H/wp-versions.txt"
+grep -nE "DISALLOW_FILE_(EDIT|MODS)|WP_DEBUG|SCRIPT_DEBUG|table_prefix|_(KEY|SALT)'|DB_(USER|PASSWORD)" wp-config*.php > "$H/wp-config.txt" 2>/dev/null
+git ls-files | grep -E '(^|/)(debug\.log|wp-config\.php|\.htaccess|[^/]*\.sql(\.gz)?)$' > "$H/wp-files.txt"
+grep -rnE 'chmod +(-R +)?[0-7]?77' $(git ls-files '*.sh' '*.yml' '*.yaml' Makefile Dockerfile 2>/dev/null) > "$H/wp-perms.txt" 2>/dev/null
+```
+
+Without stubs PHPStan reports every WordPress function as unknown: rerun
+the PHP block's PHPStan commands, adding `-c "$H/wp.neon"` to the first two
+unless the project's own config already includes `phpstan-wordpress`.
+
+- **The security sniffs are leads to demonstrate.** A missing nonce matters
+  on a handler that changes state; output already escaped by a template
+  function is a false positive. A REST route with `permission_callback =>
+  '__return_true'` that writes, or a `wp_ajax_nopriv_` handler that writes
+  without `current_user_can`, is **insecure**, band fire.
+- **The practice sniffs** are the rules from the WordPress PHP standard that
+  cost something. `AlternativeFunctions` is **reinvented** (`curl_*` where
+  `wp_remote_get` is, `json_encode` over `wp_json_encode`);
+  `DirectDatabaseQuery`, `SlowDBQuery` and `PostsPerPage` (`-1`, everything
+  at once) are **performance** — give the size; `DevelopmentFunctions` is
+  **debug leftovers**; `Deprecated*` is **dependencies behind**.
+- **Closures as hooks** cannot be removed with `remove_action` — a finding
+  in a plugin or theme others extend, not in a site's own glue.
+- **Style is taste unless the project chose it.** Tabs, spacing, Yoda
+  conditions, `array()` — the WordPress standard has opinions, but without
+  a `phpcs.xml(.dist)` naming WordPress they are not SUCK. With one, run
+  `wpcs` with that ruleset: failing it is **no guard rails**.
+- **Dead code:** a callback named in a string (`add_action( 'init',
+  'my_init' )`), a shortcode, a template file loaded by name — all entry
+  points. Grep the name before believing shipmonk.
+- **Hardening**, from the WordPress hardening guide, as far as a repository
+  shows it: real keys, salts or `DB_PASSWORD` committed are **secrets**;
+  the sample's `put your unique phrase here` left in is **broken** — every
+  such site shares its salts. `WP_DEBUG_DISPLAY` on, or a `debug.log` in the
+  tree, leaks paths and queries. No `DISALLOW_FILE_EDIT` lets one stolen
+  admin login edit PHP. A tracked `.htaccess` should deny `wp-config.php`
+  and block PHP in `wp-includes/`, outside the `# BEGIN WordPress` markers
+  WordPress rewrites. `chmod 777` in a deploy script, an `admin` user in a
+  SQL seed, a plugin that runs PHP stored in the database (Code Snippets,
+  Insert PHP) are findings; the default `wp_` table prefix is a weak one,
+  with fix risk high on a live database.
+- **Plugin versions:** osv-scanner and `composer audit` do not know
+  WordPress.org plugins unless they come through `wpackagist` with
+  advisories. Check `wp-versions.txt` against WPScan or Wordfence
+  Intelligence — both want an account and receive the plugin list, so ask
+  first. A plugin nobody can say is still used is **dead**.
+- **JavaScript and CSS** go through their own sections. A project on
+  `@wordpress/scripts` runs `wp-scripts lint-js` and `lint-style` with
+  WordPress's configs; failing them is **no guard rails**. The accessibility
+  standard is WCAG 2.2 AA: an image without `alt` or a field without a label
+  in a template is **broken** for the people who need it — a full audit is
+  not this hunt.
+
+### CSS
+
+```
+cat > "$H/stylelint.json" <<'EOF'
+{ "rules": {
+  "block-no-empty": true, "color-no-invalid-hex": true, "declaration-block-no-duplicate-properties": true,
+  "declaration-block-no-shorthand-property-overrides": true, "declaration-no-important": true,
+  "font-family-no-missing-generic-family-keyword": true, "function-no-unknown": true, "max-nesting-depth": 3,
+  "no-descending-specificity": true, "no-duplicate-at-import-rules": true, "no-duplicate-selectors": true,
+  "no-invalid-double-slash-comments": true, "property-no-unknown": true, "property-no-vendor-prefix": true,
+  "selector-max-compound-selectors": 3, "selector-max-id": 0, "selector-no-qualifying-type": true,
+  "selector-pseudo-class-no-unknown": true, "selector-pseudo-element-no-unknown": true,
+  "selector-type-no-unknown": [true, { "ignore": ["custom-elements"] }], "unit-no-unknown": true, "value-no-vendor-prefix": true
+} }
+EOF
+npx -y -p stylelint@16 -p postcss-scss stylelint --custom-syntax postcss-scss --config "$H/stylelint.json" --report-needless-disables --formatter unix '<src>/**/*.{css,scss}' > "$H/stylelint.txt" 2>&1
+npx -y purgecss@6 --css '<src>/**/*.css' --content '<templates>' --rejected 2>/dev/null | node -e 'for (const r of JSON.parse(require("fs").readFileSync(0))) console.log(r.file + ": " + r.rejected.join(", "))' > "$H/unused-css.txt"
+grep -rhoiE '#[0-9a-f]{3,8}\b|(rgb|hsl)a?\([^)]*\)' --include='*.css' --include='*.scss' <src> | tr 'A-F' 'a-f' | sort | uniq -c | sort -rn > "$H/colors.txt"
+grep -rnoE 'z-index: *-?[0-9]+' --include='*.css' --include='*.scss' <src> > "$H/z-index.txt"
+grep -rhoE '@media[^{]+' --include='*.css' --include='*.scss' <src> | sort | uniq -c | sort -rn > "$H/breakpoints.txt"
+```
+
+- **stylelint** runs this config, not the project's: core rules only, each
+  naming a cost — a duplicate property or selector is one the next edit
+  misses, an ID or a four-deep selector starts a specificity war that
+  `!important` finishes. If the project has its own stylelint config, run
+  it too; failing it is **no guard rails**. `--report-needless-disables` is
+  **stale**. For Less, swap `postcss-scss` for `postcss-less`.
+- **Vendor prefixes** written by hand are **dead weight** when Autoprefixer
+  or a `browserslist` is set up, and wrong for the next browser when not.
+- **purgecss** lists selectors no file in `<templates>` mentions. Give it
+  everything that can name a class: HTML, templates, JS, JSX, PHP, Markdown.
+  A class built at runtime (`'is-' + state`), added by a CMS editor or a
+  third-party script, or one of WordPress's (`.wp-block-*`, `.alignwide`)
+  looks unused — grep the stem before calling it **dead**.
+- **Colours, z-index, breakpoints** are counts, not findings. Forty hex
+  values for what is six colours, the same one repeated in thirty places, a
+  `z-index` ladder up to 99999, breakpoints at 767, 768 and 769px: the
+  finding is the change that must be made in many places (**duplicate**) or
+  the next one that will escalate (**brittle**).
+- **Duplicates** across stylesheets come from jscpd, which reads CSS and
+  SCSS.
+
 ## 3. Hunt
 
 Nobody can read a whole codebase, so read where SUCK costs most first: files
@@ -294,7 +466,8 @@ The categories, grouped by the band they usually land in (step 5):
   package that will not load.
 - **Insecure** — the obvious kind: input reaching a shell, SQL, `eval` or a
   template unescaped; TLS verification off; unsafe deserialization
-  (`pickle`, `yaml.load`); secrets in logs; checks only the client enforces.
+  (`pickle`, `yaml.load`, `unserialize`); a WordPress handler with no nonce or
+  capability check; secrets in logs; checks only the client enforces.
   Demonstrate it like a bug. This is the obvious layer, not an audit — that
   is the `security-review` and `red-blue` skills.
 - **Secrets** — a key, token or password in the tree or anywhere in history.
@@ -330,8 +503,8 @@ The categories, grouped by the band they usually land in (step 5):
   would have caught.
 - **Suppressed** — a rule switched off instead of obeyed. Worst first: a
   whole file or crate (`/* eslint-disable */`, `@ts-nocheck`,
-  `#![allow(clippy::all)]`, `# mypy: ignore-errors`); a blanket one naming no
-  rule (`# noqa`, `//nolint`, `# type: ignore`); one that no longer
+  `#![allow(clippy::all)]`, `# mypy: ignore-errors`, a PHPStan
+  baseline); a blanket one naming no rule (`# noqa`, `//nolint`, `# type: ignore`); one that no longer
   suppresses anything; one hiding a real error. Look for the reason first —
   a comment beside it, `reason = "…"`, the commit that added it. A named
   rule on one line with a reason that still holds is a decision, not a
@@ -381,7 +554,8 @@ The categories, grouped by the band they usually land in (step 5):
   TODOs older than a year (`git blame` dates them), changelogs in source. A
   comment that says *why* is not SUCK.
 - **Debug leftovers** — `console.log`, `print`, `dbg!`, `debugger`,
-  `breakpoint()` left from a debugging session in code that ships.
+  `breakpoint()`, `var_dump`, `dd()` left from a debugging session in code
+  that ships.
 - **Stale** — suppressions that suppress nothing, dependencies a patch or
   minor behind (one finding together, not one per package).
 - **Bullshit** — the rest of what makes a newcomer say "why?": wrappers
