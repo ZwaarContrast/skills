@@ -125,6 +125,13 @@ Contrast ratios, colour-alone, text resize and reflow belong to a11y.md (WCAG 1.
 - **VIS-45** Label chart series in place rather than through a legend when the labels fit; leave the legend off for a single series; add texture or labels so no series depends on colour.
   Check: multi-series charts identified only by a colour legend. [33]
 
+## Iconography: the right icon for the job
+
+- **VIS-46** For a well-known action, use the icon people already know for it, drawn the way the platform draws it: trash for delete, pencil for edit, gear for settings, magnifier for search, the platform's own share symbol. Before drawing a new icon, look at what competitors and the target platform use. A familiar icon never takes on a different meaning (a hamburger that means "list", a trash can that archives): even a slight shift costs the icon its trust.
+  Check: set each icon crop from `reveal.js` beside the action it performs; a familiar action with an unfamiliar icon, or a familiar icon on a different action. [25]
+- **VIS-47** Icons whose meanings compete — heart, star, bookmark, flag — get one fixed meaning across the product and a visible label. An icon nobody recognises hides its feature as well as a menu does. Draw icons simple and schematic, so they still read at their smallest size.
+  Check: the icon test's wrong answers; two of heart, star and bookmark in one product for different jobs; detailed icons that blur at 16–24 px. [25]
+
 ## Sources
 
 Credit: W3C WAI, "Understanding WCAG 2.2" (Copyright 2026 World Wide Web Consortium), the W3C Software and Document License (https://www.w3.org/copyright/software-license/).
