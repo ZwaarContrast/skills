@@ -56,7 +56,7 @@ npx skills add ZwaarContrast/skills --skill clean-room # just one
 - **ux-suck-hunt** — the same hunt for the user's experience, on websites,
   mobile and tablet apps, desktop apps — and for the AI agents that act on a
   user's behalf. It starts by asking who the product is for and what it may
-  change, then measures every screen with Playwright: axe, contrast from
+  change, then measures each screen with Playwright: axe, contrast from
   pixels where axe gives up, text spacing, reflow, target sizes, keyboard
   focus and reduced motion, at phone, iPad and desktop widths. Subagents
   walk it as UX researchers, as users who have never seen it, and as an

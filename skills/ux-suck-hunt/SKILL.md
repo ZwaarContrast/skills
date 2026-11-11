@@ -163,7 +163,7 @@ mandate, each marked confirmed or inferred.
 **One hunt directory holds everything**, as in `suck-hunt`:
 
 ```
-H=$(mktemp -d) && mkdir -p "$H/tmp" "$H/findings" "$H/walks" "$H/.playwright" && git status --porcelain --ignored > "$H/before" && echo "$H"
+H=$(mktemp -d) && echo "$H" && mkdir -p "$H/tmp" "$H/findings" "$H/walks" "$H/.playwright" && { git status --porcelain --ignored > "$H/before" 2>/dev/null || echo "no repository" > "$H/before"; }
 cp <skill-dir>/probe.js <skill-dir>/reveal.js <skill-dir>/guard.js "$H/" && cp <skill-dir>/cli.config.json "$H/.playwright/"
 ```
 
@@ -248,6 +248,23 @@ Without the user's yes there is no disposable mode, whatever the evidence
 looks like. A Check or Measure step marked **(disposable only)** in the
 rulebook writes to the backend: in any other mode use the read-only
 alternative beside it.
+
+### Signing in
+
+The guard blocks the sign-in like any other write, and the agent never
+signs in on its own. When a top task sits behind a login, ask the user for
+a test account and have them sign in once, themselves, in a visible
+browser opened from `$H`, then save the session:
+
+```
+cd "$H" && playwright-cli -s=login open --headed <login-url>
+cd "$H" && playwright-cli -s=login state-save auth.json && playwright-cli -s=login close
+```
+
+Every hunt session then loads it right after the guard line: `cd "$H" &&
+playwright-cli -s=$SESSION state-load auth.json`. `auth.json` holds a live
+session: it stays in `$H` and never goes in a report. No account, no
+signed-in walk — those tasks are "not run".
 
 ### Running it
 
@@ -350,7 +367,7 @@ and exit code 0. So check what the guard printed, never its exit code:
 
 ```
 npm i -s --prefix "$H/axe" axe-core@4 && cp "$H/axe/node_modules/axe-core/axe.min.js" "$H/"
-cd "$H" && SESSION="ux$(basename "$H" | tail -c 7)" && echo "$SESSION" && playwright-cli -s=$SESSION open \
+cd "$H" && SESSION="ux$(basename "$H" | tail -c 7)-<who>" && echo "$SESSION" && playwright-cli -s=$SESSION open \
   && playwright-cli -s=$SESSION --raw run-code --filename=guard.js | grep -q 'write guard on' \
   || { echo "NO GUARD — stop"; playwright-cli -s=$SESSION close; }
 cd "$H" && playwright-cli -s=$SESSION run-code "async page => { await page.goto('<url>'); }"
@@ -360,15 +377,18 @@ cd "$H" && playwright-cli -s=$SESSION --raw run-code "async page => page.context
 cd "$H" && playwright-cli -s=$SESSION close
 ```
 
-Like `$H`, use the printed session name literally in later calls. A
-session belongs to the directory it was opened from: `close` it from there
+`<who>` is the one using it — `lead`, the researcher's area, `walk-<task>-a`
+— so no two agents share a session: opening a name that is already open
+replaces that browser and wipes its guard log. Like `$H`, use the printed
+session name literally in later calls. A session belongs to the directory
+it was opened from: `close` it from there
 too, or it stays open. Skip the guard line only in proven-disposable mode.
 `$H/.playwright/cli.config.json` (copied in step 1) opens every session
 with the page's Content Security Policy bypassed, so axe can be injected.
 Append each session's blocked writes to `$H/blocked.txt` (one JSON array
 per session) before closing it.
 
-Run [`probe.js`](probe.js) on every screen in the map, and on its states
+Run [`probe.js`](probe.js) on every budgeted screen, and on its states
 where you can reach them. It looks, tabs, hovers, resizes and restyles for
 a moment. At the end it reloads the page twice, once under reduced motion
 and once back. So screenshot a state reached by clicking before probing
@@ -391,7 +411,8 @@ as zero violations. It returns:
   95% of the background beats; `fails` applies 4.5:1, or 3:1 for large
   text. Shadows and scrims stay in the measurement and `hasTextShadow` asks
   for a check by eye. Moving text reports `moving or covered, check by
-  eye`.
+  eye`. Text on a solid card above the image is skipped,
+  and `capped` counts it.
 - **Hover** on up to 40 links, buttons, tabs and menu items, one per style.
   `hoverContrast` is text that drops below 4.5:1 (3:1 large) while hovered,
   with its resting ratio. `hoverStuck` does not return to rest.
@@ -400,8 +421,10 @@ as zero violations. It returns:
   below 4.5:1. `colourOnlyState`: a state that differs only by colour (WCAG
   1.4.1, a lead — 3:1 between the states plus another cue passes;
   `"nothing visible"` means no difference at all). `stateIndicatorContrast`:
-  an underline, bar, border or fill under 3:1 against its neighbours (WCAG
-  1.4.11). `capped` says what the probe's `limits` cut short.
+  an underline, bar, dot, border or fill — a separate ink-bar or dot
+  element included, named by its selector — under 3:1 against its
+  neighbours (WCAG 1.4.11). `capped` says what the probe's `limits` cut
+  short.
 - **Text spacing** (WCAG 1.4.12): text that clips once the minimum line,
   letter, word and paragraph spacing are applied, and did not before.
 - **Reflow** at 320px (WCAG 1.4.10): elements that stick out and scroll
@@ -432,17 +455,25 @@ as zero violations. It returns:
 visible control, then opens every revealer, three layers deep: menus,
 `aria-expanded` toggles, disclosures, unselected tabs, overflow and
 hamburger buttons, hovered rows and cards, one right-click on the main
-content. It records what each revealed and its `path`. It opens, never
-chooses: anything named like delete, remove, sign out, pay, send, submit
-or archive is skipped. Every layer is closed, and `endState` proves the
-page is back where it started. Read its `summary`:
+content. It records what each revealed and its `path`. It opens, never chooses. It never clicks a switch, checkbox, radio or
+field, never follows a link, and skips a dialog button whose name is an
+action. Anything whose name, title, aria-label, id, class, data-* or href
+reads like delete, remove, sign out, pay, buy, send, submit, publish,
+archive, reset or leave — in English, Dutch, German, French and Spanish —
+is skipped. The list is a net, not a guarantee; `skipped` says what was
+left closed and why. Every layer is closed. `endState.clean` is true only
+when the URL, open layers, storage and form state match the start, no
+reload was needed and no write was attempted; otherwise `reloads`,
+`requestsMade`, `writesAttempted`, `storageChanged` and `controlsChanged`
+say what happened. Read its `summary`:
 
 - `deep`: controls two or more layers down — few people find them.
 - `hoverOnly`: invisible to touch and keyboard users.
 - `contextMenuOnly`: actions with no other way in.
 - `iconOnly`: `hasName: false` is an accessibility bug; no `tooltip` means
   a sighted user has to guess. Its `crop` PNGs feed the icon test (step 4).
-- `navigated`: a "menu" button that is really a link.
+- `navigated`: a "menu" button that is really a link, listed as "(link,
+  not followed)".
 - `focusNotReturned`, `popupNotClosedByEscape`: keyboard traps in the
   making.
 
@@ -479,7 +510,9 @@ network, on every platform:
   airplane mode on a device or emulator.
 
 **Done when** every budgeted screen has a probe JSON with an empty
-`errors` (or a rerun noted), and the static outputs exist.
+`errors` (or a rerun noted) — for a native app, its platform's Measure
+output instead; for an app that cannot run, "not run" with the reason —
+and the static outputs exist.
 
 ### Native and desktop builds
 
@@ -493,6 +526,10 @@ file's `## Measure` section has them: `apple.md`, `android.md`,
 `desktop.md`. Commands marked "documented, not run here" were checked
 against their docs, not executed; confirm the first one works before
 building on it.
+
+Haptics are felt, not read. Without a physical device that plays them,
+review the haptic calls in the code and say the feel was not checked;
+never report a haptic as fine from a simulator or a screenshot.
 
 ## 4. Hunt — walk it like a user, read it like a designer
 
@@ -525,31 +562,35 @@ only: a goal in the user's words ("you just signed up; invite a colleague"),
 the URL, a persona if it matters ("on a phone, in a hurry"), the safety mode
 as a hard rule, and how to drive the browser. Not the code, the map, the
 route names or the button labels — anything the brief names is a hint the
-real user did not get. They think aloud into `$H/walks/<task>.md`: what
-they expected, what they tried, where they hesitated, where they went back,
-whether they finished, and how sure they are that it worked. Run every top
-task with two walkers. Two walkers from one model share blind spots: a
-place both struggle is a pattern, but a place neither struggles proves
-nothing about real people. Their trace is the evidence, not their summary.
-Each walker runs `playwright-cli -s=<its session> tracing-start` before its
-first step and `tracing-stop` after its last. The trace lands in
+real user did not get. Walker `a` and walker `b` each keep two files. Before
+every action, one line in `$H/walks/<task>-a.notes`: `<the command> :: <what
+I am trying to do>`. At the end, `$H/walks/<task>-a.md`: what they expected,
+where they hesitated or went back, whether they finished, and how sure they
+are that it worked. Run every budgeted top task with two walkers. Two
+walkers from one model share blind spots: a place both struggle is a
+pattern, but a place neither struggles proves nothing about real people.
+Their trace is the evidence, not their summary. Each walker runs
+`playwright-cli -s=<its session> tracing-start` before its first step and
+`tracing-stop` after its last. The trace lands in
 `$H/.playwright-cli/traces/`. When the `first-contact` skill is installed,
-its ledger turns a trace into moves, screens, backtracks and screens
-"looked at and left" (dead ends):
+its ledger turns a trace into moves, screens, backtracks and screens "looked
+at and left" (dead ends):
 
 ```
-node <first-contact-dir>/ledger.mjs "$H"/.playwright-cli/traces/<trace> --notes "$H/walks/<task>-a.md"
+node <first-contact-dir>/ledger.mjs "$H"/.playwright-cli/traces/<trace> --notes "$H/walks/<task>-a.notes"
 ```
 
 Without it, count backtracks and dead ends from the walker's notes and
-say so.
+say so. Time between actions measures the model thinking, not the user
+confused: never report it.
 
 **The icon test**: give an unknowing user only the `crop` PNGs from
-`reveal.js`, one at a time, and ask what each button does. A wrong or
-"no idea" answer for an icon on a top task is a finding (VIS-30). Time
-between actions measures the model thinking, not the user confused: never
-report it. For a full, trace-measured usability test, use `first-contact`;
-this is its quick form.
+`reveal.js`, one at a time, and ask what each button does. A wrong or "no
+idea" answer for an icon on a top task is a finding (VIS-30). Then lay all
+the crops side by side: one action with two icons, one icon with two
+meanings, mixed styles (outline beside filled, different stroke weights),
+and the wrong icon for a well-known job (VIS-29, VIS-46, VIS-47). For a full,
+trace-measured usability test, use `first-contact`; this is its quick form.
 
 **An agent user**, when agents use the product (`agents.md`): a walker
 that may read only `playwright-cli snapshot` — the accessibility tree as
@@ -562,7 +603,8 @@ through reads.
 
 **Every subagent brief** includes the path of `$H` and the mode from
 `$H/safety.md` with its rules for each channel. Briefs that touch a
-browser add the session block from step 3 verbatim. In look-don't-touch
+browser add the session block from step 3 verbatim, with `<who>` filled
+in for that agent. In look-don't-touch
 and live mode they also add: "open your session from $H with the guard
 line, and stop if it does not print `write guard on`; do not follow logout,
 delete, unsubscribe or confirmation links; do not use real people's email
@@ -571,7 +613,9 @@ writes to $H/blocked.txt and close the session from $H."
 
 **Done when** every area has its `coverage.md`, every budgeted top task
 has two walks (with ledgers where `first-contact` is installed), and the
-agent user has walked when agents use the product.
+agent user has walked when agents use the product. A walk that could not
+happen — the app does not run, or it stopped at a login it had no account
+for — counts as "not run" with the reason, never as a walk.
 
 ### What UX SUCK is
 
@@ -638,7 +682,8 @@ finding takes its category from here and its rule IDs from `references/`.
 - **Unclear** — the user cannot tell what something is or does: vague
   labels ("Submit", "Click here", "Process"), the team's jargon instead of
   the user's words (Nielsen #2, match the real world). Icon-only buttons
-  with no label, two words for one thing or one word for two things.
+  with no label, the wrong icon for the job, two icons for one action, two
+  words for one thing or one word for two things.
 - **Hard to read** — text above the audience's reading level: long
   sentences, passive voice, undefined terms and abbreviations, walls of
   text with nothing to scan, the important word at the end. Judged against
