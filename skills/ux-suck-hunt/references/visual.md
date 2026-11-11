@@ -131,8 +131,9 @@ Credit: W3C WAI, "Understanding WCAG 2.2" (Copyright 2026 World Wide Web Consort
 Credit: "prefers-reduced-motion" by Mozilla Contributors, CC-BY-SA 2.5 (https://creativecommons.org/licenses/by-sa/2.5/).
 Credit: Android Developers documentation and Material Components for Android by Google, the Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0).
 Credit: the IBM Carbon Design System website, the Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0).
+Credit: the U.S. Web Design System [6][32] (designsystem.digital.gov), a public domain US Government work; cited for facts.
 
-[1] Butterick, Practical Typography — Summary of key rules — https://practicaltypography.com/summary-of-key-rules.html
+[1] Butterick, Practical Typography — Summary of key rules (practitioner book, [1]-[5]) — https://practicaltypography.com/summary-of-key-rules.html
 [2] Butterick — All caps — https://practicaltypography.com/all-caps.html
 [3] Butterick — Justified text — https://practicaltypography.com/justified-text.html
 [4] Butterick — Underlining — https://practicaltypography.com/underlining.html

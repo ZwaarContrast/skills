@@ -119,7 +119,7 @@ Summarised in our own words from the sources at the end; numbers and names are c
 
 - **DESK-48** Undo and redo go back through every action since the document was opened or saved, sit first in the Edit menu (Ctrl+Z / Ctrl+Y; Command-Z / Shift-Command-Z), name the action they will reverse ("Undo Typing"), and scroll the affected change into view.
   Check: (disposable only, or a local scratch document) make 20 assorted edits, scroll away, undo all of them; read the Edit menu labels. [1][27]
-- **DESK-49** Undo before confirmation: WEB-7 owns the rule, on desktop as on the web.
+- **DESK-49** Undo before confirmation: WEB-7 owns the rule and WEB-68 the safeguard for each size of loss, on desktop as on the web.
   Check: (disposable only, or a local scratch document) delete something; note whether there is undo, a prompt, or neither. Read-only: read the delete handler. [14][22]
 - **DESK-50** Work is saved without being asked: at intervals during editing, on closing the file and on switching to another app.
   Check: (disposable only, or a local scratch document) edit, kill the process, relaunch; see what is missing. [29]
@@ -201,7 +201,7 @@ Credit: Electron documentation, Copyright (c) Electron contributors and (c) 2013
 [33] NN/g: Data Tables: Four Major User Tasks — https://www.nngroup.com/articles/data-tables/
 [34] NN/g: Infinite Scrolling — https://www.nngroup.com/articles/infinite-scrolling/
 [35] NN/g: Keyboard-Only Navigation for Improved Accessibility — https://www.nngroup.com/articles/keyboard-accessibility/
-[36] Pencil & Paper: Data Table Design UX Patterns — https://www.pencilandpaper.io/articles/ux-pattern-analysis-enterprise-data-tables
+[36] Pencil & Paper: Data Table Design UX Patterns (practitioner article, pattern examples, no research cited) — https://www.pencilandpaper.io/articles/ux-pattern-analysis-enterprise-data-tables
 [37] IBM Carbon: Data table usage — https://carbondesignsystem.com/components/data-table/usage/
 [38] Electron: Dark Mode — https://www.electronjs.org/docs/latest/tutorial/dark-mode
 [39] Electron: nativeTheme — https://www.electronjs.org/docs/latest/api/native-theme

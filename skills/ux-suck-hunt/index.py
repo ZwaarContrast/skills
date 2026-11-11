@@ -43,8 +43,8 @@ def parse(path):
             cur["cites"] = cites(text)
             body = RULE.match(text).group(3)
             body, check = (re.split(r"(?:^|\s)Check:", body, maxsplit=1) + [""])[:2]
-            cur["text"] = re.sub(r"\s+", " ", CITE.sub("", body)).strip()
-            cur["check"] = re.sub(r"\s+", " ", CITE.sub("", check)).strip()
+            cur["text"] = re.sub(r"\s+([.,;:])", r"\1", re.sub(r"\s+", " ", CITE.sub("", body))).strip()
+            cur["check"] = re.sub(r"\s+([.,;:])", r"\1", re.sub(r"\s+", " ", CITE.sub("", check))).strip()
             rows.append(cur)
 
     for i, line in enumerate(lines[:src_at], 1):

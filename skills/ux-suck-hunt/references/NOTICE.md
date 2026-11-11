@@ -27,6 +27,7 @@ Sources by licence:
   Playwright, Model Context Protocol, OpenAPI, llms.txt (Apache 2.0).
 - **MIT** (Electron docs, Copyright (c) Electron contributors and GitHub Inc.;
   Tauri docs, Copyright (c) Tauri Programme within The Commons Conservancy;
+  Expo docs, Copyright (c) 650 Industries, Inc.;
   MCP contributions not yet relicensed): https://opensource.org/license/mit.
 - **CC BY-SA** (MDN Web Docs by Mozilla Contributors, 2.5; Command Line
   Interface Guidelines, clig.dev, 4.0): cited for facts only; no text is
@@ -34,7 +35,8 @@ Sources by licence:
 - **CC BY-NC-ND 4.0** (Laws of UX by Jon Yablonski, lawsofux.com; Mailchimp
   Content Style Guide is CC BY-NC 4.0): credited as sources of facts and
   citations only; no text is reproduced or adapted.
-- **US federal works** (FTC, digital.gov, CDC): public domain; credited.
+- **US federal works** (FTC, digital.gov and the U.S. Web Design System, CDC):
+  public domain; credited.
 - **All rights reserved** (Apple, Nielsen Norman Group, Baymard Institute,
   Butterick's Practical Typography, Pencil & Paper, UXmatters, Atlassian,
   Anthropic, IETF, deceptive.design, Readable, Fluent 2 (Microsoft), SubUX,

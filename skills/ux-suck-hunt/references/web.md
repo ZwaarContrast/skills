@@ -7,19 +7,19 @@ Summarised in our own words from the sources at the end; numbers and names are c
 
 - **WEB-1** Acknowledge every action quickly and visibly. Under 0.1 s a response reads as instant, up to 1 s the user's train of thought survives, and beyond 10 s attention drifts to something else. This rule owns the pass/fail line for response time: no visible change by 1 s is a finding; on the web, INP over 200 ms (WEB-50) is the field metric for the same thing; the Doherty 0.4 s (LAW-1) is a target, not a fail line.
   Check: time each control on a slow network (SKILL.md: Slow network) with a screen recording or trace (web: the DevTools Performance panel); a wait over 1 s with nothing changing on screen is a finding. [1][2]
-- **WEB-2** Match the indicator to the wait: nothing below 1 s; from about 1 s some progress cue, and since the sources name no type for 1-2 s, a busy state on the control is enough; an indeterminate spinner for 2 to 10 s; and at 10 s or more a percent-done bar with a cancel option. A full-screen load under 10 s can use a skeleton whose blocks match the real layout; a bare header and footer frame does not count.
+- **WEB-2** Match the indicator to the wait: nothing below 1 s; from about 1 s some progress cue, and since the sources name no type for 1-2 s, a busy state on the control is enough; an indeterminate spinner for 2 to 10 s on a control or region (for a whole page or view, the skeleton of WEB-60); and at 10 s or more a percent-done bar with a cancel option. This rule owns the timings; WEB-60 owns which loader fits what is loading.
   Check: on a slow network (SKILL.md: Slow network), look for spinners that blink on quick loads, spinners on uploads/exports, and long jobs that cannot be stopped. [2][3][4]
 - **WEB-3** Name things the way the audience does, using their domain vocabulary rather than the product's internals.
   Check: grep UI strings for DB column names, enum constants, HTTP status codes and internal codenames. [1]
 - **WEB-4** Stick to the conventions of the wider web and use one term and one control per concept throughout; visitors arrive trained by other sites (Jakob's law).
-  Check: collect the labels used for a single concept ("Delete"/"Remove"/"Trash"); a logo that does not go home; links that do not look clickable. [1][14]
+  Check: collect the terms and controls used for a single concept (the verbs for one action, such as "Delete"/"Remove": TEXT-55 owns them); a logo that does not go home; links that do not look clickable. [1][14]
 - **WEB-5** Keep choices on screen so people can pick instead of remember, and never make them memorise something from one screen to type on another.
   Check: a code or ID displayed on an earlier step and asked for later; menus made only of unlabelled icons. [1]
 
 ## User control, dialogs & notifications
 
 - **WEB-6** Every flow, dialog and mode needs an obvious way out, and actions people may regret need a way back.
-  Check: modals lacking a close or Cancel; multi-step flows lacking Back; destructive actions with no undo or restore. [1][7]
+  Check: modals lacking a close or Cancel; multi-step flows lacking Back. Destructive actions with no undo, restore or fitting confirmation: WEB-68 owns them. [1][7]
 - **WEB-7** Reach for undo before a confirmation; ask for confirmation only when the result is severe or permanent, never for everyday actions. A confirmation names what will happen, its buttons name the outcomes ("Delete file"/"Keep file"), and the destructive choice is not preselected.
   Check: grep `confirm(` and "Are you sure"; Yes/No/OK buttons; autofocus on the destructive button; confirmations on save, archive or favourite. [7]
 - **WEB-8** The browser Back button must lead to the prior page exactly as the user left it.
@@ -153,12 +153,12 @@ Summarised in our own words from the sources at the end; numbers and names are c
 
 ## Loading & perceived speed
 
-- **WEB-60** Size the loader to what is loading: a busy state or small spinner for a local wait (a button, a row, a panel), a skeleton for a whole page or view; one region fetching never blocks the whole screen. WEB-2 owns the timings.
-  Check: load each screen on a slow network (SKILL.md: Slow network); a screen-wide spinner or overlay while one region fetches is a finding. [61]
-- **WEB-61** Show each part as soon as it is ready: frame and primary content first, text before images, offscreen images and heavy assets deferred (web: iframes and scripts too). Reserve the space of whatever arrives late (image sizes, embed and ad slots; web: a fallback font sized like the web font), so nothing moves under the reader.
-  Check: screenshots or a screen recording every second on a slow network (SKILL.md: Slow network); text held back by unrelated assets, or content that jumps when an image, embed or font lands (web: CLS, WEB-50). [62][64]
+- **WEB-60** Size the loader to what is loading: a busy state or small spinner for a local wait (a button, a row, a panel); for a whole page or view, a skeleton whose blocks match the real layout (a bare header and footer frame does not count); one region fetching never blocks the whole screen. WEB-2 owns the timings.
+  Check: load each screen on a slow network (SKILL.md: Slow network); a screen-wide spinner or overlay while one region fetches is a finding; a full-page spinner shown past 2 s where a skeleton would fit is a weaker finding. [4][61]
+- **WEB-61** Show each part as soon as it is ready: frame and primary content first, text before images, offscreen images and heavy assets deferred (web: iframes and scripts too). Reserving space for what arrives late is WEB-51 (images, embeds, ads) and WEB-52 (fonts) on the web; a native app reserves it the same way for late images and embeds, and that native case is checked here.
+  Check: screenshots or a screen recording every second on a slow network (SKILL.md: Slow network); text held back by unrelated assets; native only, content that jumps when an image or embed lands (web: WEB-51, WEB-52). [62][64]
 - **WEB-62** Start work at the first clear signal of intent and acknowledge it at once: a search can fetch on the first keystroke (web: `keydown` rather than `keyup`), an upload can begin when the file is chosen rather than on submit, and a long operation shows its loader the moment it starts.
-  Check: search and lookup handlers that wait for the key to come up (web: bound only to `keyup`) or for submit; uploads that only start on the final button. [62][64]
+  Check: search and lookup handlers that wait for the key to come up (web: bound only to `keyup`) or for submit; uploads that only start on the final button: read-only, read whether the file input's change handler starts the upload; (disposable only) choose a file and watch whether the request leaves before submit. [62][64]
 - **WEB-63** Keep progress honest: a percent-done bar tracks real work and never parks at 99%. When the length is unknown, name the current step and count ("Importing 3 of 12") and phrase estimates loosely ("this can take a few minutes").
   Check: (disposable only) start a long job on a slow network (SKILL.md: Slow network); a bar that stalls near the end, jumps to done, or a precise estimate that turns out wrong. Read-only: read how the progress value and estimate are computed. [61]
 - **WEB-64** Let long jobs run without the user: past about 10 s, offer to continue in the background with a small progress drawer they can walk away from, and say when it is done, in the app or by email.
@@ -166,7 +166,7 @@ Summarised in our own words from the sources at the end; numbers and names are c
 - **WEB-65** Refresh without pulling content out from under the reader: data that syncs itself updates quietly; new data for something the user is reading is announced (a banner or toast that loads it on request) rather than reshuffled in.
   Check: leave a list open while new items arrive (web: serve them with `page.route` and `route.fulfill()`; (disposable only) by creating them); rows that jump or reorder under the cursor. [61]
 - **WEB-66** Use optimistic updates for cheap, reversible actions that nearly always succeed (a like, a toggle, add to cart, reordering): show the result at once and confirm in the background. When the server refuses, roll back visibly and say what failed; a silent rollback is a screen that lied. Money, deletes and anything irreversible wait for the server.
-  Check: toggles that wait a round trip before moving, on a slow network (SKILL.md: Slow network); on a 500 (web: `page.route` with `route.fulfill({ status: 500 })`; native: a mock server or (disposable only) a real failure), an optimistic change that vanishes without a message. [63][1]
+  Check: toggles that wait a round trip before moving: read-only, read whether the handler changes state before the request resolves, or (web) answer the toggle's request with a delayed `page.route` that ends in `route.fulfill()`; (disposable only) flip it on a slow network (SKILL.md: Slow network). On a 500 (web: `page.route` with `route.fulfill({ status: 500 })`; native: a mock server or (disposable only) a real failure), an optimistic change that vanishes without a message. [63][1]
 
 ## Finding your way: calm, not hidden
 
@@ -175,8 +175,8 @@ Summarised in our own words from the sources at the end; numbers and names are c
 
 ## Protecting against loss
 
-- **WEB-68** Match the safeguard to the loss: undo for anything that can be reversed; a specific confirmation (WEB-7) for what is permanent; and for the rare, catastrophic ones (deleting an account, a whole project, every record) a step people would never do by habit, such as typing the item's name. Keep that last tier for the few actions that earn it, or typing becomes the next reflex. A short-lived undo (a snackbar) is backed by somewhere lasting — trash, history, versions — because some regret it days later; and a destructive confirmation looks unlike the routine dialogs, so habit does not click it through.
-  Check: run `reveal.js` and list every destructive control; each needs undo, a confirmation naming what is lost, or — for account, project or bulk deletion — a typed confirmation; a typed confirmation on routine deletes is a finding too; so is an undo snackbar with nowhere to restore from once it is gone. [7][66]
+- **WEB-68** Match the safeguard to the loss: undo for anything that can be reversed; a specific confirmation (WEB-7) for what is permanent; and for the rare, catastrophic ones (deleting an account, a whole project, every record) a step people would never do by habit, such as typing a confirming word. Keep that last tier for the few actions that earn it, or typing becomes the next reflex. A short-lived undo (a snackbar) is backed by somewhere lasting — trash, history, versions — because some regret it days later; and a destructive confirmation looks unlike the routine dialogs, so habit does not click it through.
+  Check: list the destructive controls by hand: filter `reveal.js` output (its controls and its skipped list) by name for delete, remove, erase, clear and close account, since it does not flag them. Read-only: read each one's handler for a confirmation and its wording, an undo, and a soft-delete or trash path. (disposable only) press each and look for the item in trash or history afterwards. Each needs undo, a confirmation naming what is lost, or — for account, project or bulk deletion — a typed confirmation; a typed confirmation on routine deletes is a finding too; so is an undo snackbar with nothing lasting behind it. [7][66]
 
 ## Sources
 
@@ -243,9 +243,9 @@ Credit: the FTC report cited below. Source: United States Federal Trade Commissi
 [56] MDN, pointer media feature — https://developer.mozilla.org/en-US/docs/Web/CSS/@media/pointer
 [57] MDN, prefers-reduced-motion — https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion
 [58] MDN, forced-colors — https://developer.mozilla.org/en-US/docs/Web/CSS/@media/forced-colors
-[59] Deceptive Patterns (deceptive.design), Types — https://www.deceptive.design/types
+[59] Deceptive Patterns (deceptive.design), Types (practitioner catalogue of examples) — https://www.deceptive.design/types
 [60] FTC Staff Report, Bringing Dark Patterns to Light (Sept 2022) — https://www.ftc.gov/system/files/ftc_gov/pdf/P214800%20Dark%20Patterns%20Report%209.14.2022%20-%20FINAL.pdf
-[61] Pencil & Paper, UX Design Patterns for Loading (Vassilatos & Crawshaw, 2022) — https://www.pencilandpaper.io/articles/ux-pattern-analysis-loading-feedback
+[61] Pencil & Paper, UX Design Patterns for Loading (Vassilatos & Crawshaw, 2022; practitioner article, pattern examples, no research cited) — https://www.pencilandpaper.io/articles/ux-pattern-analysis-loading-feedback
 [62] MDN, Perceived performance — https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Performance/Perceived_performance
 [63] SubUX, Perceived speed (2026; practitioner guide, its optimistic-UI advice cites no research) — https://subux.pro/guides/article/perceived-speed
 [64] Marvel, A Designer's Guide to Perceived Performance (Luke Jones; practitioner examples, no research cited) — https://marvelapp.com/blog/a-designers-guide-to-perceived-performance/

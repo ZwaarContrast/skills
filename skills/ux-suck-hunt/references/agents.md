@@ -112,7 +112,7 @@ Credit: Command Line Interface Guidelines (clig.dev), the Creative Commons Attri
 Credit: the WebMCP specification, Draft Community Group Report of 10 November 2026, under the W3C Community Contributor License Agreement (https://www.w3.org/community/about/process/cla/).
 Credit: the Model Context Protocol specification (versions 2025-06-18 and 2025-11-25), the OpenAPI Specification v3.1.1, and the llms.txt proposal, the Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0); MCP contributions not yet relicensed remain under the MIT License.
 
-[1] Mathias Biilmann, "Introducing AX: Why Agent Experience Matters" (28 Jan 2025) — https://biilmann.blog/articles/introducing-ax/
+[1] Mathias Biilmann, "Introducing AX: Why Agent Experience Matters" (28 Jan 2025; practitioner blog post by Netlify's CEO, no research cited) — https://biilmann.blog/articles/introducing-ax/
 [2] web.dev, Kasper Kulikowski & Omkar More, making sites work for AI agents — https://web.dev/articles/ai-agent-site-ux
 [3] Microsoft, Playwright MCP README — https://github.com/microsoft/playwright-mcp
 [4] Anthropic, Computer use tool — https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool

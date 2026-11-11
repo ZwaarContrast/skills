@@ -1,6 +1,6 @@
 # Content clarity
 
-What makes product text clear for the people it is written for: reading level, plain language, scannability, terminology, voice, inclusive and global wording, numbers and dates, and how to measure them. Read when: the product has screens, onboarding, help, emails or docs carrying more than a handful of labels. (Error-message wording, button labels and form copy: see web.md. Type size: see visual.md; contrast: A11Y-14.)
+What makes product text clear for the people it is written for: reading level, plain language, scannability, terminology, voice, inclusive and global wording, numbers and dates, and how to measure them. Read when: the product has screens, onboarding, help, emails or docs carrying more than a handful of labels. (Error-message wording, button labels and form copy: see web.md; the Delete/Remove verbs: TEXT-55. Type size: see visual.md; contrast: A11Y-14.)
 Summarised in our own words from the sources at the end; numbers and names are cited as facts.
 
 ## Who: set the audience first
@@ -106,6 +106,8 @@ Reading is the method; readability formulas only screen. NN/g notes they count w
 Contains public sector information licensed under the Open Government Licence v3.0 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
 Credit: the Microsoft Writing Style Guide, Copyright Microsoft Corporation, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
 Credit: W3C documents [20]-[23], Copyright World Wide Web Consortium, the W3C Software and Document License (https://www.w3.org/copyright/software-license/); no W3C text is reproduced.
+Credit: digital.gov [16]-[19] (US General Services Administration) and the CDC Clear Communication Index [30] (US Centers for Disease Control and Prevention), public domain US Government works; cited for facts.
+Credit: the Mailchimp Content Style Guide [28][29], CC BY-NC 4.0 (https://creativecommons.org/licenses/by-nc/4.0/); cited for facts only, no text reproduced or adapted.
 
 [1] GOV.UK — Writing to GOV.UK standards: Use clear language — https://guidance.publishing.service.gov.uk/writing-to-gov-uk-standards/writing-guidelines/clear-language/
 [2] GOV.UK — Writing to GOV.UK standards: Create a clear structure — https://guidance.publishing.service.gov.uk/writing-to-gov-uk-standards/writing-guidelines/clear-structure/
@@ -139,7 +141,7 @@ Credit: W3C documents [20]-[23], Copyright World Wide Web Consortium, the W3C So
 [30] CDC — Clear Communication Index (and How to Use the Index) — https://www.cdc.gov/ccindex/index.html , https://www.cdc.gov/ccindex/tool/how-to-use.html
 [31] textstat on PyPI — https://pypi.org/project/textstat/
 [32] Playwright — Locator.innerText — https://playwright.dev/docs/api/class-locator#locator-inner-text
-[33] Readable — Flesch Reading Ease and Flesch-Kincaid Grade Level (conversion table linked from [6]) — https://readable.com/readability/flesch-reading-ease-flesch-kincaid-grade-level/
+[33] Readable — Flesch Reading Ease and Flesch-Kincaid Grade Level (vendor guide; conversion table linked from [6]) — https://readable.com/readability/flesch-reading-ease-flesch-kincaid-grade-level/
 [34] Microsoft Writing Style Guide, delete — https://learn.microsoft.com/en-us/style-guide/a-z-word-list-term-collections/d/delete
 [35] Microsoft Writing Style Guide, remove — https://learn.microsoft.com/en-us/style-guide/a-z-word-list-term-collections/r/remove
 [36] UX Magazine, UI copy: Remove vs Delete (Alex Zlatkus, 2020; practitioner article) — https://uxmag.com/articles/ui-copy-remove-vs-delete2-banner

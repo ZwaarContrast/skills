@@ -86,8 +86,8 @@ Summarised in our own words from the sources at the end; numbers and names are c
   Check: an outcome (success, error, limit hit) whose handler fires a haptic but changes nothing visible or audible. [5][26]
 - **TOUCH-30** Offer a way to disable haptics and obey the system. On Android, `performHapticFeedback` and the other haptic APIs follow the user's touch-feedback setting; on iOS the Taptic Engine stays silent in Low Power Mode, when switched off in Settings, and while the camera or dictation runs.
   Check: UI feedback routed through paths that skip settings (Android `Vibrator.vibrate`); a haptics-heavy app or game with no in-app switch. [5][27][34]
-- **TOUCH-31** Pick system haptics by what they are documented to mean: iOS `UIFeedbackGenerator` offers Notification (a task's result), Impact (a physical bump, such as something snapping into place) and Selection (a value stepping through choices); on Android reach for `HapticFeedbackConstants` (`CONFIRM`, `REJECT`, `VIRTUAL_KEY` and others) before building custom effects. Do not borrow a pattern for some other meaning.
-  Check: grep the calls (see Measure) and match each to its trigger; an error playing a success notification or a selection tick on a plain button press are findings. [5][26][27]
+- **TOUCH-31** Pick system haptics by what they are documented to mean: iOS `UIFeedbackGenerator` offers Notification (a task's result, as success, warning or error, so those three outcomes never share one pattern), Impact (a physical bump, such as something snapping into place) and Selection (a value stepping through choices); on Android reach for `HapticFeedbackConstants` (`CONFIRM`, `REJECT`, `VIRTUAL_KEY` and others) before building custom effects. Do not borrow a pattern for some other meaning.
+  Check: grep the calls (see Measure) and match each to its trigger; an error playing a success notification, success, warning and error sharing one pattern, or a selection tick on a plain button press are findings. [5][26][27]
 - **TOUCH-32** One interaction, one haptic, across the whole app, and the same haptic the system uses for well-known controls such as pickers and keyboards.
   Check: list every haptic call with its trigger; similar actions with different or absent haptics are findings. [5][26]
 - **TOUCH-33** Use haptics sparingly: short pulses for discrete events, barely perceptible ones for very frequent events (scrolling, dragging a text handle), stronger ones for important events than for routine ones.
@@ -112,10 +112,10 @@ Summarised in our own words from the sources at the end; numbers and names are c
 
 ## Haptics: devices and judging them
 
-- **TOUCH-41** Haptics with different meanings feel different (success, warning and error are not one buzz), and each matches what the screen and sound say at that moment. Judge them on a physical device that supports haptics: a hunt without one reviews the code and says it could not feel them.
-  Check: map each haptic call in the code to its event; two meanings sharing one pattern, or a haptic finding reported without a device. [35]
+- **TOUCH-41** How a haptic feels is judged in its final context, on a physical device that supports haptics, not from the code or on a desktop. Which pattern each meaning gets is TOUCH-31's, one haptic per interaction is TOUCH-32's, and agreeing with screen and sound is TOUCH-29's.
+  Check: on a supported device, play each call on the TOUCH-32 list through read-only actions ((disposable only) for one behind a write; read-only: leave it to the code review of TOUCH-29 to TOUCH-36); two meanings that feel alike in the hand though the code gives them different patterns, or a haptic felt where no call was found (a library or system default firing). [35]
 - **TOUCH-42** Some Apple devices have no haptics at all (iPad, iPod touch, Apple Vision Pro): check `CHHapticEngine.capabilitiesForHardware().supportsHaptics` and give those devices the same information as sound or a visual cue.
-  Check: on iPad, a confirmation that exists only as a haptic; Core Haptics code with no `supportsHaptics` branch. [36]
+  Check: read the code paths: a confirmation that exists only as a haptic, so iPad users get nothing; Core Haptics code with no `supportsHaptics` branch. [36]
 
 ## Measure
 
@@ -139,7 +139,7 @@ const small = await page.$$eval('a,button,input,select,textarea,[role=button],[o
 - Use `tap()` (not `click()`) to prove hover-only menus fail (TOUCH-25), and record a trace to time tap-to-feedback (TOUCH-16, TOUCH-27).
 - Native: Android Accessibility Scanner flags small targets (accounts for `TouchDelegate` only on Android 10+); Xcode Accessibility Inspector. Documented, not run here. [9]
 
-Grep for haptics and vibration (then apply TOUCH-29 to TOUCH-36 to each hit):
+Grep for haptics and vibration (then apply TOUCH-29 to TOUCH-36, TOUCH-41 and TOUCH-42 to each hit):
 
 ```sh
 rg -n 'UIImpactFeedbackGenerator|UINotificationFeedbackGenerator|UISelectionFeedbackGenerator|UIFeedbackGenerator|CHHapticEngine|\.sensoryFeedback\(|NSHapticFeedbackManager|WKInterfaceDevice.*play'   # Apple
@@ -160,6 +160,8 @@ Credit: Android Developers documentation by the Android Open Source Project, the
 Credit: Chrome for Developers, the Creative Commons Attribution 4.0 License (https://creativecommons.org/licenses/by/4.0/).
 Credit: Microsoft Learn (Windows apps documentation), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
 Credit: the Playwright documentation by Microsoft, the Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0).
+Credit: the Flutter documentation (docs.flutter.dev, api.flutter.dev), Creative Commons Attribution 4.0 International (https://creativecommons.org/licenses/by/4.0/).
+Credit: the Expo documentation, Copyright (c) 650 Industries, Inc. (Expo), the MIT License (https://opensource.org/license/mit).
 
 [1] W3C, Understanding SC 2.5.8 Target Size (Minimum) — https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html
 [2] W3C, Understanding SC 2.5.5 Target Size (Enhanced) — https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html
@@ -178,8 +180,8 @@ Credit: the Playwright documentation by Microsoft, the Apache License 2.0 (https
 [15] Android Developers, Ensure compatibility with gesture navigation — https://developer.android.com/develop/ui/views/touch-and-input/gestures/gesturenav
 [16] Nielsen Norman Group, Contextual Swipe — https://www.nngroup.com/articles/contextual-swipe/
 [17] Nielsen Norman Group, Touch Targets on Touchscreens — https://www.nngroup.com/articles/touch-target-size/
-[18] Steven Hoober, How Do Users Really Hold Mobile Devices? (UXmatters, 2013, with 2017 author correction) — https://www.uxmatters.com/mt/archives/2013/02/how-do-users-really-hold-mobile-devices.php
-[19] Steven Hoober, Design for Fingers, Touch, and People, Part 1 (UXmatters, 2017) — https://www.uxmatters.com/mt/archives/2017/03/design-for-fingers-touch-and-people-part-1.php
+[18] Steven Hoober, How Do Users Really Hold Mobile Devices? (UXmatters, 2013, with 2017 author correction; practitioner article reporting the author's own field observations) — https://www.uxmatters.com/mt/archives/2013/02/how-do-users-really-hold-mobile-devices.php
+[19] Steven Hoober, Design for Fingers, Touch, and People, Part 1 (UXmatters, 2017; practitioner article reporting the author's own research) — https://www.uxmatters.com/mt/archives/2017/03/design-for-fingers-touch-and-people-part-1.php
 [20] Nielsen Norman Group, Basic Patterns for Mobile Navigation — https://www.nngroup.com/articles/mobile-navigation-patterns/
 [21] MDN, pointer media feature — https://developer.mozilla.org/en-US/docs/Web/CSS/@media/pointer
 [22] MDN, hover media feature — https://developer.mozilla.org/en-US/docs/Web/CSS/@media/hover
@@ -195,5 +197,5 @@ Credit: the Playwright documentation by Microsoft, the Apache License 2.0 (https
 [32] Playwright, Locator.tap — https://playwright.dev/docs/api/class-locator#locator-tap
 [33] Flutter API, HapticFeedback class — https://api.flutter.dev/flutter/services/HapticFeedback-class.html
 [34] Expo, Haptics — https://docs.expo.dev/versions/latest/sdk/haptics/
-[35] Hapticlabs, Design principles for haptic UX — https://www.hapticlabs.io/principles
+[35] Hapticlabs, Design principles for haptic UX (vendor guide, no research cited) — https://www.hapticlabs.io/principles
 [36] Apple, Preparing your app to play haptics — https://developer.apple.com/documentation/corehaptics/preparing-your-app-to-play-haptics
