@@ -113,11 +113,8 @@ before it holds.
 
 ### Who, what, and what you may change
 
-Great design starts with who it is for. The same sentence is clear to a
-tax adviser and opaque to a first-time filer; a dense table is a gift to an
-analyst and a wall to a visitor. Every judgement in this hunt is relative
-to the audience — is this copy clear, is this flow too long, is this
-jargon. So pin it down before judging anything.
+Every judgement in this hunt is relative to the audience: the same
+sentence is clear to a tax adviser and opaque to a first-time filer.
 
 **Infer first.** Read the product: landing and marketing copy, README,
 onboarding, pricing, seed and fixture data, route names, locale files,
@@ -311,8 +308,7 @@ write `$H/map.md`:
   counted.
 - **Features**: everything the product can do, read from the code — routes,
   menu and command definitions, action handlers, API operations, settings.
-  Step 3's `reveal.js` finds where each one lives in the interface and how
-  deep. A feature the code has and nobody can reach is a finding.
+  Step 3's `reveal.js` finds where each one lives and how deep.
 - **Portrait**: a contact sheet of every budgeted screen at phone and
   desktop width (the probe's screenshots), so the whole product can be seen
   at once. Inconsistencies between screens show here first.
@@ -498,9 +494,8 @@ nothing is there. Compare its controls with the features list from step 2:
 a feature found nowhere is hidden from everyone.
 
 Beyond the probe, use Playwright for whatever a screen needs to prove a
-point, in look-don't-touch mode or not. Fake an empty list, a 500 or a slow
-response with `page.route` (ending in `fulfill` or `fallback`) and
-screenshot what the user sees. Try `context.setOffline(true)` and
+point, in look-don't-touch mode or not. Fake the map's states with
+`page.route` (step 2) and screenshot what the user sees. Try
 `emulateMedia({ colorScheme: 'dark' })`. Use `page.goBack()` after a step
 to see whether state survives, and a reload in the middle of a form. For
 real touch input (`hasTouch`, `isMobile`, `tap()`) open the session with
@@ -583,8 +578,7 @@ real user did not get. Walker `a` and walker `b` each keep two files. Before
 every action, one line in `$H/walks/<task>-a.notes`: `<the command> :: <what
 I am trying to do>`. At the end, `$H/walks/<task>-a.md`: what they expected,
 where they hesitated or went back, whether they finished, and how sure they
-are that it worked. Run every budgeted top task with two walkers. Two
-walkers from one model share blind spots: a place both struggle is a
+are that it worked. Two walkers from one model share blind spots: a place both struggle is a
 pattern, but a place neither struggles proves nothing about real people.
 Their trace is the evidence, not their summary. Each walker runs
 `playwright-cli -s=<its session> tracing-start` before its first step and
@@ -638,137 +632,72 @@ for — counts as "not run" with the reason, never as a walk.
 
 ### What UX SUCK is
 
-The categories, grouped by the band they usually land in (step 6). A
-finding takes its category from here and its rule IDs from `references/`.
+The categories, by the band they usually land in (step 6). A finding takes
+its category from here and its rule IDs from `references/`.
 
 **Usually fire — a user is stopped, misled or shut out**
 
-- **Dead end** — a top task cannot be completed: a broken step, a button
-  that does nothing, a flow that loops, a 404 from the app's own link, a
-  page with no way back or forward (Nielsen #3, user control and freedom).
-- **Shut out** — a WCAG 2.2 AA failure on a top task. No keyboard path or a
-  trap, focus invisible or hidden, unlabelled controls, images with meaning
-  and no `alt`, text below 4.5:1 contrast (3:1 for large text and UI parts),
-  zoom blocked, sideways scroll at 320px, targets under 24px. Drag-only
-  actions with no click alternative (2.5.7), a login that needs a memory
-  test or blocks paste into the password field (3.3.8), the same info asked
-  twice in one process (3.3.7), help that moves between pages (3.2.6),
-  status messages a screen reader never hears (4.1.3). One finding per
-  barrier, listing every screen it is on.
-- **Lost work** — input thrown away: a form cleared on error, a draft lost
-  on back, reload or timeout, a session that expires mid-task with no
-  warning (Nielsen error guidance: preserve input).
-- **Lying UI** — the screen says something false: success shown before the
-  save, a stale count, a saved state that is not, a progress bar that
-  restarts, a "free" that is not.
-- **Dark pattern** — the product works against the user on purpose:
-  confirmshaming ("No thanks, I like paying more"), preselected opt-ins,
-  hidden costs, an easy signup with a hard cancel, nagging, disguised ads,
-  trick wording (deceptive.design, the FTC's dark-patterns report:
-  `web.md`).
-- **Unsafe destruction** — delete, overwrite or send with neither undo nor
-  a confirmation that names what will be lost. Undo beats a confirm dialog:
-  people click through confirms by habit. Keep the confirm for the
-  permanent, and a typed name for the catastrophic (WEB-68).
+- **Dead end** — a top task cannot finish: a dead button, a loop, a 404 from
+  the app's own link, no way back (Nielsen #3, user control and freedom).
+- **Shut out** — a WCAG 2.2 AA failure on a top task: no keyboard path, text
+  under 4.5:1 (3:1 large and UI parts), targets under 24px, sideways scroll
+  at 320px, drag-only (2.5.7), info asked twice (3.3.7), paste blocked at
+  login (3.3.8), help that moves (3.2.6), unheard status (4.1.3). One
+  finding per barrier, listing every screen it is on (`a11y.md`).
+- **Lost work** — a form cleared on error, a draft lost on reload, an
+  unwarned timeout (Nielsen error guidance: preserve input).
+- **Lying UI** — success before the save, a stale count, a "free" that is
+  not.
+- **Dark pattern** — confirmshaming, preselected opt-ins, a hard cancel
+  (deceptive.design, FTC dark-patterns report: `web.md`).
+- **Unsafe destruction** — delete or send with no undo and no confirm naming
+  the loss. Undo beats a confirm dialog: people click through confirms by
+  habit. Confirm the permanent; type a name for the catastrophic (WEB-68).
 
 **Usually slow — friction on every visit**
 
-- **Silent** — no feedback (Nielsen #1, visibility of system status): no
-  response to a click, no indicator for a wait, no progress for a long one
-  (the response-time limits are in `web.md`). A button that stays live and
-  invites the double submit, a whole page blocked while one region loads,
-  progress that lies, content that jumps as it arrives (`web.md`, "Loading
-  & perceived speed").
+- **Silent** — no feedback (Nielsen #1, visibility of system status): a dead
+  click, an unmarked wait, content that jumps (`web.md`, "Loading &
+  perceived speed").
 - **Error SUCK** — errors that do not help (NN/g error-message guidelines):
-  far from the field, colour-only, generic ("Something went wrong"), jargon
-  or codes, blaming ("invalid"), no next step, validated before the user
-  finished typing, or left showing after it is fixed. Good: next to the
-  field, says what is wrong and how to fix it in the user's words, keeps
-  the input, and the form's summary links to each field.
-- **Form SUCK** — forms that make the user work: placeholder as label, one
-  long line split into four boxes, fields that are not needed (every field
-  costs completion), multi-column layouts that get skipped. Format demands
-  the code could handle (spaces in a card number, dashes in a phone),
-  required/optional unmarked, the wrong keyboard on mobile, no
-  `autocomplete`, a date picker for a birthday (Baymard, GOV.UK Design
-  System: `web.md`).
-- **Missing state** — the states nobody designed. An empty screen that is
-  just blank; a good one says what goes here and offers the first action.
-  No loading state, or a spinner where a skeleton of the layout would hold
-  the eye and stop the jump. An error state that is a stack trace or
-  nothing, no offline message, a no-permission page that does not say who
-  can grant it, "0 results" with no way to widen the search.
-- **Unclear** — the user cannot tell what something is or does: vague
-  labels ("Submit", "Click here", "Process"), the team's jargon instead of
-  the user's words (Nielsen #2, match the real world). Icon-only buttons
-  with no label, the wrong icon for the job, two icons for one action, two
-  words for one thing or one word for two things.
-- **Hard to read** — text above the audience's reading level: long
-  sentences, passive voice, undefined terms and abbreviations, walls of
-  text with nothing to scan, the important word at the end. Judged against
-  the audience from step 1 (`content.md`).
-- **Hidden** — the user cannot find what the product can do. A top-task
-  action behind an overflow menu or two layers deep, controls that appear
-  only on hover, a right-click menu or a gesture with no visible
-  alternative. Icon-only buttons people cannot name, a feature the code has
-  but the interface never exposes. Hidden in plain sight counts: a control
-  that does not look like one, or a label nobody would connect to the job
-  (`reveal.js` output; `web.md`, `visual.md` iconography, `touch.md`).
-- **Lost** — the user cannot tell where they are or how to get back: no
-  page title or heading matching the link they clicked, no current-page
-  marker in navigation. The back button leaving the app or losing the
-  filters, state that is not in the URL so it cannot be shared or
-  bookmarked, a modal opening a modal.
-- **Overloaded** — too much at once: too many equal-weight choices (Hick's
-  law), no visual hierarchy so the primary action does not stand out. Walls
-  of text, long instructions up front instead of help where it is needed.
-  Memory demands: a code shown on one screen to type on the next
-  (recognition over recall, Nielsen #6).
-- **Inconsistent** — the same thing looking or behaving differently: two
-  button styles for the primary action, cancel left on one dialog and right
-  on the next, a component reinvented per page. Conventions broken without
-  reason (Jakob's law: users spend their time on other sites): a logo that
-  is not home, a link that does not look like one.
-- **Cramped on touch** — works at 1280px with a mouse, fights the user on
-  a phone or tablet. Targets below the platform's size, hover-only menus
-  and tooltips, gestures with no visible alternative, primary actions out
-  of reach, tables that scroll sideways with no hint. A fixed header and
-  footer eating half the screen, a keyboard covering the field being typed
-  in, an iPad layout that is a stretched phone (`touch.md`, `apple.md`,
-  `android.md`).
-- **Desktop friction** — a desktop app that ignores desktop: no keyboard
-  shortcuts or broken standard ones, no undo, no multi-select or bulk
-  action where users handle many items. A window that forgets its size,
-  context menus that are the only path (`desktop.md`).
-- **Agent-hostile** — an agent acting for the user cannot do the task:
-  controls with no accessible name, state only visible in pixels, an API
-  error that does not say what to change. A CLI that prompts with no
-  terminal attached, a destructive tool with no confirmation (`agents.md`).
-- **Interrupting** — the product grabbing attention it did not earn: a
-  modal or newsletter popup on arrival, a cookie banner covering the task,
-  notification-permission prompts before any value, autoplaying media,
-  focus stolen while typing, toasts piling up.
-- **Motion** — animation that ignores `prefers-reduced-motion`, motion that
-  delays the user (a 600ms transition on every click), parallax and
-  auto-advancing carousels. Motion should explain a change, not decorate it.
+  far from the field, generic, blaming, no next step.
+- **Form SUCK** — placeholder as label, needless fields, fussy formats, no
+  `autocomplete` (Baymard, GOV.UK Design System: `web.md`).
+- **Missing state** — empty, loading, error, offline or no-permission states
+  nobody designed; "0 results" with no way out.
+- **Unclear** — vague labels ("Submit"), the team's jargon (Nielsen #2,
+  match the real world), the wrong icon, two words for one thing.
+- **Hard to read** — walls of text above the audience's level
+  (`content.md`).
+- **Hidden** — a top-task action two layers deep, hover-only controls, a
+  feature no one can reach (`reveal.js`; `web.md`, `visual.md` iconography,
+  `touch.md`).
+- **Lost** — no current-page marker, a back button that drops the filters,
+  state not in the URL, a modal on a modal.
+- **Overloaded** — many equal choices (Hick's law), no clear primary action,
+  a code to carry between screens (recognition over recall, Nielsen #6).
+- **Inconsistent** — two primary-button styles, cancel swapping sides, a
+  logo that is not home (Jakob's law).
+- **Cramped on touch** — small targets, hover-only menus, a keyboard over
+  the field, a stretched-phone iPad (`touch.md`, `apple.md`, `android.md`).
+- **Desktop friction** — no shortcuts, undo or bulk action (`desktop.md`).
+- **Agent-hostile** — unnamed controls, state only in pixels, errors that do
+  not say what to change, a CLI that prompts with no terminal (`agents.md`).
+- **Interrupting** — a popup on arrival, a cookie banner over the task, a
+  permission prompt before any value, focus stolen while typing.
+- **Motion** — ignores `prefers-reduced-motion` or delays the user (600ms on
+  every click). Motion should explain a change, not decorate it.
 
 **Usually polish — the difference between working and delightful**
 
-- **Flat copy** — the voice: microcopy that is robotic, inconsistent in
-  tone, or says too much. Front-load the words that matter, use the user's
-  vocabulary, sentence case, buttons that say what they do ("Send invoice",
-  not "OK").
-- **Weak defaults** — making the user choose what the product could have
-  guessed: country from locale, the most common option preselected (never
-  for consent or money), sensible sort order, remembered preferences.
-- **Unrewarded finish** — the end of a top task is an anticlimax: no
-  confirmation that says what happened and what comes next, no way to the
-  obvious next step. The end of an experience weighs heavily in how it is
-  remembered (peak-end rule, `laws.md`). The finish of a top task is where
-  delight pays most.
-- **Rough edges** — misaligned spacing, a jump when content loads (layout
-  shift), truncated text with no way to read the rest, orphaned words in
-  headings, a favicon or title missing, dark mode with unreadable bits.
+- **Flat copy** — robotic microcopy; "OK" where "Send invoice" belongs.
+- **Weak defaults** — asking what the product could guess: country from
+  locale, the common option preselected (never for consent or money).
+- **Unrewarded finish** — no word on what happened or what is next; the end
+  weighs most in memory (peak-end rule, `laws.md`).
+- **Rough edges** — misaligned spacing, layout shift, unreadable dark-mode
+  bits.
+
 
 ## 5. Try to kill every find
 
@@ -803,13 +732,10 @@ component name). A UX finding a developer cannot locate in the code is half
 a finding.
 
 **Write every survivor down the moment it survives** — one file per
-finding, `$H/findings/<category>-<slug>.md`, in the write-up format from
-step 6, screenshots referenced by path. Every one, not only the ones that
-will make the top ten: a long hunt that runs out of room before the report
-must not lose what it already proved. Subagents write theirs into the same
-directory prefixed with their area — `$H/findings/<area>--<category>-<slug>.md`
-— so two can never pick the same name. They never number files and never
-write an index.
+finding, `$H/findings/<category>-<slug>.md` (subagents: with their area
+prefix, step 4), in the write-up format from step 6, screenshots
+referenced by path. Every one, not only the top ten: a long hunt that runs
+out of room before the report must not lose what it already proved.
 
 ## 6. Report — in the conversation
 
@@ -870,12 +796,9 @@ placeholder-as-label on `/signup`; a walker completes signup without retyping.
 **Depends on:** —
 ```
 
-- **Where** — the screen and state *and* the code, with the symbol name.
-- **Who meets it** — which users, on which task, how often.
-- **Evidence** — screenshot paths, the probe or tool line, the walker's
-  words. Pasted, not paraphrased.
-- **Principle** — the rule IDs it breaks, from `references/`, in a few
-  words each.
+- **Where** names the code's symbol, not only its file. **Evidence** is
+  pasted, not paraphrased: screenshot paths, the probe or tool line, the
+  walker's words.
 - **Fix** — numbered steps naming files, components and the exact new copy.
   "Improve the UX" is banned; say what to change to what.
 - **Done when** — a check that fails now and passes after: the probe line
@@ -885,8 +808,7 @@ placeholder-as-label on `/signup`; a walker completes signup without retyping.
   give its first S step. **Fix risk**: low, medium (shared component, many
   screens), high (auth, payments, a flow other teams own).
 
-Findings 11–25 stay one table row each here; their full write-ups, and
-every finding past 25, are in `$H/findings/`. End with the single change
+Findings 11–25 stay one table row each here. End with the single change
 that removes the most UX SUCK for the least work.
 
 **What would make it amazing** — after the SUCK, up to five things that go
