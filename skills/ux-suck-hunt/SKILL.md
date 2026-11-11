@@ -60,12 +60,11 @@ rule's whole statement and how to test it; axe rule ids, `simctl` and `adb`
 live there. Find rules there and read only their lines:
 
 ```
-cd <skill-dir>/references
-grep -i 'contrast' RULES.tsv                          # every rule on a subject, all files
-awk -F'\t' '$2=="web.md"{print $5}' RULES.tsv | uniq   # one file's topics
-awk -F'\t' '$5 ~ /^Forms/' RULES.tsv                  # one topic's rules
-sed -n '54,55p' web.md                                # read a rule: WEB-21's start,end
-sed -n '/^## Measure/,/^## Sources/p' apple.md        # a platform's tools
+R=<skill-dir>/references; grep -i 'contrast' "$R/RULES.tsv"                      # every rule on a subject
+R=<skill-dir>/references; awk -F'\t' '$2=="web.md"{print $5}' "$R/RULES.tsv" | uniq # one file's topics
+R=<skill-dir>/references; awk -F'\t' '$5 ~ /^Forms/' "$R/RULES.tsv"              # one topic's rules
+R=<skill-dir>/references; sed -n '54,55p' "$R/web.md"                            # read a rule: WEB-21's start,end
+R=<skill-dir>/references; sed -n '/^## Measure/,/^## Sources/p' "$R/apple.md"    # a platform's tools
 ```
 
 | File | IDs | Read when |
@@ -106,7 +105,7 @@ affordable. Raise it only when the user asks:
 - **People**: two unknowing users per top task, for at most five top
   tasks; one researcher per area, at most six areas; one agent user.
 - **Browsers at once**: at most four sessions locally, two against a live
-  site. Agents beyond the cap wait for a free slot.
+  site. The lead launches browser agents in waves that fit the cap.
 
 Each step below ends on a **Done when** line. Do not start the next step
 before it holds.
@@ -162,15 +161,16 @@ mandate, each marked confirmed or inferred.
 **One hunt directory holds everything**, as in `suck-hunt`:
 
 ```
-H=$(mktemp -d) && echo "$H" && mkdir -p "$H/tmp" "$H/findings" "$H/walks" "$H/.playwright" && { git status --porcelain --ignored > "$H/before" 2>/dev/null || echo "no repository" > "$H/before"; }
+H=$(mktemp -d) && echo "$H" && mkdir -p "$H/tmp" "$H/findings" "$H/coverage" "$H/walks" "$H/.playwright" && { git status --porcelain --ignored > "$H/before" 2>/dev/null || echo "no repository" > "$H/before"; }
 cp <skill-dir>/probe.js <skill-dir>/reveal.js <skill-dir>/guard.js "$H/" && cp <skill-dir>/*.config.json "$H/.playwright/"
 ```
 
 Tool output, screenshots, probe JSON, walker logs and findings all go to
 `$H`. Count and grep them; never paste them whole into the conversation.
-Each shell call starts fresh: use the printed path literally. The blocks
-are bash; zsh does not word-split `$VAR`, so loops break there. Paste a
-block into `"$H/run.sh"` and run `H=<path> bash "$H/run.sh"`. The hunt never
+Each shell call starts fresh: variables and `cd` do not survive it, so use
+the printed path and names literally. The blocks are bash; to run several
+lines at once, paste them into `"$H/run.sh"` and run `H=<path> bash
+"$H/run.sh"`, never as zsh. Every subagent brief says so too. The hunt never
 edits the repository before step 7, and at the end deletes only the paths
 `git status` shows as new. **Keep `$H` itself**: every finding, screenshot
 and walker log lives there, and the report points at it.
@@ -217,18 +217,29 @@ subagent:
   channel:
   - *Browser*: every session runs [`guard.js`](guard.js) before its first
     page load (step 3). It answers `POST`, `PUT`, `PATCH` and `DELETE` with
-    a 503 (read-only GraphQL with its query text excepted). It drops what
-    the page sends over a WebSocket and logs what it stopped. The session
-    config blocks service workers, so none can answer out of its sight.
-    It cannot stop a `GET` that writes (`/logout`, `?action=delete`, magic
-    links) or a page that writes when loaded: leave those alone. Forms may
+    a 503 (a GraphQL read with nothing but `query`, `variables`,
+    `operationName` and `extensions` excepted). It drops what the page and
+    its workers send over a WebSocket, and logs what it stopped and every
+    worker. A `SHAREDWORKER … (unguarded)` line in `blocked.txt` means
+    that screen can send past it: outside disposable mode, look at it and
+    click nothing there. The session config blocks service workers, so
+    none can answer out of its sight; a PWA's offline mode and anything
+    waiting on `serviceWorker.ready` are "not run (guard)". It cannot stop
+    a `GET` that writes (`/logout`, `?action=delete`, magic links,
+    email-verification links) or a page that writes when loaded: leave
+    those alone. Forms may
     be submitted into the guard to see the app's error path; a failure the
     guard caused is not a finding. Only the session's own context is
     guarded: never `browser.newContext()` (touch has its own config, step
     3), `page.request` or `context.request` — all three reach the server
     unguarded. An app that reads over POST or a WebSocket shows its reads
     in `blocked.txt` on the first load: say so in `safety.md`, and report
-    the tasks that need them as "not run (guard)", never as dead ends.
+    the tasks that need them as "not run (guard)", never as dead ends. A
+    realtime app (Yjs, Socket.IO, graphql-ws, Phoenix channels) sends a
+    frame before it gets any data, so its live screens load empty under
+    the guard; tell the user in step 1 that testing them needs disposable
+    mode. Token refresh is a POST too: a 503 on the auth endpoint means
+    the session is about to die, so rerun the sign-in gate (step 3).
   - *Mocks*: a `page.route` handler ends in `route.fulfill()` or
     `route.fallback()`, never `route.continue()` — `continue` sends the
     request to the network past the guard. `playwright-cli route` answers
@@ -252,7 +263,10 @@ subagent:
   user has confirmed it: show them the evidence and ask once, "this
   backend is disposable — may the hunt write to it?". Walkers may then
   create, edit and delete, using data they make themselves, and the seed or
-  reset command is noted so the state can be restored.
+  reset command is noted so the state can be restored. Each walker signs
+  in to an account of its own, and the lead reseeds between waves: walkers
+  sharing an account or a document see each other's edits (live, on a
+  realtime app) and report them as the product's.
 
 Without the user's yes there is no disposable mode, whatever the evidence
 looks like. A Check or Measure step marked **(disposable only)** in the
@@ -261,31 +275,37 @@ alternative beside it.
 
 ### Signing in
 
-The guard blocks the sign-in like any other write, and the agent never
-signs in on its own. When a top task sits behind a login, ask the user for
-a test account and have them sign in once, themselves, in a visible
-browser opened from `$H`, then save the session:
+The guard blocks the sign-in like any other write. Outside disposable mode
+the agent never signs in on its own: when a top task sits behind a login,
+ask the user for a test account and have them sign in once, themselves, in
+a visible browser opened from `$H`. Then save the session, with the name
+the first line printed:
 
 ```
 cd "$H" && L="login$(basename "$H" | tail -c 7)" && echo "$L" && playwright-cli -s=$L open --headed <login-url>
-cd "$H" && playwright-cli -s=$L state-save auth.json && playwright-cli -s=$L close
+cd "$H" && playwright-cli -s=<printed name> --raw run-code "async page => { await page.context().storageState({ path: 'auth.json', indexedDB: true }); return 'saved'; }" && playwright-cli -s=<printed name> close
 ```
 
-Every hunt session then loads it right after the guard line: `cd "$H" &&
-playwright-cli -s=$SESSION state-load auth.json`. Keep the path relative: a
-path outside the session's directory fails silently, and the walker hunts
-the logged-out app. **Prove it signed in** before any walker goes: a
-`snapshot` that shows something only a signed-in user sees. No proof, no
-signed-in walk. `auth.json` holds a live session: it stays in `$H` and
-never goes in a report. No account, no
-signed-in walk — those tasks are "not run". On a native, Electron or
-Tauri app the user signs in on the device or emulator, the same way.
+`indexedDB: true` keeps sign-ins that live there (Firebase); plain
+`state-save` drops them. sessionStorage is never saved: an app that keeps
+its sign-in there (MSAL's default) needs the user to sign in inside each
+session. Ask the user for a word only a signed-in user sees ("Sign out",
+their name) and write it into `safety.md` as the **signed-in marker**.
+Every session proves its sign-in with the gate in step 3 and gets its
+line in `$H/signin.txt`; no line, no signed-in walk. Rerun the gate
+before each top task: a session expires mid-hunt. `auth*.json` holds a
+live session: it stays in `$H` and never goes in a report. No account, no
+signed-in walk — those tasks are "not run". On a native, Electron or Tauri
+app the user signs in on the device or emulator, the same way.
 
 **Email codes and magic links, disposable mode only.** One sign-in does not
-stretch over many walkers, and auth rate limits block scripted ones. Give
-each walker its own throwaway address (`walker01@…`), read its code or link
-from the dev server's log or local mail catcher, and space the requests out
-under the limit. Each walker proves its own sign-in the same way.
+stretch over many walkers, and auth rate limits block scripted ones. The
+lead signs each walker in before spawning it: one throwaway address each
+on a reserved domain (`walker01@example.test`), and only when check 3
+proved the mail lands in the dev server's log or a local mail catcher.
+Read the code or link from there, space the requests out under the rate
+limit, save each as `auth-<who>.json` the same way, and prove each with
+the gate. Walkers never read the log themselves.
 
 ### Running it
 
@@ -295,15 +315,17 @@ dev server with `TMPDIR="$H/tmp"` and stop it at the end. Starting it is
 running project code: read the script first, and do not start anything that
 migrates or seeds a database checks 1–3 have not cleared. Then do check 4
 with the guarded session from step 3. A scratch database may print schema
-warnings at first boot, before the app's migrations run; that is expected.
-In disposable mode, screenshot the seeded state and look at it before any
-walker goes in: overlapping, empty or nonsense seed data turns into false
-findings. If the app cannot run at all, the
-hunt falls back to reading (step 3's static part and step 4 against the
-code) and the report says "not run" with the reason.
+warnings at first boot, before the app's migrations run; they are noise
+only once the migrations report success or their tables exist. Screenshot
+the seeded state to `$H/seed.png` and look at it before any walker goes
+in: overlapping, empty or nonsense seed data turns into false findings. If
+the app cannot run at all, the hunt falls back to reading (step 3's static
+part and step 4 against the code) and the report says "not run" with the
+reason.
 
-**Done when** `$H/safety.md` names the mode with its evidence, and the
-user's answer if it is disposable.
+**Done when** `$H/safety.md` names the mode with its evidence, the
+user's answer if it is disposable, and the signed-in marker if a top task
+needs one; and on a local run `$H/seed.png` shows sane data.
 
 ## 2. Map the experience
 
@@ -393,7 +415,10 @@ and exit code 0. So check what the guard printed, never its exit code:
 npm i -s --prefix "$H/axe" axe-core@4 && cp "$H/axe/node_modules/axe-core/axe.min.js" "$H/"
 cd "$H" && SESSION="ux$(basename "$H" | tail -c 7)-<who>" && echo "$SESSION" && playwright-cli -s=$SESSION open \
   && playwright-cli -s=$SESSION --raw run-code --filename=guard.js | grep -q 'write guard on' \
-  || { echo "NO GUARD — stop"; playwright-cli -s=$SESSION close; }
+  || { echo "NO GUARD — stop"; playwright-cli -s=$SESSION close; exit 1; }
+cd "$H" && playwright-cli -s=$SESSION state-load <auth file> | grep -q 'Storage state restored' && playwright-cli -s=$SESSION goto <signed-in url> >/dev/null \
+  && playwright-cli -s=$SESSION snapshot | grep -q '<signed-in marker>' && echo "signed in: $SESSION $(date +%T)" >> "$H/signin.txt" \
+  || { echo "NOT SIGNED IN — stop"; exit 1; }
 cd "$H" && playwright-cli -s=$SESSION run-code "async page => { await page.goto('<url>'); }"
 cd "$H" && playwright-cli -s=$SESSION --raw run-code --filename=probe.js > "$H/probe-<screen>.json"
 cd "$H" && playwright-cli -s=$SESSION --raw run-code --filename=reveal.js > "$H/reveal-<screen>.json"
@@ -404,7 +429,10 @@ cd "$H" && playwright-cli -s=$SESSION close
 
 `<who>` is the one using it — `lead`, the researcher's area, `walk-<task>-a`
 — so no two agents share a session: opening a name that is already open
-replaces that browser and wipes its guard log. Like `$H`, use the printed
+replaces that browser and wipes its guard log. The sign-in line runs only
+for a signed-in task: `<auth file>` is `auth.json`, or `auth-<who>.json`
+when each walker has its own. Its path stays relative; outside the
+session's directory `state-load` prints an error and still exits 0. Like `$H`, use the printed
 session name literally in later calls. A session belongs to the directory
 it was opened from: `close` it from there
 too, or it stays open. Skip the guard line only in proven-disposable mode.
@@ -422,92 +450,18 @@ emulation and styles as it found them. Per screen it screenshots at 320,
 390, 820 (iPad portrait) and 1280px, at most three screens tall, under a
 new name each run (listed in `screenshots`; `pageHeight` says what was
 cut). A non-empty `errors` means a check did not run: rerun, never read it
-as zero violations. It returns:
+as zero violations. What each field means, and which ones are leads to check by eye, is in
+[`outputs.md`](outputs.md): read its probe part before reading a probe
+JSON.
 
-- **axe** violations against WCAG 2.2 A/AA plus best practice, in every
-  frame (a node in a frame reads `iframe … button`), and the `incomplete`
-  ones axe could not decide. `framesNotTested` lists frames it could not
-  reach: check those by hand.
-- **Pixel contrast** for text on an image, video, canvas, gradient or
-  `background-image`, and for the text axe left undecided. It measures at
-  every width: the text sits on a different part of the image at each.
-  Images under it are loaded first; one that never loads reports `image
-  under it did not load, check by eye`, never a pass. `p5` is the contrast
-  95% of the background beats; `fails` applies 4.5:1, or 3:1 for large
-  text. Shadows and scrims stay in the measurement and `hasTextShadow` asks
-  for a check by eye. Moving text reports `moving or covered, check by
-  eye`. Text on a solid card above the image is skipped,
-  and `capped` counts it.
-- **Hover** on up to 40 links, buttons, tabs and menu items, one per style.
-  `hoverContrast` is text that drops below 4.5:1 (3:1 large) while hovered,
-  with its resting ratio. `hoverStuck` does not return to rest.
-- **Selected, current, pressed, checked** (tabs, nav, listboxes, segmented
-  controls, toggles), against an unselected sibling. `selectedContrast`:
-  below 4.5:1. `colourOnlyState`: a state that differs only by colour (WCAG
-  1.4.1, a lead — 3:1 between the states plus another cue passes;
-  `"nothing visible"` means no difference at all). `stateIndicatorContrast`:
-  an underline, bar, dot, border or fill — a separate ink-bar or dot
-  element included, named by its selector — under 3:1 against its
-  neighbours (WCAG 1.4.11). `capped` says what the probe's `limits` cut
-  short.
-- **Text spacing** (WCAG 1.4.12): text that clips once the minimum line,
-  letter, word and paragraph spacing are applied, and did not before.
-- **Reflow** at 320px (WCAG 1.4.10): elements that stick out and scroll
-  sideways, and `clippedSideways` — content cut off by `overflow-x:
-  hidden`, which fails just the same. Carousels land there too: check the
-  screenshot.
-- **Small targets** under 24×24px (WCAG 2.5.8), visually hidden elements
-  skipped. Inline links in running text are exempt, and so is a small
-  target with 24px of clear space around it — check before reporting.
-  Touch platforms want more: `touch.md`.
-- **Fields**: placeholder used as the only label. A field asking for an
-  email, phone, postcode, name or password with no or `off` `autocomplete`
-  or the wrong `type` (wrong keyboard, no autofill — WCAG 1.3.5). Disabled
-  buttons (a disabled submit that never says why is a lead).
-- **Labels**: every control's accessible name with counts — five "Learn
-  more"s, an unnamed icon button, three different words for one action.
-- **Headings, title, lang, viewport meta**. Fields, labels and these sit
-  under `viewports["390"]` and `viewports["1280"]` — a phone layout can hold
-  a different form than the desktop one; the other checks sit under every
-  width or at the top level.
-- **Keyboard walk** from the top of the page, into shadow DOM and
-  same-origin frames: every stop in order. `noRing`: stops whose look does
-  not change on focus (a change on a child element only needs the
-  screenshot). Focus hidden under a sticky header or cookie banner (WCAG
-  2.4.11). Traps (2.1.2): focus that stays on one element. Focus bouncing
-  between two elements is not detected; the order shows it.
-- **Motion**: what still animates when the page loads with
-  `prefers-reduced-motion: reduce`.
-
-[`reveal.js`](reveal.js) finds what is hidden on a screen. It lists every
-visible control, then opens every revealer, three layers deep: menus,
-`aria-expanded` toggles, disclosures, unselected tabs, overflow and
-hamburger buttons, hovered rows and cards, one right-click on the main
-content. It records what each revealed and its `path`. It opens, never chooses. It never clicks a switch, checkbox, radio or
-field, never follows a link, and skips a dialog button whose name is an
-action. Anything whose name, title, aria-label, id, class, data-* or href
-reads like delete, remove, sign out, pay, buy, send, submit, publish,
-archive, reset or leave — in English, Dutch, German, French and Spanish —
-is skipped. The list is a net, not a guarantee; `skipped` says what was
-left closed and why. Every layer is closed. `endState.clean` is true only
-when the URL, open layers, storage and form state match the start, no
-reload was needed and no write was attempted; otherwise `reloads`,
-`requestsMade`, `writesAttempted`, `storageChanged` and `controlsChanged`
-say what happened. Read its `summary`:
-
-- `deep`: controls two or more layers down — few people find them.
-- `hoverOnly`: invisible to touch and keyboard users.
-- `contextMenuOnly`: actions with no other way in.
-- `iconOnly`: `hasName: false` is an accessibility bug; no `tooltip` means
-  a sighted user has to guess. Its `crop` PNGs feed the icon test (step 4).
-- `navigated`: a "menu" button that is really a link, listed as "(link,
-  not followed)".
-- `focusNotReturned`, `popupNotClosedByEscape`: keyboard traps in the
-  making.
-
-`capped` and `errors` are what it did not look at — a gap, not proof that
-nothing is there. Compare its controls with the features list from step 2:
-a feature found nowhere is hidden from everyone.
+[`reveal.js`](reveal.js) finds what is hidden on a screen: it opens every
+menu, disclosure, tab, overflow button, hovered row and one right-click,
+three layers deep, and records what each revealed. It opens, never
+chooses: it never clicks a switch, checkbox, radio or field, never follows
+a link, and skips anything named like delete, sign out, pay or send, in
+five languages. Its fields are in `outputs.md`'s reveal part. Compare its
+controls with the features list from step 2: a feature found nowhere is
+hidden from everyone.
 
 Beyond the probe, use Playwright for whatever a screen needs to prove a
 point, in look-don't-touch mode or not. Fake the map's states with
@@ -579,7 +533,7 @@ awk -F'\t' '$2 ~ /^(web|a11y|content|visual|touch|apple)\.md$/ {print $2"\t"$5}'
 
 It picks every topic its screens touch: Forms for a form, Navigation for a
 menu, Loading for anything that fetches. It runs the Check of every rule in
-those topics. It writes `$H/findings/<area>--coverage.md`: the topics, the
+those topics. It writes `$H/coverage/<area>.md`: the topics, the
 rule IDs checked, and those it could not check and why. Two runs then
 cover the same rules. Findings go to
 `$H/findings/<area>--<category>-<slug>.md` with screenshots; researchers
@@ -632,17 +586,26 @@ through reads.
 `$H/safety.md` with its rules for each channel. Briefs that touch a
 browser add the session block from step 3 verbatim, with `<who>` filled
 in for that agent — except unknowing users, who get only its open, guard,
-blocked-writes and close lines: the probe and reveal outputs are a map of
-the product they must not have. In look-don't-touch
+sign-in, blocked-writes and close lines: the probe and reveal outputs are a
+map of the product they must not have. Every brief says: "run each line as
+its own call, or several through `bash`, never zsh; use names and paths
+literally", and for a signed-in task: "stop if the sign-in line prints NOT
+SIGNED IN". In look-don't-touch
 and live mode they also add: "open your session from $H with the guard
 line, and stop if it does not print `write guard on`; do not follow logout,
 delete, unsubscribe or confirmation links; do not use real people's email
 addresses or phone numbers, ever; before closing, append your blocked
 writes to $H/blocked.txt and close the session from $H."
 
-**Done when** every area has its `coverage.md`, every budgeted top task
-has two walks (with ledgers where `first-contact` is installed), and the
-agent user has walked when agents use the product. A walk that could not
+Walks become findings in the lead's hands: every place a walker
+hesitated, backtracked or gave up is a file
+`$H/findings/walk--<task>-<slug>.md` quoting the notes and the trace.
+
+**Done when** every area has its `coverage/<area>.md`, every budgeted top
+task has two walks (with ledgers where `first-contact` is installed),
+every signed-in walk has its line in `signin.txt`, every struggle in a
+walk is a finding file, and the agent user has walked when agents use the
+product. A walk that could not
 happen — the app does not run, or it stopped at a login it had no account
 for — counts as "not run" with the reason, never as a walk.
 
@@ -724,7 +687,9 @@ with `$H`; it may rerun anything and answers per finding "holds" or
 
 - **Is it the product, or the test setup?** A blank screen because the dev
   seed is empty, a slow load from a cold dev server, an error because the
-  guard blocked a write. Reproduce it the way a real user would meet it,
+  guard blocked a write or a service worker, a session that expired
+  mid-walk, data another agent changed (in disposable mode, reproduce it
+  on a fresh seed). Reproduce it the way a real user would meet it,
   or drop it.
 - **Is it real for the users?** An admin screen used by two staff weighs
   less than checkout. A pattern that breaks a convention may be the
@@ -834,6 +799,9 @@ the product could have guessed, a finish worth remembering, a feature
 people would love if they could find it. Proposals, marked as such, within
 the mandate.
 
+**Done when** the report is in the conversation and `INDEX.md` has a row
+for every finding.
+
 Then offer to make it great: one finding, one band or one proposal at a
 time. When one theme turned up a cluster (spacing, toasts, empty states),
 offer a themed follow-up hunt on it: a narrow hunt finds what the broad one
@@ -868,21 +836,30 @@ when the user asks, in the project's own commit style.
   missing is a proposal, added only when the mandate says so.
 - **The suite still passes**, and the project's own linters do too.
 - **Name what the check missed.** A UI fix verified with the API mocked
-  never touched realtime, sync or websocket paths; say so beside the
-  finding.
+  never touched realtime, sync or WebSocket paths. In disposable mode,
+  check a realtime fix with two sessions on the same document; otherwise
+  list the paths under "not verified".
 - **Split by risk.** A fix that changes the schema or server behaviour
-  goes on its own branch and is tested against a copy of real data (a
-  backup restored into a scratch database) before it merges. Copy and
-  layout fixes do not wait on it.
-- **Show the big ones first.** Before merging, put the three to five fixes
-  that change a flow most in front of the user to try by hand.
-- **Fix agents** get about five findings each, run one after another in the
-  same tree. Their brief says to commit in the project's style and the
-  user's, with no trailer, co-author line or AI mention the user has not
-  asked for: subagents add them by default.
+  goes on a branch of its own. It stays `fixed, untested on data` until
+  it has run against a full seed and a migration from the old schema with
+  data in it, or against a copy of real data the user hands over. Never
+  take that copy yourself. Copy and layout fixes do not wait on it.
+- **The user tries the big ones.** A fix that changes a flow stays
+  `awaiting try` until the user says they tried it. List those three to
+  five for them when the batch is done.
+- **Fix agents** get about five findings each, one batch after another in
+  the same tree; a schema fix goes to its own agent on its own branch.
+  Their brief carries the mandate and the commit rule: commit only if the
+  user asked, in the project's style, with no trailer, co-author line or
+  AI mention the user has not asked for — subagents add them by default.
 
 One finding per change, so each can be reviewed and reverted on its own.
 After each, update the finding's file and its `INDEX.md` row: `Status:
-fixed` (with the commit, if one was made), or `proposed` for a fix outside
-the mandate. Put the after screenshots beside the before ones, so the
-record says what is done and what is still open.
+fixed` with the commit if one was made, the path of its Done-when check
+output and what was not verified; `fixed, untested on data`; `awaiting
+try`; or `proposed` for a fix outside the mandate. Put the after
+screenshots beside the before ones, so the record says what is done and
+what is still open.
+
+**Done when** every picked finding's row has one of those statuses, and no
+row says `fixed` without its check output.
