@@ -1,6 +1,6 @@
 ---
 name: suck-hunt
-description: SUCK hunt — sweep a codebase for everything that SUCKS and prove each find. Broken, insecure, untested, brittle, badly typed, lint-suppressed, dead, duplicated, overengineered, reinvented, slow, unreadable code; vulnerable or outdated dependencies, committed secrets, big files outside LFS, missing lint and format, a README that lies. Tools find the mechanical SUCK, reading finds the rest, and the reply is ranked findings a developer can pick up cold. Use to find what SUCKS, hunt tech debt or code smells, roast a codebase, or find what to delete. Reports in conversation; does not fix.
+description: SUCK hunt — sweep a codebase for everything that SUCKS and prove each find. Broken, insecure, untested, brittle, badly typed, lint-suppressed, dead, duplicated, overengineered, reinvented, slow, unreadable code; vulnerable or outdated dependencies, committed secrets, big files outside LFS, missing lint and format, a README that lies. Tools find the mechanical SUCK, reading finds the rest, and the reply is ranked findings a developer can pick up cold. Use to find what SUCKS, hunt tech debt or code smells, roast a codebase, or find what to delete. Reports in conversation; does not fix. It hunts the code; the product as people use it — UX, usability, accessibility, copy — is ux-suck-hunt's. A bare "what SUCKS in my app" means both; run both.
 ---
 
 # SUCK hunt
@@ -17,6 +17,13 @@ is worthless. "`PaymentStrategyFactory` has one implementation and one caller,
 that is merely unfamiliar — leave it. SUCK costs something: bugs, time to
 read, time to change, fear of touching it. If you cannot name the cost, it is
 not a finding.
+
+**This hunt is the code.** Obvious UX SUCK met along the way — an error
+message that says nothing, a form that throws away input, a button with no
+label — goes in the report like any other find. Hunting the experience
+itself is the `ux-suck-hunt` skill's: when the ask is everything that SUCKS,
+run both and cross-reference findings that are both — the swallowed
+exception here, the user staring at a frozen button there.
 
 **It is always SUCK, in capitals.** Every time the word appears in what you
 say — "hunting for SUCK", "this module SUCKS", "the worst SUCK" — it is
@@ -397,7 +404,7 @@ unless the project's own config already includes `phpstan-wordpress`.
   WordPress's configs; failing them is **no guard rails**. The accessibility
   standard is WCAG 2.2 AA: an image without `alt` or a field without a label
   in a template is **broken** for the people who need it — a full audit is
-  not this hunt.
+  `ux-suck-hunt`.
 
 ### CSS
 
