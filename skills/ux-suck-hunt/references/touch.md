@@ -119,19 +119,16 @@ Summarised in our own words from the sources at the end; numbers and names are c
 
 ## Measure
 
-Playwright device emulation (checked with playwright-core 1.65.0 and run in headless Chromium):
+Playwright device emulation, inside the guarded session (SKILL.md step 3): open it with `--config=.playwright/phone.config.json` (Pixel 7) or `tablet.config.json` (iPad Pro 11 viewport, in Chromium), then run the guard line as usual. Never `browser.newContext()`: a new context sits outside the guard, so its writes reach the server. Checked in a guarded session: `pointer: coarse` matched, `tap()` worked, a POST got the guard's 503.
 
 ```js
-const { chromium, webkit, devices } = require('playwright');
-// devices['iPhone 15'], devices['iPad Pro 11'] (webkit, isMobile, hasTouch); devices['Pixel 7'] (chromium)
-const ctx = await browser.newContext({ ...devices['Pixel 7'] });
-const page = await ctx.newPage();
-await page.goto(url);
-await page.evaluate(() => [matchMedia('(pointer: coarse)').matches, matchMedia('(hover: none)').matches]); // [true, true] in run
-await page.locator('nav >> text=Menu').tap();   // needs hasTouch: true, else "The page does not support tap"
-const small = await page.$$eval('a,button,input,select,textarea,[role=button],[onclick]',
-  els => els.map(e => { const r = e.getBoundingClientRect(); return { html: e.outerHTML.slice(0, 80), w: r.width, h: r.height }; })
-            .filter(r => r.w > 0 && (r.w < 24 || r.h < 24)));   // candidates for TOUCH-1/2; apply the spacing test by hand
+// run-code, in the touch session
+async page => {
+  await page.goto('<url>');
+  const media = await page.evaluate(() => [matchMedia('(pointer: coarse)').matches, matchMedia('(hover: none)').matches]);
+  await page.locator('nav >> text=Menu').tap();   // needs hasTouch, else "The page does not support tap"
+  return media;
+}
 ```
 
 - `isMobile` makes the page honour the meta viewport and turns on touch events; `hasTouch` turns on touch events and is off unless set. The device descriptors switch both on. [30][31]

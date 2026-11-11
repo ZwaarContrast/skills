@@ -63,13 +63,13 @@ Biilmann coined AX for everything an AI agent goes through when it is the one us
 - **AGENT-25** Support machine-readable output: emit formatted JSON under `--json`, and offer `--plain` when decorated output would break parsing [16].
   Check: `cmd --json | jq .` for each read command.
 - **AGENT-26** Prompt only when stdin is an interactive terminal; otherwise demand the values as flags or arguments, and treat `--no-input` as a ban on all interaction [16].
-  Check: `cmd </dev/null` on a read command, and on a write command with `--dry-run` or (disposable only) without; hanging or waiting at a prompt is a finding.
+  Check: `cmd </dev/null` on a read command, and on a write command with a `--dry-run` that its own `--help` documents and its code stops on before any write, or (disposable only) with none; hanging or waiting at a prompt is a finding.
 - **AGENT-27** Guard dangerous operations in a scriptable way: without a TTY, require `-f`/`--force` or `--confirm="name-of-thing"`; offer `--dry-run` to report what would change without changing it [16].
-  Check: (disposable only) run the delete command with stdin closed; it must refuse without `--force` and must not prompt. Read-only: its `--help` lists `--force` (or `--confirm`) and `--dry-run`, the code refuses without a TTY, and `--dry-run` with stdin closed changes nothing.
+  Check: (disposable only) run the delete command with stdin closed; it must refuse without `--force` and must not prompt. Read-only: its `--help` lists `--force` (or `--confirm`) and `--dry-run`, the code refuses without a TTY, and the code shows `--dry-run` returns before any write.
 - **AGENT-28** Show help for `-h` and `--help`; drop animations when stdout is not a TTY; respect `NO_COLOR`; provide `-q` [16].
   Check: `cmd --help`; `cmd | cat` for spinner or ANSI leftovers; `NO_COLOR=1 cmd`.
 - **AGENT-29** Keep operations idempotent where you can, and catch expected errors to replace them with a message that says what to do next [16].
-  Check: (disposable only) run the same create/apply twice — read-only: `--dry-run` the apply against the existing state; read the error for a missing argument.
+  Check: (disposable only) run the same create/apply twice — read-only: read the apply code for an idempotency check, or use a `--dry-run` that its own `--help` documents and its code stops on before any write; read the error for a missing argument.
 - **AGENT-30** Take secrets from a file or stdin (e.g. `--password-file`), not from a flag value [16].
   Check: `--help` for `--token`/`--password` flags that take the secret inline.
 
@@ -101,7 +101,7 @@ Each command below was checked against its documentation; none were run against 
 
 - Agent walk without vision: open the session with the guarded session block in SKILL.md step 3, then `snapshot` / `click` (and `fill`) under that session's name; refs come from the snapshot, each snapshot is saved as YAML, and `--boxes` adds bounding boxes [20]. Walk one top task from the snapshot alone, no screenshots. Each step where the control is missing, unnamed or ambiguous is an AGENT-1/2/3 finding; each step with no visible change is AGENT-7.
 - Docs: `curl -sf https://<host>/llms.txt` and `curl -sf https://<host>/<page>.md` (AGENT-31, AGENT-32).
-- CLI: `cmd </dev/null; echo $?` on a read command, `cmd --json | jq .`, `cmd >/dev/null` (only stderr remains), `cmd | cat` (no spinners); the destructive command's `--help` and `--dry-run`, and (disposable only) the command itself without `--force` and with stdin closed (AGENT-24-AGENT-28).
+- CLI: `cmd </dev/null; echo $?` on a read command, `cmd --json | jq .`, `cmd >/dev/null` (only stderr remains), `cmd | cat` (no spinners); the destructive command's `--help` (and a `--dry-run` that its own `--help` documents and its code stops on before any write), and (disposable only) the command itself without `--force` and with stdin closed (AGENT-24-AGENT-28).
 - API: `curl -i` a malformed read (bad parameter, unknown id) and read status, `Content-Type` and body (AGENT-20); (disposable only) the same with `curl -i -X POST <endpoint> -d '{bad}'`, a create repeated with one `Idempotency-Key` (AGENT-21), and a burst until 429 to read `Retry-After` (AGENT-22) — read-only: find the key handling and the rate limit in the code or OpenAPI description; call without credentials and expect 401 with `WWW-Authenticate` (AGENT-35).
 - MCP: send `tools/list` (page with `cursor`) and audit names, descriptions, `inputSchema`, `outputSchema` and `annotations` (AGENT-11-19); call each read-only tool (by its code, not just `readOnlyHint`) with bad input and confirm `isError: true` with a fix-it message (AGENT-17); (disposable only) the write tools too — read-only: read their validation code.
 

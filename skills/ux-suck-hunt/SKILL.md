@@ -100,11 +100,13 @@ affordable. Raise it only when the user asks:
 
 - **Screens**: every screen of a top task, with its states; then one
   screen per remaining route pattern (`/items/:id` once, not per item). At
-  most 30 in all. The report states coverage against this budget.
+  most 30 in all. Past 30, keep the top tasks' screens, then the patterns
+  linked from the main navigation in its order, then the rest by name; the
+  report lists what was left out.
 - **People**: two unknowing users per top task, for at most five top
   tasks; one researcher per area, at most six areas; one agent user.
 - **Browsers at once**: at most four sessions locally, two against a live
-  site.
+  site. Agents beyond the cap wait for a free slot.
 
 Each step below ends on a **Done when** line. Do not start the next step
 before it holds.
@@ -164,7 +166,7 @@ mandate, each marked confirmed or inferred.
 
 ```
 H=$(mktemp -d) && echo "$H" && mkdir -p "$H/tmp" "$H/findings" "$H/walks" "$H/.playwright" && { git status --porcelain --ignored > "$H/before" 2>/dev/null || echo "no repository" > "$H/before"; }
-cp <skill-dir>/probe.js <skill-dir>/reveal.js <skill-dir>/guard.js "$H/" && cp <skill-dir>/cli.config.json "$H/.playwright/"
+cp <skill-dir>/probe.js <skill-dir>/reveal.js <skill-dir>/guard.js "$H/" && cp <skill-dir>/*.config.json "$H/.playwright/"
 ```
 
 Tool output, screenshots, probe JSON, walker logs and findings all go to
@@ -222,17 +224,26 @@ subagent:
     It cannot stop a `GET` that writes (`/logout`, `?action=delete`, magic
     links) or a page that writes when loaded: leave those alone. Forms may
     be submitted into the guard to see the app's error path; a failure the
-    guard caused is not a finding.
+    guard caused is not a finding. Only the session's own context is
+    guarded: never `browser.newContext()` (touch has its own config, step
+    3), `page.request` or `context.request` — all three reach the server
+    unguarded. An app that reads over POST or a WebSocket shows its reads
+    in `blocked.txt` on the first load: say so in `safety.md`, and report
+    the tasks that need them as "not run (guard)", never as dead ends.
   - *Mocks*: a `page.route` handler ends in `route.fulfill()` or
     `route.fallback()`, never `route.continue()` — `continue` sends the
-    request to the network past the guard.
-  - *API, CLI, MCP*: reads only — `GET`, `--help`, `--dry-run`,
-    `tools/list`, the OpenAPI or schema file. A Check that needs a write
+    request to the network past the guard. `playwright-cli route` answers
+    locally with `--status` and `--body`; with `--header` or
+    `--remove-header` it passes the request on, past the guard — never.
+  - *API, CLI, MCP*: reads only — `GET`, `--help`, `tools/list`, the
+    OpenAPI or schema file, and `--dry-run` only where the command's own
+    `--help` documents it and its code stops before writing. A CLI that
+    ignores unknown flags turns `--dry-run` into the real write. A Check that needs a write
     (`(disposable only)` in the rulebook) is recorded as "not run:
     look-don't-touch".
   - *Native, Electron, Tauri*: no guard can sit in their traffic. Walk and
-    look, but submit, create, send, buy and delete nothing, and sign in
-    only with an account the user gave for the hunt.
+    look, but submit, create, send, buy and delete nothing. Signing in
+    works as below: the user does it.
 - **Live site** — a production URL. Look, don't touch, plus: at most two
   browser sessions against it, no load, crawl or rate-limit tests, the
   budget's screens only. Decline optional cookies. Never sign up or sign
@@ -257,14 +268,15 @@ a test account and have them sign in once, themselves, in a visible
 browser opened from `$H`, then save the session:
 
 ```
-cd "$H" && playwright-cli -s=login open --headed <login-url>
-cd "$H" && playwright-cli -s=login state-save auth.json && playwright-cli -s=login close
+cd "$H" && L="login$(basename "$H" | tail -c 7)" && echo "$L" && playwright-cli -s=$L open --headed <login-url>
+cd "$H" && playwright-cli -s=$L state-save auth.json && playwright-cli -s=$L close
 ```
 
 Every hunt session then loads it right after the guard line: `cd "$H" &&
 playwright-cli -s=$SESSION state-load auth.json`. `auth.json` holds a live
 session: it stays in `$H` and never goes in a report. No account, no
-signed-in walk — those tasks are "not run".
+signed-in walk — those tasks are "not run". On a native, Electron or
+Tauri app the user signs in on the device or emulator, the same way.
 
 ### Running it
 
@@ -374,6 +386,7 @@ cd "$H" && playwright-cli -s=$SESSION run-code "async page => { await page.goto(
 cd "$H" && playwright-cli -s=$SESSION --raw run-code --filename=probe.js > "$H/probe-<screen>.json"
 cd "$H" && playwright-cli -s=$SESSION --raw run-code --filename=reveal.js > "$H/reveal-<screen>.json"
 cd "$H" && playwright-cli -s=$SESSION --raw run-code "async page => page.context().__uxBlocked || []" >> "$H/blocked.txt"
+cd "$H" && playwright-cli -s=$SESSION route-list | grep -i header && echo "ROUTE PAST THE GUARD — report it"
 cd "$H" && playwright-cli -s=$SESSION close
 ```
 
@@ -441,7 +454,10 @@ as zero violations. It returns:
   buttons (a disabled submit that never says why is a lead).
 - **Labels**: every control's accessible name with counts — five "Learn
   more"s, an unnamed icon button, three different words for one action.
-- **Headings, title, lang, viewport meta**.
+- **Headings, title, lang, viewport meta**. Fields, labels and these sit
+  under `viewports["390"]` and `viewports["1280"]` — a phone layout can hold
+  a different form than the desktop one; the other checks sit under every
+  width or at the top level.
 - **Keyboard walk** from the top of the page, into shadow DOM and
   same-origin frames: every stop in order. `noRing`: stops whose look does
   not change on focus (a change on a child element only needs the
@@ -487,9 +503,10 @@ response with `page.route` (ending in `fulfill` or `fallback`) and
 screenshot what the user sees. Try `context.setOffline(true)` and
 `emulateMedia({ colorScheme: 'dark' })`. Use `page.goBack()` after a step
 to see whether state survives, and a reload in the middle of a form. For
-real touch input (`hasTouch`, `isMobile`, `tap()`) open the page in a
-context made from a Playwright device — `touch.md`, Measure. Every one of
-these screenshots is evidence.
+real touch input (`hasTouch`, `isMobile`, `tap()`) open the session with
+`--config=.playwright/phone.config.json` (Pixel 7) or `tablet.config.json`
+(iPad Pro 11), then the guard line as always — `touch.md`, Measure. Every
+one of these screenshots is evidence.
 
 ### Slow network
 
@@ -509,11 +526,6 @@ network, on every platform:
 - *Offline*: `page.context().setOffline(true)` in a browser session;
   airplane mode on a device or emulator.
 
-**Done when** every budgeted screen has a probe JSON with an empty
-`errors` (or a rerun noted) — for a native app, its platform's Measure
-output instead; for an app that cannot run, "not run" with the reason —
-and the static outputs exist.
-
 ### Native and desktop builds
 
 Playwright reaches web views, Electron and (through WebDriver) Tauri. None
@@ -530,6 +542,11 @@ building on it.
 Haptics are felt, not read. Without a physical device that plays them,
 review the haptic calls in the code and say the feel was not checked;
 never report a haptic as fine from a simulator or a screenshot.
+
+**Done when** every budgeted screen has a probe JSON with an empty
+`errors` (or a rerun noted) — for a native app, its platform's Measure
+output instead; for an app that cannot run, "not run" with the reason —
+and the static outputs exist.
 
 ## 4. Hunt — walk it like a user, read it like a designer
 
@@ -604,7 +621,9 @@ through reads.
 **Every subagent brief** includes the path of `$H` and the mode from
 `$H/safety.md` with its rules for each channel. Briefs that touch a
 browser add the session block from step 3 verbatim, with `<who>` filled
-in for that agent. In look-don't-touch
+in for that agent — except unknowing users, who get only its open, guard,
+blocked-writes and close lines: the probe and reveal outputs are a map of
+the product they must not have. In look-don't-touch
 and live mode they also add: "open your session from $H with the guard
 line, and stop if it does not print `write guard on`; do not follow logout,
 delete, unsubscribe or confirmation links; do not use real people's email
@@ -774,7 +793,9 @@ with `$H`; it may rerun anything and answers per finding "holds" or
 - **Taste:** can you name the cost and the principle? If not, drop it.
 
 **Done when** every finding is marked holds or refuted, and every holding
-one is a file in `$H/findings/`.
+one is a file in `$H/findings/`. A refuted one leaves `findings/`; its
+claim and the reason it fell go on one line in `$H/refuted.md`, so the
+next run sees what was tried. Totals count holding findings only.
 
 What survives keeps its evidence: screenshots before anything changes, the
 probe line, the walker's quote, and the code that causes it (file:line and
