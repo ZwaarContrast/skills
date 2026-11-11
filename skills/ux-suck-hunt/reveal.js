@@ -2,7 +2,7 @@
 // Opens every menu, disclosure, tab, hover and right-click layer on this screen without activating anything; returns JSON, writes reveal-icon-<slug>-<n>.png. See SKILL.md.
 async page => {
   const DEPTH = 3, REVEALERS = 60, HOVERS = 30, PER_KIND = 3, TIPS = 40, BUDGET = 150000, SETTLE = 300;
-  const DANGER = '\\b(delete|remove|sign\\s?out|log\\s?out|logout|pay|buy|purchase|checkout|send|submit|unsubscribe|cancel\\s+subscription|archive|destroy|erase|trash|discard|leave)\\b';
+  const DANGER = String.raw`delete|verwijderen|löschen|loeschen|supprimer|eliminar|borrar|remove|verwijder|entfernen|retirer|quitar|sign\W*out|log\W*out|log\W*off|afmelden|uitloggen|abmelden|ausloggen|déconnexion|deconnexion|déconnecter|cerrar\W+sesión|pay|buy|purchase|betalen|kopen|kaufen|acheter|comprar|checkout|send|verzenden|versturen|senden|envoyer|enviar|submit|publish|publiceren|veröffentlichen|publier|publicar|archive|archiveren|unsubscribe|uitschrijven|cancel\W+subscription|discard|trash|erase|destroy|reset|leave|revoke|deactivate`;
   const CTRL = 'a[href],button,input:not([type=hidden]),select,textarea,summary,[contenteditable=""],[contenteditable=true],[tabindex]:not([tabindex="-1"]),' +
     ['button', 'link', 'menuitem', 'menuitemcheckbox', 'menuitemradio', 'tab', 'checkbox', 'radio', 'switch', 'option', 'combobox', 'treeitem', 'slider'].map(r => `[role=${r}]`).join(',');
   const ROW = 'tr,[role=row],li,article,[role=listitem],[role=article],[class*=card],[class*=row],[class*=item]';
@@ -12,11 +12,14 @@ async page => {
   const ctx = page.context(), wait = ms => page.waitForTimeout(ms), late = () => Date.now() - t0 > BUDGET;
   const onPopup = p => { out.newTabs.push(p.url()); p.close().catch(() => {}); };
   const onDialog = d => { out.dialogs.push(d.message().slice(0, 80)); d.dismiss().catch(() => {}); };
-  ctx.on('page', onPopup); page.on('dialog', onDialog);
+  const requests = [], onRequest = r => { if (!/^(data|blob):/.test(r.url())) requests.push(r.method() + ' ' + r.url()); };
+  ctx.on('page', onPopup); page.on('dialog', onDialog); page.on('request', onRequest);
 
   const inject = () => page.evaluate(({ CTRL, ROW, DANGER }) => {
     if (window.__rv) return;
-    const danger = new RegExp(DANGER, 'i');
+    const word = src => new RegExp(`(?<![\\p{L}\\p{N}])(${src})(?![\\p{L}\\p{N}])`, 'iu');
+    const DANGER_RE = word(DANGER), OPENS = new RegExp('^' + word(String.raw`open|show|view|see|more|options|settings|preferences|details|info|help|filters?|sort|share|edit|menu|select|choose|pick|manage|customi[sz]e|search|meer|toon|bekijk|opties|instellingen|mehr|anzeigen|optionen|einstellungen|afficher|voir|paramètres|más|ver|opciones|ajustes`).source, 'iu');
+    const MORE = /^(menu|more|options?|kebab|overflow|hamburger|burger|dots|ellipsis|actions|meer|mehr|más|menú)$/iu, TOGGLE = /^(switch|checkbox|radio|menuitemcheckbox|menuitemradio)$/;
     const deep = (root, sel, acc = []) => { for (const el of root.querySelectorAll('*')) { if (el.matches(sel)) acc.push(el); if (el.shadowRoot) deep(el.shadowRoot, sel, acc); } return acc; };
     const clipped = el => {   // collapsed accordions: max-height 0 + overflow hidden keeps the children's boxes
       const r = el.getBoundingClientRect();
@@ -30,34 +33,46 @@ async page => {
     const vis = el => { const r = el.getBoundingClientRect(); return r.width > 1 && r.height > 1 && el.checkVisibility({ opacityProperty: true, visibilityProperty: true }) && !clipped(el); };
     const clean = s => (s || '').trim().replace(/\s+/g, ' ');
     const text = el => clean(el.innerText).slice(0, 60);
-    const a11y = el => { const root = el.getRootNode(), field = /^(INPUT|SELECT|TEXTAREA)$/.test(el.tagName);
-      return [
+    const a11y = el => { const root = el.getRootNode(), field = /^(INPUT|SELECT|TEXTAREA)$/.test(el.tagName), btn = el.tagName === 'INPUT' && /^(submit|button|reset|image)$/.test(el.type), inner = field ? '' : clean(el.innerText);
+      return [   // glyph-only text last, so title="Delete" on a 🗑 button is the name
         (el.getAttribute('aria-labelledby') || '').split(/\s+/).map(id => id && root.getElementById?.(id)?.textContent).join(' '),
         el.getAttribute('aria-label'),
         [...(el.labels || [])].map(l => l.innerText).join(' '),
-        el.tagName === 'INPUT' && /^(submit|button|reset|image)$/.test(el.type) ? el.value || el.alt : '',
-        field ? '' : el.innerText,
-        field ? '' : [...el.querySelectorAll('img[alt],svg[aria-label],svg title')].map(e => e.getAttribute('alt') || e.getAttribute('aria-label') || e.textContent).join(' '),
-        el.title, field ? el.placeholder : '',
+        el.getAttribute('alt'),
+        btn && el.type !== 'image' ? el.value : '',
+        /[\p{L}\p{N}]/u.test(inner) ? inner : '',
+        field ? '' : [...el.querySelectorAll('svg title,svg[aria-label],img[alt]')].map(e => e.getAttribute('aria-label') || e.getAttribute('alt') || e.textContent).join(' '),
+        field ? el.placeholder : '',
+        el.title,
+        inner,
       ].map(clean).find(Boolean)?.slice(0, 60) || ''; };
     const iconOnly = el => el.tagName === 'INPUT' ? el.type === 'image' : !/^(SELECT|TEXTAREA)$/.test(el.tagName) && !el.isContentEditable && !/[\p{L}\p{N}]/u.test(el.innerText || '');
     const sel = el => el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + ((el.getAttribute('class') || '').trim() ? '.' + el.getAttribute('class').trim().split(/\s+/).slice(0, 2).join('.') : '');
-    const MORE = /\b(menu|more|options?|kebab|overflow|hamburger|burger|dots|ellipsis|actions)\b|[⋮⋯…☰≡]/i;
+    const more = el => /[⋮⋯…☰≡]/.test(el.textContent) || [...(a11y(el) + ' ' + el.textContent).split(/[^\p{L}\p{N}]+/u), ...`${el.id} ${el.getAttribute('class') || ''}`.split(/\s+/)].some(w => MORE.test(w));
+    const dangerous = el => (el.type === 'submit' && !!el.form) || DANGER_RE.test([a11y(el), text(el), el.title, el.getAttribute('aria-label'), el.id, el.getAttribute('class'), el.getAttribute('href'), el.getAttribute('formaction'),
+      ...[...el.attributes].filter(a => a.name.startsWith('data-')).map(a => a.value)].join(' ').replace(/(\p{Ll})(\p{Lu})/gu, '$1 $2'));
+    const isLink = el => el.tagName === 'A' && el.hasAttribute('href') && !/^\s*(#|javascript:\s*(void\b|;?\s*$))/i.test(el.getAttribute('href'));
+    const hidesTarget = el => (el.getAttribute('aria-controls') || '').split(/\s+/).some(id => { const t = id && el.getRootNode().getElementById?.(id); return t && !vis(t); });
     const kind = el => {
-      const role = el.getAttribute('role'), hp = el.getAttribute('aria-haspopup'), ex = el.getAttribute('aria-expanded');
-      if (role === 'tab') return el.getAttribute('aria-selected') === 'true' ? null : 'tab';
-      if (el.tagName === 'SUMMARY') return el.parentElement?.open ? null : 'click';
+      const role = el.getAttribute('role') || '', hp = el.getAttribute('aria-haspopup'), ex = el.getAttribute('aria-expanded');
       if (ex === 'true' || el.disabled || el.getAttribute('aria-disabled') === 'true') return null;
-      if ((hp && hp !== 'false') || ex === 'false') return 'click';
-      if (iconOnly(el) && (/^(BUTTON|A)$/.test(el.tagName) || role === 'button') && MORE.test([a11y(el), el.id, el.getAttribute('class'), el.textContent].join(' '))) return 'click';
-      return null;
+      let how = null;
+      if (role === 'tab') how = el.getAttribute('aria-selected') !== 'true' && el.closest('[role=tablist]') ? 'tab' : null;
+      else if (el.tagName === 'SUMMARY') how = el.parentElement?.tagName === 'DETAILS' && !el.parentElement.open ? 'click' : null;
+      else if ((hp && hp !== 'false') || (ex === 'false' && hidesTarget(el)) || (iconOnly(el) && (/^(BUTTON|A)$/.test(el.tagName) || role === 'button') && more(el))) how = 'click';
+      if (!how) return null;
+      if (TOGGLE.test(role) || el.tagName === 'INPUT') return 'skip:toggle or field, not opened';
+      if (isLink(el)) return 'link';
+      if (dangerous(el)) return 'skip:destructive or leaving';
+      if (hp === 'dialog' && !OPENS.test(a11y(el))) return 'skip:action that opens a dialog';
+      return how;
     };
     const key = el => [el.tagName, el.getAttribute('role') || '', a11y(el) || text(el)].join('|');
     const controls = () => deep(document, CTRL).filter(vis);
     const desc = (el, pool, k = key) => ({ key: k(el), n: pool.filter(x => k(x) === k(el)).indexOf(el) });
     const info = (el, pool) => { const name = a11y(el), t = text(el);
       return { name: name || t || el.title || sel(el), text: t, a11yName: name, iconOnly: iconOnly(el), role: el.getAttribute('role') || el.tagName.toLowerCase(), sel: sel(el),
-        revealer: kind(el), popup: !!el.getAttribute('aria-haspopup') && el.getAttribute('aria-haspopup') !== 'false', danger: danger.test(name + ' ' + t) || (el.type === 'submit' && !!el.form), d: desc(el, pool) }; };
+        revealer: kind(el), popup: !!el.getAttribute('aria-haspopup') && el.getAttribute('aria-haspopup') !== 'false', href: typeof el.href === 'string' ? el.href : null, d: desc(el, pool) }; };
     const rowKey = el => el.tagName + '|' + clean(el.innerText).slice(0, 40);
     const rowsAll = () => deep(document, ROW).filter(vis);
     window.__rv = {
@@ -90,6 +105,14 @@ async page => {
       sig() { return [location.href, controls().map(key).sort().join('~'), deep(document, '[aria-expanded="true"]').length + ' expanded',
         document.querySelectorAll('details[open]').length + ' details open', deep(document, '[role=tab][aria-selected="true"]').map(key).join('~'),
         deep(document, 'dialog[open],[role=dialog],[role=alertdialog],[role=menu],[role=listbox],[role=tooltip]').filter(vis).length + ' layers'].join('\n'); },
+      state() {   // storage and form state, to prove the run changed nothing
+        const s = {}, c = {}, seen = {};
+        for (const n of ['localStorage', 'sessionStorage']) try { const o = window[n]; for (let i = 0; i < o.length; i++) s[n + '.' + o.key(i)] = o.getItem(o.key(i)); } catch {}
+        for (const el of deep(document, 'input:not([type=hidden]),select,textarea,[aria-checked],[aria-pressed]')) {
+          const k = sel(el) + (el.name ? `[name=${el.name}]` : ''), n = seen[k] = (seen[k] || 0) + 1;
+          c[k + (n > 1 ? ' #' + n : '')] = [el.value, el.checked, el.getAttribute('aria-checked'), el.getAttribute('aria-pressed')].join('|');
+        }
+        return { s, c }; },
       point(d) {   // a spot inside the row that the row itself receives, not a gap or a control
         const el = this.find(d); if (!el) return null;
         el.scrollIntoView({ block: 'nearest' });
@@ -111,9 +134,9 @@ async page => {
   const rv = (fn, arg) => page.evaluate(([fn, arg]) => window.__rv[fn](arg), [fn, arg]);
   const handle = async d => (await page.evaluateHandle(d => window.__rv.find(d), d)).asElement();
   const away = async () => { const [x, y] = await rv('away'); await page.mouse.move(x, y); };
-  let baseSig, baseTabs;
+  let baseSig, baseTabs, baseState, reloads = 0;
   const settled = async () => page.url() === base && (await rv('sig')) === baseSig;
-  const home = async () => { if (page.url() !== base) { await page.goBack().catch(() => {}); if (page.url() !== base) await page.goto(base); } else await page.reload(); await page.waitForLoadState('load').catch(() => {}); await inject(); };
+  const home = async () => { reloads++; if (page.url() !== base) { await page.goBack().catch(() => {}); if (page.url() !== base) await page.goto(base); } else await page.reload(); await page.waitForLoadState('load').catch(() => {}); await inject(); };
   const restoreTabs = async () => { for (const d of baseTabs) { const h = await handle(d); if (h && !(await h.evaluate(e => e.getAttribute('aria-selected') === 'true'))) await h.click({ timeout: 2000 }).catch(() => {}); } await wait(SETTLE); };
 
   // closes whatever is open; says how, and whether focus came back to the revealer
@@ -178,7 +201,8 @@ async page => {
       if (f.iconOnly && depth <= 1) await inspectIcon(c, i);
       out.controls.push(c);
       if (!f.revealer) continue;
-      if (f.danger) { out.skipped.push(`${[...path, f.name].join(' > ')} (destructive or leaving)`); continue; }
+      if (f.revealer === 'link') { c.navigated = true; out.revealers.push({ name: f.name, depth, path, how: 'link', navigated: f.href, followed: false }); out.skipped.push(`${[...path, f.name].join(' > ')} (link, not followed)`); continue; }
+      if (f.revealer.startsWith('skip:')) { out.skipped.push(`${[...path, f.name].join(' > ')} (${f.revealer.slice(5)})`); continue; }
       if (depth >= DEPTH) { out.capped.push(`depth ${DEPTH}: ${[...path, f.name].join(' > ')} not opened`); continue; }
       queue.push({ chain: [...task.chain, { how: f.revealer, d: f.d }], depth, path: [...path, f.name], name: f.name, popup: f.popup });
     }
@@ -186,6 +210,7 @@ async page => {
 
   try {
     await inject();
+    baseState = await rv('state');
     await page.evaluate(() => { document.activeElement?.blur(); });
     await away(); await wait(SETTLE);
     baseSig = await rv('sig');
@@ -262,17 +287,23 @@ async page => {
       deep: out.controls.filter(c => c.depth >= 2).map(label),
       hoverOnly: [...new Set(out.controls.filter(c => c.hoverOnly).map(label))],
       contextMenuOnly: out.controls.filter(c => c.path[0] === 'right-click' && !elsewhere.has(c.name.toLowerCase())).map(c => c.name),
-      navigated: out.revealers.filter(r => r.navigated).map(r => `${[...r.path, r.name].join(' > ')} -> ${r.navigated}`),
+      navigated: out.revealers.filter(r => r.navigated).map(r => `${[...r.path, r.name].join(' > ')} -> ${r.navigated}${r.followed === false ? ' (link, not followed)' : ''}`),
       focusNotReturned: out.revealers.filter(r => r.focusReturned === false).map(r => r.name),
       popupNotClosedByEscape: out.revealers.filter(r => r.popup && r.closedBy && r.closedBy !== 'escape').map(r => `${r.name}: ${r.closedBy}`),
     };
     return out;
   } finally {
     try {
-      if (baseSig) { await reset(); out.endState = { sameUrl: page.url() === base, layersClosed: await settled() }; }
+      if (baseSig) {
+        await reset();
+        const now = await rv('state'), changed = (a, b) => [...new Set([...Object.keys(a), ...Object.keys(b)])].filter(k => a[k] !== b[k]);
+        const e = out.endState = { clean: false, sameUrl: page.url() === base, layersClosed: await settled(), reloads, requestsMade: [...new Set(requests)].slice(0, 40),
+          writesAttempted: requests.filter(r => !/^(GET|HEAD|OPTIONS) /.test(r)).length, storageChanged: changed(baseState.s, now.s), controlsChanged: changed(baseState.c, now.c) };
+        e.clean = e.sameUrl && e.layersClosed && !reloads && !e.writesAttempted && !e.storageChanged.length && !e.controlsChanged.length;
+      }
       await page.evaluate(() => { document.activeElement?.blur(); scrollTo(0, 0); delete window.__rv; });
     } catch (e) { out.errors.push('restore: ' + msg(e)); }
-    ctx.off('page', onPopup); page.off('dialog', onDialog);
+    ctx.off('page', onPopup); page.off('dialog', onDialog); page.off('request', onRequest);
     out.runtimeMs = Date.now() - t0;
   }
 }
