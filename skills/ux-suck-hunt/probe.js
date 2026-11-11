@@ -247,7 +247,7 @@ async page => {
         if (w === 320) r.clippedSideways = [...document.querySelectorAll('body *')]
           .filter(el => clipsX(el) && el.scrollWidth > el.clientWidth + 1 && vis(el) && !hidden(el) && (el.innerText?.trim() || el.querySelector('a[href],button,input,select,textarea')))
           .slice(0, 10).map(el => ({ sel: sel(el), scrollWidth: el.scrollWidth, clientWidth: el.clientWidth }));
-        if (w === 1280) {
+        if (w === 390 || w === 1280) {   // phone and desktop layouts can hold different forms
           const fields = [...document.querySelectorAll('input:not([type=hidden]):not([type=submit]):not([type=button]),select,textarea')].filter(vis);
           const labelled = el => (el.labels && [...el.labels].some(l => l.innerText.trim())) || el.getAttribute('aria-labelledby');
           r.placeholderAsLabel = fields.filter(el => el.placeholder && !labelled(el)).map(el => ({ sel: sel(el), placeholder: el.placeholder }));
