@@ -58,10 +58,10 @@ async page => {
   };
   const imageText = async w => {   // text over an image, video, canvas or gradient: it sits on a different part of it at every width
     const n = await page.evaluate(() => window.__ux.findImageText());
-    let i = 0;
+    let i = 0, skipped = 0;
     for (let measured = 0; i < Math.min(n, IMG_LOOK) && measured < IMG_TEXT; i++) {
       const pre = await page.evaluate(i => window.__ux.prep(i), i);
-      if (pre.skip) continue;
+      if (pre.skip) { skipped++; continue; }
       measured++;
       if (pre.error) { out.pixelContrast.push({ width: w, node: pre.sel, on: pre.on, error: pre.error }); continue; }
       const h = (await page.evaluateHandle(i => window.__ux.found[i].el, i)).asElement();
@@ -70,6 +70,7 @@ async page => {
       await h.dispose();
     }
     if (n > i) out.capped.push(`text on images at ${w}px: ${n} found, ${i} looked at`);
+    if (skipped) out.capped.push(`text on images at ${w}px: ${skipped} skipped, solid layer above the image`);
     await page.evaluate(() => scrollTo(0, 0));
   };
   try {
@@ -83,10 +84,12 @@ async page => {
           (el.getAttribute('aria-labelledby') || '').split(/\s+/).map(id => id && root.getElementById?.(id)?.textContent).join(' '),
           el.getAttribute('aria-label'),
           [...(el.labels || [])].map(l => l.innerText).join(' '),
-          el.tagName === 'INPUT' && /^(submit|button|reset)$/.test(el.type) ? el.value : '',
-          field ? el.placeholder : el.innerText,
-          field ? '' : [...el.querySelectorAll('img[alt],svg[aria-label]')].map(e => e.getAttribute('alt') || e.getAttribute('aria-label')).join(' '),
-          el.title, el.getAttribute('alt'),
+          el.getAttribute('alt'),
+          el.tagName === 'INPUT' && /^(submit|button|reset)$/.test(el.type) ? el.value : field ? '' : el.innerText,
+          field ? '' : [...el.querySelectorAll('svg[aria-label],svg title')].map(e => e.getAttribute('aria-label') || e.textContent).join(' '),
+          field ? '' : [...el.querySelectorAll('img[alt]')].map(e => e.getAttribute('alt')).join(' '),
+          field ? el.placeholder : '',
+          el.title,   // title is the spec's last resort
         ].map(s => (s || '').trim().replace(/\s+/g, ' ')).find(Boolean)?.slice(0, 40) || ''; },
       sel: el => el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + (typeof el.className === 'string' && el.className.trim() ? '.' + el.className.trim().split(/\s+/).slice(0, 2).join('.') : ''),
       settle: (el, ms) => Promise.race([Promise.all(el.getAnimations({ subtree: true }).filter(a => a.transitionProperty).map(a => a.finished)), new Promise(r => setTimeout(r, ms))]).catch(() => {}),
@@ -106,10 +109,12 @@ async page => {
       const owner = e => { const w = document.createTreeWalker(e, NodeFilter.SHOW_TEXT); for (let n; (n = w.nextNode());) if (n.data.trim() && vis(n.parentElement)) return n.parentElement; return e; };
       const ink = e => { let o = 1; for (let a = e; a; a = up(a)) o *= +getComputedStyle(a).opacity; const c = rgba(getComputedStyle(e).color); c[3] *= o; return c; };
       const large = e => { const cs = getComputedStyle(e), z = parseFloat(cs.fontSize); return z >= 24 || (parseInt(cs.fontWeight) >= 700 && z >= 18.66); };
-      const fill = e => {   // solid colour behind e from its ancestors, null over an image or gradient
+      const covers = (a, p) => { const c = getComputedStyle(a, p), m = (c.transform.match(/matrix\(([^)]*)\)/)?.[1] || '1,0,0,1').split(',').map(Number);
+        return c.content !== 'none' && c.display !== 'none' && (c.backgroundImage !== 'none' || rgba(c.backgroundColor)[3] > 0) && parseFloat(c.width) * parseFloat(c.height) * Math.abs(m[0] * m[3]) > 0.5 * a.offsetWidth * a.offsetHeight; };
+      const fill = e => {   // solid colour behind e from its ancestors, null over an image, gradient or covering pseudo-element
         const layers = [];
         for (let a = e; a; a = up(a)) { const cs = getComputedStyle(a);
-          if (cs.backgroundImage !== 'none' || /^(IMG|VIDEO|CANVAS)$/.test(a.tagName)) return null;
+          if (cs.backgroundImage !== 'none' || /^(IMG|VIDEO|CANVAS)$/.test(a.tagName) || covers(a, '::before') || covers(a, '::after')) return null;
           const c = rgba(cs.backgroundColor); if (c[3]) layers.push(c); if (c[3] === 1) break; }
         return layers.reduceRight((bg, c) => over(c, bg), [255, 255, 255]);
       };
@@ -155,6 +160,7 @@ async page => {
             } else for (const [, u] of (bg || '').matchAll(/url\("?(.*?)"?\)/g)) { const im = new Image(); im.src = u; await wait(im.decode(), 3000); }
           }
           await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+          if (under.some(u => u.e === el)) return res;
           const r = el.getBoundingClientRect(), es = document.elementsFromPoint(r.left + r.width / 2, r.top + r.height / 2);
           for (const e of es.slice(es.indexOf(el) + 1)) {
             if (under.some(u => u.e === e)) break;
@@ -163,7 +169,7 @@ async page => {
           }
           return res;
         },
-        hoverables: n => {
+        hoverables: () => {
           U.ims = imgs();
           const seen = new Set(), all = [...document.querySelectorAll('a[href],button,[role=button],[role=link],[role=tab],[role=menuitem],[role=option],summary')].filter(e => vis(e) && !hidden(e) && e.innerText?.trim());
           U.picked = all.filter(e => { const c = getComputedStyle(owner(e)), k = [e.tagName, e.className, c.color, c.fontSize, getComputedStyle(e).backgroundColor].join('|'); return !seen.has(k) && seen.add(k); });
@@ -179,7 +185,16 @@ async page => {
             return [c.fontWeight, c.fontStyle, c.fontSize, c.textDecorationLine, c.textTransform, c.borderStyle, c.borderWidth, c.outlineStyle, c.outlineWidth, c.boxShadow.replace(/rgba?\([^)]*\)/g, ''), c.backgroundImage === 'none', c.transform,
               p ? [c.content, c.display, Math.round(parseFloat(c.width) / e.offsetWidth * 10), c.height, rgba(c.backgroundColor)[3] > 0] : ''].join('|'); };
           const parts = e => [e, owner(e)].flatMap(x => [null, '::before', '::after'].map(p => [x, p]));
-          const look = e => [...parts(e).map(([x, p]) => shape(x, p)), [...e.querySelectorAll('svg,img')].filter(vis).length, fill(e)?.join() !== fill(up(e))?.join()].join('/');
+          const seen = x => x.checkVisibility({ opacityProperty: true, visibilityProperty: true }) && vis(x) && !hidden(x);
+          const mark = x => { const b = x.getBoundingClientRect(); return x.tagName + (x.innerText?.trim() ? '' : Math.round(b.width) + 'x' + Math.round(b.height)); };   // text boxes differ by label, so only textless ones by size
+          const marks = e => [...e.querySelectorAll('*')].filter(x => !x.ownerSVGElement && seen(x)).map(mark);
+          const look = e => [...parts(e).map(([x, p]) => shape(x, p)), marks(e).join(), fill(e)?.join() !== fill(up(e))?.join()].join('/');
+          const inkOf = x => { const c = getComputedStyle(x), b = rgba(c.backgroundColor); if (b[3]) return b;
+            const d = ['Bottom', 'Top', 'Left', 'Right'].find(d => parseFloat(c[`border${d}Width`]) > 0 && c[`border${d}Style`] !== 'none' && rgba(c[`border${d}Color`])[3]);
+            return d ? rgba(c[`border${d}Color`]) : null; };
+          const bars = (g, it, peer) => { const a = it.getBoundingClientRect(), b = peer.getBoundingClientRect(), span = (r, x) => Math.max(0, Math.min(r.right, x.right) - Math.max(r.left, x.left));   // e.g. a tab ink bar outside the tabs
+            return [...g.querySelectorAll('*')].filter(x => !x.ownerSVGElement && !x.innerText?.trim() && !x.contains(it) && !it.contains(x) && !peer.contains(x) && seen(x) && inkOf(x)).filter(x => { const r = x.getBoundingClientRect();
+              return Math.min(r.width, r.height) <= 6 && span(r, a) > 0.5 * r.width && span(r, b) < 0.5 * r.width && r.top < a.bottom + 8 && r.bottom > a.top - 8; }); };
           const paint = e => parts(e).flatMap(([x, p], i) => { const c = getComputedStyle(x, p), off = (i > 2 && x === e) || (p && c.content === 'none');   // only colours that are drawn
             return [['color', 1], ['background-color', 1], ['border-color', parseFloat(c.borderWidth) > 0], ['outline-color', c.outlineStyle !== 'none'], ['text-decoration-color', c.textDecorationLine !== 'none'], ['box-shadow', 1]]
               .map(([k, on]) => [(i > 2 ? 'text' : '') + (p || '') + ' ' + k, !off && on ? c.getPropertyValue(k) : '']); });
@@ -193,7 +208,10 @@ async page => {
             const o = owner(it), B = onImage(o, U.ims) ? null : fill(o), Q = fill(peer), P = fill(up(it)), fg = ink(o);
             const r = { sel: sel(it), text: it.innerText.trim().slice(0, 30), peer: sel(peer), large: large(o), contrast: B && ratio(over(fg, B), B), indicators: [] };
             const q = paint(peer), differs = [...new Set(paint(it).filter(([, v], j) => v !== q[j][1]).map(([k]) => k.trim()))];
-            if (look(it) === look(peer)) r.colourOnly = { differs: differs.length ? differs : 'nothing visible', textStateContrast: ratio(over(fg, B || [255, 255, 255]), over(ink(owner(peer)), Q || [255, 255, 255])), bgStateContrast: B && Q ? ratio(B, Q) : null };
+            const pm = marks(peer), own = [...it.querySelectorAll('*')].filter(x => !x.ownerSVGElement && seen(x) && !x.innerText?.trim() && inkOf(x) && !pm.includes(mark(x)));
+            const els = [...own, ...(g ? bars(g, it, peer) : [])];
+            for (const x of els) { const F = fill(up(x)); if (F) r.indicators.push([sel(x), ratio(over(inkOf(x), F), F)]); }
+            if (!els.length && look(it) === look(peer)) r.colourOnly = { differs: differs.length ? differs : 'nothing visible', textStateContrast: ratio(over(fg, B || [255, 255, 255]), over(ink(owner(peer)), Q || [255, 255, 255])), bgStateContrast: B && Q ? ratio(B, Q) : null };
             if (B && Q && P) {
               const ci = getComputedStyle(it), cp = getComputedStyle(peer);
               for (const d of ['Top', 'Right', 'Bottom', 'Left']) { const k = `border${d}`, c = rgba(ci[k + 'Color']);
