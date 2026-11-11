@@ -10,9 +10,11 @@ async page => {
     let ops;
     try { ops = JSON.parse(req.postData() || ''); } catch { return false; }
     ops = Array.isArray(ops) ? ops : [ops];
+    // only a real GraphQL read passes: a document starting with {, query or fragment, and no mutation/subscription
     // ponytail: a field named "mutation" is blocked too; erring towards blocking is the point
+    const doc = q => q.replace(/#[^\n]*/g, '').replace(/"""[\s\S]*?"""|"(?:\\.|[^"\\])*"/g, '""').trim();
     return ops.length > 0 && ops.every(o => o && typeof o.query === 'string' &&
-      !/\b(mutation|subscription)\b/.test(o.query.replace(/#[^\n]*/g, '').replace(/"""[\s\S]*?"""|"(?:\\.|[^"\\])*"/g, '""')));
+      /^(\{|query\b|fragment\b)/.test(doc(o.query)) && !/\b(mutation|subscription)\b/.test(doc(o.query)));
   };
 
   await ctx.route('**/*', route => {
