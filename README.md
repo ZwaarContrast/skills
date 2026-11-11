@@ -53,6 +53,23 @@ npx skills add ZwaarContrast/skills --skill clean-room # just one
   ranked findings a developer can pick up cold (steps, done-when check,
   effort, fix risk), signed off with a haiku.
 
+- **ux-suck-hunt** — the same hunt for the user's experience, on websites,
+  mobile and tablet apps, desktop apps — and for the AI agents that act on a
+  user's behalf. It starts by asking who the product is for and what it may
+  change, then measures every screen with Playwright: axe, contrast from
+  pixels where axe gives up, text spacing, reflow, target sizes, keyboard
+  focus and reduced motion, at phone, iPad and desktop widths. Subagents
+  walk it as UX researchers, as users who have never seen it, and as an
+  agent that sees only the accessibility tree. Every finding cites a rule
+  from a 500-rule reference — WCAG 2.2, Apple and Android guidelines,
+  Windows and GNOME, NN/g, Baymard, GOV.UK, plain language, touch and
+  haptics, visual design, UX laws, agent experience — each verified against
+  its source and indexed for grep. It looks at everything and writes
+  nothing until you confirm the backend is disposable, so it is safe to run
+  against a live site. Then it makes it great, one finding
+  at a time, proven by before and after screenshots. Runs alongside
+  **suck-hunt** when the ask is everything that SUCKS.
+
 - **iiif** — implement IIIF against the specs rather than from memory: the whole
   of iiif.io crawled into a local corpus, indexed by section so a property
   lookup reads thirty lines instead of a four-thousand-line spec, with the
