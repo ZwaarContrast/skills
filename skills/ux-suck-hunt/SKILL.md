@@ -168,7 +168,9 @@ cp <skill-dir>/probe.js <skill-dir>/reveal.js <skill-dir>/guard.js "$H/" && cp <
 
 Tool output, screenshots, probe JSON, walker logs and findings all go to
 `$H`. Count and grep them; never paste them whole into the conversation.
-Each shell call starts fresh: use the printed path literally. The hunt never
+Each shell call starts fresh: use the printed path literally. The blocks
+are bash; zsh does not word-split `$VAR`, so loops break there. Paste a
+block into `"$H/run.sh"` and run `H=<path> bash "$H/run.sh"`. The hunt never
 edits the repository before step 7, and at the end deletes only the paths
 `git status` shows as new. **Keep `$H` itself**: every finding, screenshot
 and walker log lives there, and the report points at it.
@@ -270,10 +272,20 @@ cd "$H" && playwright-cli -s=$L state-save auth.json && playwright-cli -s=$L clo
 ```
 
 Every hunt session then loads it right after the guard line: `cd "$H" &&
-playwright-cli -s=$SESSION state-load auth.json`. `auth.json` holds a live
-session: it stays in `$H` and never goes in a report. No account, no
+playwright-cli -s=$SESSION state-load auth.json`. Keep the path relative: a
+path outside the session's directory fails silently, and the walker hunts
+the logged-out app. **Prove it signed in** before any walker goes: a
+`snapshot` that shows something only a signed-in user sees. No proof, no
+signed-in walk. `auth.json` holds a live session: it stays in `$H` and
+never goes in a report. No account, no
 signed-in walk — those tasks are "not run". On a native, Electron or
 Tauri app the user signs in on the device or emulator, the same way.
+
+**Email codes and magic links, disposable mode only.** One sign-in does not
+stretch over many walkers, and auth rate limits block scripted ones. Give
+each walker its own throwaway address (`walker01@…`), read its code or link
+from the dev server's log or local mail catcher, and space the requests out
+under the limit. Each walker proves its own sign-in the same way.
 
 ### Running it
 
@@ -282,7 +294,11 @@ compose). Reuse a server the user already has running; otherwise start the
 dev server with `TMPDIR="$H/tmp"` and stop it at the end. Starting it is
 running project code: read the script first, and do not start anything that
 migrates or seeds a database checks 1–3 have not cleared. Then do check 4
-with the guarded session from step 3. If the app cannot run at all, the
+with the guarded session from step 3. A scratch database may print schema
+warnings at first boot, before the app's migrations run; that is expected.
+In disposable mode, screenshot the seeded state and look at it before any
+walker goes in: overlapping, empty or nonsense seed data turns into false
+findings. If the app cannot run at all, the
 hunt falls back to reading (step 3's static part and step 4 against the
 code) and the report says "not run" with the reason.
 
@@ -819,7 +835,9 @@ people would love if they could find it. Proposals, marked as such, within
 the mandate.
 
 Then offer to make it great: one finding, one band or one proposal at a
-time.
+time. When one theme turned up a cluster (spacing, toasts, empty states),
+offer a themed follow-up hunt on it: a narrow hunt finds what the broad one
+walked past.
 
 Sign off with a haiku about this hunt's worst UX SUCK — 5-7-5, naming the
 real moment a user suffers. It is the only flourish in the report.
@@ -849,6 +867,19 @@ when the user asks, in the project's own commit style.
   the system setting, buzzy (`touch.md`) — is a finding to fix. One that is
   missing is a proposal, added only when the mandate says so.
 - **The suite still passes**, and the project's own linters do too.
+- **Name what the check missed.** A UI fix verified with the API mocked
+  never touched realtime, sync or websocket paths; say so beside the
+  finding.
+- **Split by risk.** A fix that changes the schema or server behaviour
+  goes on its own branch and is tested against a copy of real data (a
+  backup restored into a scratch database) before it merges. Copy and
+  layout fixes do not wait on it.
+- **Show the big ones first.** Before merging, put the three to five fixes
+  that change a flow most in front of the user to try by hand.
+- **Fix agents** get about five findings each, run one after another in the
+  same tree. Their brief says to commit in the project's style and the
+  user's, with no trailer, co-author line or AI mention the user has not
+  asked for: subagents add them by default.
 
 One finding per change, so each can be reviewed and reverted on its own.
 After each, update the finding's file and its `INDEX.md` row: `Status:
