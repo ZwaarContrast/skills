@@ -13,7 +13,9 @@ async page => {
     // only a real GraphQL read passes: a document starting with {, query or fragment, and no mutation/subscription
     // ponytail: a field named "mutation" is blocked too; erring towards blocking is the point
     const doc = q => q.replace(/#[^\n]*/g, '').replace(/"""[\s\S]*?"""|"(?:\\.|[^"\\])*"/g, '""').trim();
+    const gqlKeys = ['query', 'variables', 'operationName', 'extensions'];
     return ops.length > 0 && ops.every(o => o && typeof o.query === 'string' &&
+      Object.keys(o).every(k => gqlKeys.includes(k)) &&
       /^(\{|query\b|fragment\b)/.test(doc(o.query)) && !/\b(mutation|subscription)\b/.test(doc(o.query)));
   };
 
@@ -26,8 +28,22 @@ async page => {
 
   await ctx.routeWebSocket(/.*/, ws => {
     ws.connectToServer();   // server -> page still flows; page -> server is dropped
-    ws.onMessage(m => log(`WS ${ws.url()} ${String(m).slice(0, 80)}`));
+    ws.onMessage(m => log(`WS ${ws.url()} ${typeof m === 'string' ? m.slice(0, 80) : 'hex ' + m.toString('hex').slice(0, 80)}`));
   });
 
-  return 'write guard on: GET, HEAD, OPTIONS and read-only GraphQL reach the server; other requests and WebSocket sends are blocked';
+  // routeWebSocket cannot see inside workers: mute their sends and log every worker
+  const muteWorker = w => {
+    log(`WORKER ${w.url()}`);
+    w.evaluate(() => { if (self.WebSocket) WebSocket.prototype.send = function () {}; }).catch(() => {});
+  };
+  const watch = p => p.on('worker', muteWorker);
+  ctx.pages().forEach(watch);
+  ctx.on('page', watch);
+  await ctx.exposeBinding('__uxSharedWorker', (_, url) => log(`SHAREDWORKER ${url} (unguarded)`));
+  await ctx.addInitScript(() => {
+    const S = window.SharedWorker;
+    if (S) window.SharedWorker = function (url, o) { window.__uxSharedWorker(String(url)); return new S(url, o); };
+  });
+
+  return 'write guard on: GET, HEAD, OPTIONS and read-only GraphQL reach the server; other requests, WebSocket sends and worker WebSocket sends are blocked; workers are logged';
 }
