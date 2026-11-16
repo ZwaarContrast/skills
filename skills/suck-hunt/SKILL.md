@@ -1,6 +1,6 @@
 ---
 name: suck-hunt
-description: SUCK hunt — sweep a codebase for everything that SUCKS and prove each find. Broken, insecure, untested, brittle, badly typed, lint-suppressed, dead, duplicated, overengineered, reinvented, slow, unreadable code; vulnerable or outdated dependencies, committed secrets, big files outside LFS, missing lint and format, a README that lies. Tools find the mechanical SUCK, reading finds the rest, and the reply is ranked findings a developer can pick up cold. Use to find what SUCKS, hunt tech debt or code smells, roast a codebase, or find what to delete. Reports in conversation; does not fix. It hunts the code; the product as people use it — UX, usability, accessibility, copy — is ux-suck-hunt's. A bare "what SUCKS in my app" means both; run both.
+description: SUCK hunt — sweep a codebase for everything that SUCKS and prove each find. Broken, insecure, untested, brittle, badly typed, implicit state machines, lint-suppressed, dead, duplicated, overengineered, reinvented, slow, unreadable code; vulnerable or outdated dependencies, committed secrets, big files outside LFS, missing lint and format, a README that lies. Tools find the mechanical SUCK, reading finds the rest, and the reply is ranked findings a developer can pick up cold. Use to find what SUCKS, hunt tech debt or code smells, roast a codebase, or find what to delete. Reports in conversation; does not fix. It hunts the code; the product as people use it — UX, usability, accessibility, copy — is ux-suck-hunt's. A bare "what SUCKS in my app" means both; run both.
 ---
 
 # SUCK hunt
@@ -107,6 +107,8 @@ grep -rnE 'verify=False|rejectUnauthorized: *false|InsecureSkipVerify: *true|she
 grep -rnE 'console\.(log|debug)\(|debugger;|\bdbg!\(|breakpoint\(\)|pdb\.set_trace|^\s*print\(|fmt\.Print(ln|f)?\(' <src> > "$H/debug.txt"
 grep -rnE 'eslint-disable|oxlint-disable|biome-ignore|stylelint-disable|@ts-ignore|@ts-expect-error|@ts-nocheck|noqa|type: ?ignore|pyright: ?ignore|mypy: ?ignore-errors|pylint: ?disable|#!?\[(allow|expect)\(|//\s*nolint|//lint:ignore|#nosec|\.skip\(|xit\(|todo!|unimplemented!' <src> > "$H/suppressions.txt"
 grep -rnE 'continue-on-error: *true|allow_failure: *true|\|\| *true' .github .gitlab-ci.yml .circleci > "$H/ci.txt" 2>/dev/null
+grep -roE '\b(is|has|should)[A-Z_][A-Za-z_]*\s*[:=]\s*(true|false|True|False)\b' <src> | cut -d: -f1 | uniq -c | awk '$1>=4' | sort -rn > "$H/flag-piles.txt"
+grep -rnE "\b(status|state|phase|mode|step|stage)\s*(===?|!==?)\s*['\"][A-Za-z_-]+['\"]" <src> > "$H/status-compares.txt"
 go run github.com/google/osv-scanner/v2/cmd/osv-scanner@latest scan source -r -f markdown . > "$H/osv.md" 2>/dev/null
 go run github.com/zricethezav/gitleaks/v8@latest git --no-banner --redact -f csv -r "$H/secrets.csv" . 2>/dev/null
 git ls-files -ci --exclude-standard > "$H/tracked-ignored.txt"
@@ -141,6 +143,11 @@ the exported API of a package others import. A tool that
 - **The greps are leads.** Output that *is* the product — a CLI printing its
   result — is not a debug leftover. `cmd || true` in a cleanup step is
   normal; in a test or lint step it is a CI that cannot fail.
+- **Implicit state machines** hide in `flag-piles.txt` (a file setting four
+  or more `is…`/`has…` flags; `usestate-flags.txt` for React) and
+  `status-compares.txt` (the files comparing a status most: `cut -d:
+  -f1 "$H/status-compares.txt" | sort | uniq -c | sort -rn`). Read the top files whole and list their states and what
+  moves between them; step 3 says what counts.
 - **Secrets never reach the conversation.** `--redact` keeps values out of
   the file; the report names file, commit and kind of secret, never the
   value.
@@ -193,6 +200,7 @@ npx -y -p @ast-grep/cli ast-grep run -l ts -p 'JSON.parse($$$) as $T' <src> > "$
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'try { $$$ } catch ($E) { }' <src> > "$H/swallowed.txt"
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'JSON.parse(JSON.stringify($X))' <src> > "$H/deep-clone.txt"
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'new Promise($$$A => setTimeout($$$))' <src> > "$H/sleeps.txt"
+grep -roE 'useState(<boolean>)?\((true|false)\)' <src> | cut -d: -f1 | uniq -c | awk '$1>=3' | sort -rn > "$H/usestate-flags.txt"
 npx -y npm-check-updates > "$H/outdated.txt" 2>&1
 npm audit --package-lock-only > "$H/audit.txt" 2>&1
 ```
@@ -492,6 +500,21 @@ The categories, grouped by the band they usually land in (step 5):
   matching on error-message strings, hard-coded paths and ports, `sleep` to
   wait for readiness, tests that assert on implementation, shared mutable
   state, catch-all handlers that swallow and carry on, circular imports.
+- **Implicit state** — a state machine nobody wrote down: `isLoading`,
+  `isError`, `hasData` and `isSubmitting` side by side, a `status` string
+  compared in a dozen files, transitions spread across handlers and
+  effects. It is a finding only with a named bad state and the path to
+  it: a combination that should not exist but can (loading and error both
+  true after a retry, a second submit while the first is pending, an edit
+  screen open on a deleted item), or a state with no way out (no cancel
+  from `pending`, no retry from `error`). The cost line counts it —
+  "five flags, 32 combinations, 4 valid" — because nobody, person or agent,
+  can reason about the 28 nobody listed. The fix is one discriminated
+  union, enum or reducer, with the states and transitions it allows
+  written beside it; a state-machine library only when the machine is
+  big. A bad state a user can reach is **broken**, fire. The screen it
+  leaves behind (the spinner that never stops, the double charge) is
+  `ux-suck-hunt`'s to judge; cite it from there.
 - **Performance** — the obvious kind, visible in the code: a query or HTTP
   call per item (N+1), `await` in a loop where the calls are independent, a
   list searched inside a loop over another list, the whole file rewritten on
@@ -590,6 +613,9 @@ way.
 - **Performance:** is the size real? Find where the collection comes from
   and how big it gets in use. If it stays small, drop it.
 - **Overengineered:** is there really one implementation and one caller?
+- **Implicit state:** write the sequence of events that reaches the bad
+  state, and run it where the code may run. Flags that are only ever set
+  together, or one combination no event can produce, are not a finding.
 - **Suppressed:** does it still hide anything? Remove it in the scratch copy
   and rerun the tool.
 

@@ -643,7 +643,10 @@ its category from here and its rule IDs from `references/`.
 - **Form SUCK** — placeholder as label, needless fields, fussy formats, no
   `autocomplete` (Baymard, GOV.UK Design System: `web.md`).
 - **Missing state** — empty, loading, error, offline or no-permission states
-  nobody designed; "0 results" with no way out.
+  nobody designed; "0 results" with no way out. A state that gets stuck or
+  combines wrongly (a spinner beside an error, a second submit) often
+  has an implicit state machine behind it: that code cause is
+  `suck-hunt`'s, so cite it there.
 - **Unclear** — vague labels ("Submit"), the team's jargon (Nielsen #2,
   match the real world), the wrong icon, two words for one thing.
 - **Hard to read** — walls of text above the audience's level
