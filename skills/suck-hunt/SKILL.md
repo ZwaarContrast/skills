@@ -1,6 +1,6 @@
 ---
 name: suck-hunt
-description: SUCK hunt — sweep a codebase for everything that SUCKS and prove each find. Broken, insecure, untested, brittle, badly typed, implicit state machines, lint-suppressed, dead, duplicated, overengineered, reinvented, slow, unreadable code; vulnerable or outdated dependencies, committed secrets, big files outside LFS, missing lint and format, a README that lies. Tools find the mechanical SUCK, reading finds the rest, and the reply is ranked findings a developer can pick up cold. Use to find what SUCKS, hunt tech debt or code smells, roast a codebase, or find what to delete. Reports in conversation; does not fix. It hunts the code; the product as people use it — UX, usability, accessibility, copy — is ux-suck-hunt's. A bare "what SUCKS in my app" means both; run both.
+description: SUCK hunt — sweep a codebase for everything that SUCKS and prove each find. Broken, insecure, untested, brittle, badly typed, lint-suppressed, dead, duplicated, overengineered, reinvented, slow, unreadable code; implicit state machines; vulnerable or outdated dependencies, committed secrets, big files outside LFS, missing lint and format, a README that lies. Tools find the mechanical SUCK, reading finds the rest, and the reply is ranked findings a developer can pick up cold. Use to find what SUCKS, hunt tech debt or code smells, roast a codebase, or find what to delete. Reports in conversation; does not fix. It hunts the code; the product as people use it — UX, usability, accessibility, copy — is ux-suck-hunt's. A bare "what SUCKS in my app" means both; run both.
 ---
 
 # SUCK hunt
@@ -107,8 +107,9 @@ grep -rnE 'verify=False|rejectUnauthorized: *false|InsecureSkipVerify: *true|she
 grep -rnE 'console\.(log|debug)\(|debugger;|\bdbg!\(|breakpoint\(\)|pdb\.set_trace|^\s*print\(|fmt\.Print(ln|f)?\(' <src> > "$H/debug.txt"
 grep -rnE 'eslint-disable|oxlint-disable|biome-ignore|stylelint-disable|@ts-ignore|@ts-expect-error|@ts-nocheck|noqa|type: ?ignore|pyright: ?ignore|mypy: ?ignore-errors|pylint: ?disable|#!?\[(allow|expect)\(|//\s*nolint|//lint:ignore|#nosec|\.skip\(|xit\(|todo!|unimplemented!' <src> > "$H/suppressions.txt"
 grep -rnE 'continue-on-error: *true|allow_failure: *true|\|\| *true' .github .gitlab-ci.yml .circleci > "$H/ci.txt" 2>/dev/null
-grep -roE '\b(is|has|should)[A-Z_][A-Za-z_]*\s*[:=]\s*(true|false|True|False)\b' <src> | cut -d: -f1 | uniq -c | awk '$1>=4' | sort -rn > "$H/flag-piles.txt"
-grep -rnE "\b(status|state|phase|mode|step|stage)\s*(===?|!==?)\s*['\"][A-Za-z_-]+['\"]" <src> > "$H/status-compares.txt"
+grep -roE '\b([Ii]s|[Hh]as|[Ss]hould)[A-Z_][A-Za-z_]*\s*(:=|[:=])\s*(true|false|True|False)\b' <src> | grep -vE '(\.|_)(test|spec)\.|/tests?/|__tests__' | cut -d: -f1 | uniq -c | awk '$1>=4' | sort -rn > "$H/flag-piles.txt"
+grep -rnoiE "\b(set(status|state|phase|mode|step|stage)\(|(status|state|phase|mode|step|stage)\s*[:=]\s*)['\"][A-Za-z_-]+['\"]" <src> > "$H/state-writes.txt"
+sed -E "s/^([^:]+):.*['\"]([A-Za-z_-]+)['\"]$/\2 \1/" "$H/state-writes.txt" | sort -u | cut -d' ' -f1 | uniq -c | sort -rn > "$H/state-writers.txt"
 go run github.com/google/osv-scanner/v2/cmd/osv-scanner@latest scan source -r -f markdown . > "$H/osv.md" 2>/dev/null
 go run github.com/zricethezav/gitleaks/v8@latest git --no-banner --redact -f csv -r "$H/secrets.csv" . 2>/dev/null
 git ls-files -ci --exclude-standard > "$H/tracked-ignored.txt"
@@ -143,11 +144,14 @@ the exported API of a package others import. A tool that
 - **The greps are leads.** Output that *is* the product — a CLI printing its
   result — is not a debug leftover. `cmd || true` in a cleanup step is
   normal; in a test or lint step it is a CI that cannot fail.
-- **Implicit state machines** hide in `flag-piles.txt` (a file setting four
-  or more `is…`/`has…` flags; `usestate-flags.txt` for React) and
-  `status-compares.txt` (the files comparing a status most: `cut -d:
-  -f1 "$H/status-compares.txt" | sort | uniq -c | sort -rn`). Read the top files whole and list their states and what
-  moves between them; step 3 says what counts.
+- **Implicit state machines** show where state is *written*, not read:
+  reading a status everywhere is how an explicit machine is used.
+  `state-writers.txt` ranks each state value by how many files write it
+  (`state-writes.txt` has the lines); `flag-piles.txt` lists files setting
+  four or more `is…`/`has…` flags, and `usestate-flags.txt` does the same
+  for React components. Both count per file, and props defaults
+  (`{ isOpen = false }`) land there too: find the component, then read it
+  whole and list its states and what writes each. Step 3 says what counts.
 - **Secrets never reach the conversation.** `--redact` keeps values out of
   the file; the report names file, commit and kind of secret, never the
   value.
@@ -501,20 +505,27 @@ The categories, grouped by the band they usually land in (step 5):
   wait for readiness, tests that assert on implementation, shared mutable
   state, catch-all handlers that swallow and carry on, circular imports.
 - **Implicit state** — a state machine nobody wrote down: `isLoading`,
-  `isError`, `hasData` and `isSubmitting` side by side, a `status` string
-  compared in a dozen files, transitions spread across handlers and
-  effects. It is a finding only with a named bad state and the path to
-  it: a combination that should not exist but can (loading and error both
-  true after a retry, a second submit while the first is pending, an edit
-  screen open on a deleted item), or a state with no way out (no cancel
-  from `pending`, no retry from `error`). The cost line counts it —
-  "five flags, 32 combinations, 4 valid" — because nobody, person or agent,
-  can reason about the 28 nobody listed. The fix is one discriminated
-  union, enum or reducer, with the states and transitions it allows
-  written beside it; a state-machine library only when the machine is
-  big. A bad state a user can reach is **broken**, fire. The screen it
-  leaves behind (the spinner that never stops, the double charge) is
-  `ux-suck-hunt`'s to judge; cite it from there.
+  `isError`, `hasData` and `isSubmitting` side by side, one status written
+  from a dozen files, transitions spread across handlers and effects. It
+  is a finding in one of two shapes, each with its evidence:
+  - *A bad state you can reach* — a combination that should not exist but
+    can (loading and error both true after a retry, a second submit while
+    the first is pending, an edit screen open on a deleted item), or a
+    state with no way out (no cancel from `pending`, no retry from
+    `error`). Name it and the events that reach it. That is **broken**,
+    fire, and the report states its user impact.
+  - *A machine nobody can change safely* — no bad state shown yet, but a
+    cost you can count: "adding `cancelled` means editing 9 files and 4
+    effects, and nothing lists them". Slow.
+
+  Count combinations only over flags one event writes together: "five
+  coupled flags, 32 combinations, 4 meant". Unrelated flags are not one
+  machine. The fix is one discriminated union, enum or reducer, with the
+  states and transitions it allows written beside it; a state-machine
+  library only past about eight states, or with nested or parallel ones.
+  A status typed as `string` with no transitions spread around is
+  **typing**, not this. How a screen should present the state is
+  `ux-suck-hunt`'s; the bug and its impact are reported here.
 - **Performance** — the obvious kind, visible in the code: a query or HTTP
   call per item (N+1), `await` in a loop where the calls are independent, a
   list searched inside a loop over another list, the whole file rewritten on
@@ -613,9 +624,12 @@ way.
 - **Performance:** is the size real? Find where the collection comes from
   and how big it gets in use. If it stays small, drop it.
 - **Overengineered:** is there really one implementation and one caller?
-- **Implicit state:** write the sequence of events that reaches the bad
-  state, and run it where the code may run. Flags that are only ever set
-  together, or one combination no event can produce, are not a finding.
+- **Implicit state:** are these one machine? Show one event that writes
+  two of the flags; flags no event couples are independent. For a bad
+  state, write the sequence of events that reaches it and run it where the
+  code may run; flags only ever set together, or a combination no event
+  can produce, are not a finding. For change cost, count the files by
+  grepping the writes, not by estimate.
 - **Suppressed:** does it still hide anything? Remove it in the scratch copy
   and rerun the tool.
 
