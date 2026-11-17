@@ -507,11 +507,16 @@ The categories, grouped by the band they usually land in (step 5):
 - **Implicit state** — a state machine nobody wrote down: flags and a
   status side by side, changed from handlers, effects, other clients and
   jobs. Find it by **tracing**:
-  1. *Scope*: start from the piece the lead names. Add a piece when one
-     event sets both (resetting to the row-0 value does not count) or one
-     condition decides on both whether something exists or runs. Stop at
-     the smallest set that shows a defect, eight pieces at most; none in
-     eight is the no-bad-state case below.
+  1. *Scope*: work the leads by count, holders and stores first. A lead
+     names a component, file or table, which can hold several machines:
+     list its pieces — state, refs and module variables, one per field of
+     a record or CRDT value; a derived value is traced through its source
+     — and start from the one with the most write sites. Add a piece when
+     one event sets both (resetting to the row-0 value does not count) or
+     one condition decides on both whether something exists or runs. Stop
+     at the smallest set that shows a defect, eight pieces at most, then
+     start again from the next piece not yet in a machine, until every
+     piece is in one.
   2. *Writes*: grep each piece's name, its setter with and without `(`,
      and every alias or prop it is passed on as. State with one shared
      writer (`this.setState`, a store, a CRDT map's `set`) is traced by
@@ -538,7 +543,7 @@ The categories, grouped by the band they usually land in (step 5):
        gate reads, or a piece is read and never cleared; one piece kept in
        two stores (a row, its cache, a browser copy) counts as two;
      - *lost write* — a write replaces a whole record other writers also
-       change;
+       change, the same code on another client included;
      - *stuck* — a state with no way out the user or caller needs.
 
      None counts where a test asserts the behaviour or a comment says why
@@ -549,24 +554,26 @@ The categories, grouped by the band they usually land in (step 5):
   The exact events that reach a bad state are an exact input: the finding
   is **broken**, banded by step 5 like any bug, with "implicit state" in
   the write-up. Run them where step 1 allows — a test or script in
-  `$H/copy` (dependencies installed there with `--ignore-scripts`), or
-  `ux-suck-hunt`'s browser — and say whether you did. With no bad state it
-  is **implicit state**, slow, only when the state is read to decide
-  something and `git log -S'<setter or field>'` shows one commit changing
-  two or more of its write sites; name the commit. Otherwise drop it. The
-  fix: one type for the state (a union; an enum with `match`; a Go typed
-  constant that `exhaustive` checks) and one transition function that
-  rejects a move the table does not allow, with the table beside it (in
-  Go, behind a mutex or one goroutine). Persisted state is guarded in the
-  store, where a second service or a hand edit cannot skip it: an enum
-  type or `CHECK` constraint, `UPDATE … WHERE status = ?` with the
-  affected rows checked, or a trigger that rejects a move the table
-  forbids; in Redis, `WATCH`/`MULTI` or one Lua script for check-then-set.
-  A whole-record write becomes an update of the changed fields, or checks
-  a version. A browser copy carries a version and is validated at row 0.
-  Synced (CRDT): store the facts, derive the status from them, and repair
-  an illegal merged state in one function. A `string` status with no
-  transitions spread around is **typing**.
+  `$H/copy` (dependencies installed there with `--ignore-scripts`; a
+  component test renders with testing-library added there), or
+  `ux-suck-hunt`'s browser — move what you keep into `$H` before the copy
+  goes, and say whether you ran it. A machine with no defect in any of its
+  pieces is the no-bad-state case: it is **implicit state**, slow, only
+  when the state is read to decide something and `git log -S'<setter or
+  field>'` shows one commit changing two or more of its write sites; name
+  the commit. Otherwise drop it. The fix: one type for the state (a union;
+  an enum with `match`; a Go typed constant that `exhaustive` checks) and
+  one transition function that rejects a move the table does not allow,
+  with the table beside it (in Go, behind a mutex or one goroutine).
+  Persisted state is guarded in the store, where a second service or a
+  hand edit cannot skip it: an enum type or `CHECK` constraint, `UPDATE …
+  WHERE status = ?` with the affected rows checked, or a trigger that
+  rejects a move the table forbids; in Redis, `WATCH`/`MULTI` or one Lua
+  script for check-then-set. A whole-record write becomes an update of the
+  changed fields, or checks a version. A browser copy carries a version
+  and is validated at row 0. Synced (CRDT): store the facts, derive the
+  status from them, and repair an illegal merged state in one function. A
+  `string` status with no transitions spread around is **typing**.
 - **Performance** — the obvious kind, visible in the code: a query or HTTP
   call per item (N+1), `await` in a loop where the calls are independent, a
   list searched inside a loop over another list, the whole file rewritten on
@@ -720,7 +727,7 @@ evidence says so:
 | Moves to | When |
 |---|---|
 | fire | exploitable; on money, auth or a trust boundary; can take the service down (unbounded growth, N+1 on a hot path); brittle code in a high-churn file; a suppression hiding a real error; a committed `.env` |
-| slow | a lazy suppression that still suppresses something; a vulnerable dependency the shipped code never reaches; a **broken** whose bad state is cosmetic and gone at the next event |
+| slow | a lazy suppression that still suppresses something; a vulnerable dependency the shipped code never reaches; a **broken** whose bad state is only cosmetic — a wrong highlight or message, no data, money or access touched |
 | dead weight | dead code, however brittle or insecure — deleting it fixes everything. But dead code that looks about to go live (recent, half-wired) and holds a hazard says so in its finding |
 
 **Full write-ups for the first ten** (or all, if there are fewer), each one
