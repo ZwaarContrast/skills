@@ -108,6 +108,7 @@ grep -rnE 'console\.(log|debug)\(|debugger;|\bdbg!\(|breakpoint\(\)|pdb\.set_tra
 grep -rnE 'eslint-disable|oxlint-disable|biome-ignore|stylelint-disable|@ts-ignore|@ts-expect-error|@ts-nocheck|noqa|type: ?ignore|pyright: ?ignore|mypy: ?ignore-errors|pylint: ?disable|#!?\[(allow|expect)\(|//\s*nolint|//lint:ignore|#nosec|\.skip\(|xit\(|todo!|unimplemented!' <src> > "$H/suppressions.txt"
 grep -rnE 'continue-on-error: *true|allow_failure: *true|\|\| *true' .github .gitlab-ci.yml .circleci > "$H/ci.txt" 2>/dev/null
 git -c core.quotePath=off ls-files <src> | grep -E '\.(py|go|php|rb|java|kt|cs|rs|swift|ex|[jt]sx?|vue|svelte)$' | grep -vE '(\.|_)(test|spec)\.|/tests?/|__tests__|/test_[^/]*$|\.min\.js$|\.stories\.|\.pb\.go$|_generated\.|/vendor/|/generated/' | tr '\n' '\0' | xargs -0 grep -sHciE '(^|[^A-Za-z0-9_])_*(status|state|phase)([^A-Za-z0-9_]|$)' | grep -v ':0$' | sort -t: -k2 -rn | head -20 > "$H/state-fields.txt"
+git -c core.quotePath=off ls-files | grep -iE '\.(sql|prisma)$|schema\.[a-z]+$|/migrations?/' | grep -vE '/vendor/' | tr '\n' '\0' | xargs -0 grep -sHniE "^[[:space:]]*[\"'\`]?_*(status|state|phase)[\"'\`]?[[:space:]]*:?[[:space:]]*[A-Za-z]|create type [A-Za-z_\".]+ as enum|check[[:space:]]*\(.*(status|state|phase)" > "$H/state-schema.txt"
 go run github.com/google/osv-scanner/v2/cmd/osv-scanner@latest scan source -r -f markdown . > "$H/osv.md" 2>/dev/null
 go run github.com/zricethezav/gitleaks/v8@latest git --no-banner --redact -f csv -r "$H/secrets.csv" . 2>/dev/null
 git ls-files -ci --exclude-standard > "$H/tracked-ignored.txt"
@@ -144,7 +145,8 @@ the exported API of a package others import. A tool that
   normal; in a test or lint step it is a CI that cannot fail.
 - **Implicit state** starts where state piles up: `state-fields.txt`
   (code files naming a status, state or phase most; HTTP status lands
-  there too), and for JS `state-holders.txt` (components and hooks with
+  there too), `state-schema.txt` (status columns, enum types and `CHECK`
+  constraints in schemas and migrations), and for JS `state-holders.txt` (components and hooks with
   four or more pieces of state) and `state-stores.txt` (files importing a
   store or sync library, and class components). Places to start, never
   findings.
@@ -513,11 +515,16 @@ The categories, grouped by the band they usually land in (step 5):
   2. *Writes*: grep each piece's name, its setter with and without `(`,
      and every alias or prop it is passed on as. State with one shared
      writer (`this.setState`, a store, a CRDT map's `set`) is traced by
-     field name; a dispatch is a write.
+     field name; a dispatch is a write. State in storage is a column, a key
+     (localStorage, cookie, Redis) or a document field, and its writes are
+     `UPDATE` and `INSERT`, an ORM save or update, `setItem`, `SET`,
+     `HSET`, `DEL` and `EXPIRE`.
   3. *Table*, with lines: `event → fires in → checks → writes`. Row 0 is
      initialisation (URL, storage, props, defaults). *Fires in* is the
      states the trigger is reachable in, a request still in flight
-     counting as a state, plus other clients and jobs. *Checks* is what is
+     counting as a state, plus what changes it from outside: other
+     clients, jobs and queue workers, other tabs (the `storage` event),
+     keys that expire, migrations and hand edits. *Checks* is what is
      true when the write runs. Split each handler at every `await`,
      callback, request and setter call (the new value shows only after
      the next render); after a split nothing is checked unless it is
@@ -528,7 +535,8 @@ The categories, grouped by the band they usually land in (step 5):
      - *stale* — a write after a split relies on something that can change
        in the window, across requests and processes too;
      - *left behind* — an event changes one piece and leaves another its
-       gate reads, or a piece is read and never cleared;
+       gate reads, or a piece is read and never cleared; one piece kept in
+       two stores (a row, its cache, a browser copy) counts as two;
      - *lost write* — a write replaces a whole record other writers also
        change;
      - *stuck* — a state with no way out the user or caller needs.
@@ -549,12 +557,16 @@ The categories, grouped by the band they usually land in (step 5):
   fix: one type for the state (a union; an enum with `match`; a Go typed
   constant that `exhaustive` checks) and one transition function that
   rejects a move the table does not allow, with the table beside it (in
-  Go, behind a mutex or one goroutine). Persisted: `UPDATE … WHERE status
-  = ?` with the affected rows checked; a whole-record write becomes an
-  update of the changed fields, or checks a version. Synced (CRDT): store
-  the facts, derive the status from them, and repair an illegal merged
-  state in one function. A `string` status with no transitions spread
-  around is **typing**.
+  Go, behind a mutex or one goroutine). Persisted state is guarded in the
+  store, where a second service or a hand edit cannot skip it: an enum
+  type or `CHECK` constraint, `UPDATE … WHERE status = ?` with the
+  affected rows checked, or a trigger that rejects a move the table
+  forbids; in Redis, `WATCH`/`MULTI` or one Lua script for check-then-set.
+  A whole-record write becomes an update of the changed fields, or checks
+  a version. A browser copy carries a version and is validated at row 0.
+  Synced (CRDT): store the facts, derive the status from them, and repair
+  an illegal merged state in one function. A `string` status with no
+  transitions spread around is **typing**.
 - **Performance** — the obvious kind, visible in the code: a query or HTTP
   call per item (N+1), `await` in a loop where the calls are independent, a
   list searched inside a loop over another list, the whole file rewritten on
