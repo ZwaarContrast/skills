@@ -3,7 +3,7 @@
 Read this when you work an implicit-state lead (SKILL.md step 3). A trace
 turns a pile of state into a table, and the table into defects. Two hunters
 following it should draw the same table. `<skill-dir>` is the folder that
-holds SKILL.md. Section numbers below (§1–§8) are this file's; "SKILL.md
+holds SKILL.md; `<migrations>` is the folder the migration runner reads. Section numbers below (§1–§8) are this file's; "SKILL.md
 step N" is the skill's.
 
 ## §1 Schema
@@ -18,15 +18,17 @@ installed. For Postgres that is PGlite, Postgres compiled to WebAssembly
 (about 26 MB in `$H`, no server, its files kept inside itself):
 
 ```
-npm i -s --ignore-scripts --prefix "$H/pg" @electric-sql/pglite@0.5.16
-git ls-files '<migrations>/*.sql' | grep -vE '(^|/|\.)down\.sql$|/U[0-9][^/]*__[^/]*$' | sort -V | tr '\n' '\0' | xargs -0 node <skill-dir>/replay-pg.mjs "$H/pg" > "$H/state-schema-db.txt" 2> "$H/replay.txt"
+npm i -s --ignore-scripts --prefix "$H/pg" @electric-sql/pglite@0.5.16 && cp <skill-dir>/replay-pg.mjs "$H/pg/"
+git ls-files '<migrations>/*.sql' | grep -vE '(^|/|\.)down\.sql$|/U[0-9][^/]*__[^/]*$' | sort -V | tr '\n' '\0' | xargs -0 node "$H/pg/replay-pg.mjs" > "$H/state-schema-db.txt" 2> "$H/replay.txt"
 ```
 
 Up migrations only: down files (`*.down.sql`, `down.sql`, Flyway's `U…__`)
 are left out and down sections (`-- migrate:down`, `-- +goose Down`, `--
-Down Migration`) cut. `sort -V` is version order, except that Flyway runs
-`V1__` before `V1.1__`; where the runner keeps its own order (a journal, a
-timestamp prefix), use that.
+Down Migration`) cut, and so are `COPY … FROM stdin` data and `COPY …
+PROGRAM`. `sort -V` is version order, except that Flyway runs `V1__` before
+`V1.1__` and its `R__` repeatables last; where the runner keeps its own
+order (a journal, a timestamp prefix), use that. `git ls-files` sees only
+tracked files: name untracked migrations from `git status` in the report.
 
 `replay.txt` lists what did not apply. An extension that is not there
 (PostGIS, `uuid-ossp`), its types read as text, a migration runner's own
@@ -44,7 +46,9 @@ non-empty one, until three leads are taken; subagents draw from that one
 pool. The busiest is the top line where the file is ranked by count; in a
 schema file it is the table (or file) with the most lines: `cut -f1
 state-schema-db.txt | uniq -c | sort -rn`, `cut -d: -f1 state-schema.txt |
-uniq -c | sort -rn`. A lead names a component, file or table, which can
+uniq -c | sort -rn`, a data dump counted per table. Ties go to the lead with
+more write sites. A lead that turns out to hold no state is skipped and
+does not count. A lead names a component, file or table, which can
 hold several machines: trace at most two per lead. The report's coverage
 line names the leads left unworked.
 
@@ -61,8 +65,11 @@ row 0, which makes it part of row 0.
 
 ## §4 Scope
 
-Start from the piece the most conditions decide on; on a tie, the one
-declared first. Add a piece when one event sets both (resetting to the
+Start from a status-like piece — a name ending in status, state, phase or
+stage, an enum, a column with a `CHECK` — the one the most conditions
+decide on; only without one, from any piece. Ties go to the piece with more
+write sites, then the one declared first. A soft delete (`deleted_at`) or
+a timestamp is never the start. Add a piece when one event sets both (resetting to the
 row-0 value does not count) or one condition decides on both whether
 something exists or runs. Stop at the smallest set that shows a defect,
 eight pieces at most — when one event sets more, keep the eight the most
@@ -133,8 +140,9 @@ The exact events that reach a bad state are an exact input: the finding is
 **broken**, banded by SKILL.md step 5 like any bug, with "implicit state"
 in the write-up. Run them where SKILL.md step 1 allows — a test or script
 in `$H/copy` (dependencies installed there with `--ignore-scripts`; a
-component test renders with testing-library added there; the PGlite of §1
-serves as its database), or `ux-suck-hunt`'s browser — never against a
+component test renders with testing-library added there; a reproduction
+in raw SQL, or through drizzle's PGlite driver, can run against §1's
+PGlite — an app's own Postgres client cannot reach it), or `ux-suck-hunt`'s browser — never against a
 database the run did not create. Move what you keep into `$H` before the copy goes, and say whether
 you ran it.
 

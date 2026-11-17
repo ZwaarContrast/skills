@@ -201,16 +201,17 @@ with the evidence:
    `mocks/` directory switched on), a Stripe `sk_test_` / `pk_test_` key.
    A managed-cloud hostname (`*.rds.amazonaws.com`, `*.supabase.co`,
    `*.neon.tech`, `*.planetscale.com`, `cluster0.*.mongodb.net`), a live
-   payment key, or a value you cannot resolve — not disposable. Read only
-   each variable's name, scheme and host, or a key's first eight
-   characters; never the value itself:
+   payment key, or a value you cannot resolve — not disposable. Read hosts
+   and the kind of each key, never a value: this prints a URL's scheme and
+   host, a `*_HOST` as is, and for anything else only `live key`, `test
+   key`, `set` or `empty`:
 
    ```
-   grep -hE '^(export )?[A-Z0-9_]*(DATABASE|DB_|API|SUPABASE|FIREBASE|MONGO|STRIPE|REDIS)[A-Z0-9_]*=' .env* | sed -E -e 's#^(export )?([A-Z0-9_]+)=["'"'"']?([a-z0-9+]+://)([^/?#]*@)?([^/:?#"'"'"']*).*#\2 \3\5#' -e 't' -e 's#^(export )?([A-Z0-9_]+)=["'"'"']?(.{0,8}).*#\2 \3…#'
+   grep -hE '^(export )?[A-Z0-9_]*(DATABASE|DB_|POSTGRES|PG|MYSQL|API|SUPABASE|FIREBASE|MONGO|STRIPE|REDIS)[A-Z0-9_]*=' .env* | awk '{ l=$(0); sub(/^export /,"",l); n=substr(l,1,index(l,"=")-1); v=substr(l,index(l,"=")+1); gsub(/^["\047]|["\047][[:space:]]*$/,"",v); if (v ~ /^[a-z0-9+.-]+:\/\//) { s=v; sub(/:\/\/.*/,"://",s); r=substr(v,length(s)+1); if (r ~ /@/) sub(/.*@/,"",r); sub(/[\/?#:].*/,"",r); print n, s r } else if (n ~ /HOST/) print n, v; else if (v ~ /@/) { sub(/.*@/,"",v); sub(/[\/?#].*/,"",v); print n, "…@" v } else print n, (v=="" ? "empty" : v ~ /(^|_)live_/ ? "live key" : v ~ /(^|_)test_/ ? "test key" : "set") }'
    ```
 
-   A password, token or full connection string never goes into
-   `safety.md`, a brief or the report.
+   A password, token or connection string never goes into `safety.md`, a
+   brief or the report.
 3. **Side effects beyond the database.** Real email (SMTP, SendGrid,
    Postmark, Resend), SMS, webhooks, payments, push. A disposable database
    that sends real mail to real addresses in its seed data is not safe.
@@ -375,7 +376,7 @@ goes through step 5.
 cat > "$H/a11y.json" <<'EOF'
 {"plugins":["jsx-a11y"],"categories":{"correctness":"warn","suspicious":"warn","pedantic":"warn","style":"warn","restriction":"warn","nursery":"off","perf":"off"}}
 EOF
-npx -y oxlint@1.94.0 -c "$H/a11y.json" -f unix <src> 2>&1 | grep 'jsx-a11y(' > "$H/a11y-lint.txt"           # JSX/TSX
+npm_config_before=2026-11-17 npx -y oxlint@1.94.0 -c "$H/a11y.json" -f unix <src> 2>&1 | grep 'jsx-a11y(' > "$H/a11y-lint.txt"           # JSX/TSX
 grep -rnE 'outline: *(none|0)\b|:focus *\{[^}]*outline: *(none|0)' --include='*.css' --include='*.scss' --include='*.vue' --include='*.svelte' <src> > "$H/focus-killed.txt"
 grep -rnE 'user-scalable *= *no|maximum-scale *= *(0?\.[0-9]+|1(\.[0-9]+)?)\b' <src> > "$H/zoom-blocked.txt"
 grep -rnE 'tabindex="?[1-9]|autoplay|autofocus' <src> > "$H/focus-order.txt"
@@ -421,7 +422,7 @@ session was opened from. Outside it, it fails with "File access denied" —
 and exit code 0. So check what the guard printed, never its exit code:
 
 ```
-npm i -s --prefix "$H/axe" axe-core@4.14.1 --ignore-scripts && cp "$H/axe/node_modules/axe-core/axe.min.js" "$H/"
+npm_config_before=2026-11-17 npm i -s --prefix "$H/axe" axe-core@4.14.1 --ignore-scripts && cp "$H/axe/node_modules/axe-core/axe.min.js" "$H/"
 cd "$H" && SESSION="ux$(basename "$H" | tail -c 7)-<who>" && echo "$SESSION" && playwright-cli -s=$SESSION open \
   && playwright-cli -s=$SESSION --raw run-code --filename=guard.js | grep -q 'write guard on' \
   || { echo "NO GUARD — stop"; playwright-cli -s=$SESSION close; exit 1; }

@@ -4,4 +4,3 @@
 [Cc][Hh][Ee][Cc][Kk][[:space:]]*\(.*([Ss]tatus|[Ss]tate|[Pp]hase|[Ss]tage)
 ^[[:space:]]*enum [A-Za-z_]*([Ss]tatus|[Ss]tate|[Pp]hase)
 [Ee]num\(["'][a-z_]*(status|state|phase)
-(create|alter) table.*([a-z_]*(status|state|phase|stage)|is_[a-z_]+|[a-z_]+_at)[ ,)]
