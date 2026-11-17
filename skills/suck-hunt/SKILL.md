@@ -107,6 +107,7 @@ grep -rnE 'verify=False|rejectUnauthorized: *false|InsecureSkipVerify: *true|she
 grep -rnE 'console\.(log|debug)\(|debugger;|\bdbg!\(|breakpoint\(\)|pdb\.set_trace|^\s*print\(|fmt\.Print(ln|f)?\(' <src> > "$H/debug.txt"
 grep -rnE 'eslint-disable|oxlint-disable|biome-ignore|stylelint-disable|@ts-ignore|@ts-expect-error|@ts-nocheck|noqa|type: ?ignore|pyright: ?ignore|mypy: ?ignore-errors|pylint: ?disable|#!?\[(allow|expect)\(|//\s*nolint|//lint:ignore|#nosec|\.skip\(|xit\(|todo!|unimplemented!' <src> > "$H/suppressions.txt"
 grep -rnE 'continue-on-error: *true|allow_failure: *true|\|\| *true' .github .gitlab-ci.yml .circleci > "$H/ci.txt" 2>/dev/null
+grep -rcwE 'status|state|phase' <src> --exclude='*.min.js' --exclude='*.css' | grep -vE ':0$|(\.|_)(test|spec)\.|/tests?/|__tests__|/test_[^/]*$' | sort -t: -k2 -rn | head -20 > "$H/state-fields.txt"
 go run github.com/google/osv-scanner/v2/cmd/osv-scanner@latest scan source -r -f markdown . > "$H/osv.md" 2>/dev/null
 go run github.com/zricethezav/gitleaks/v8@latest git --no-banner --redact -f csv -r "$H/secrets.csv" . 2>/dev/null
 git ls-files -ci --exclude-standard > "$H/tracked-ignored.txt"
@@ -141,11 +142,11 @@ the exported API of a package others import. A tool that
 - **The greps are leads.** Output that *is* the product — a CLI printing its
   result — is not a debug leftover. `cmd || true` in a cleanup step is
   normal; in a test or lint step it is a CI that cannot fail.
-- **Implicit state** starts from where state piles up: `state-holders.txt`
-  (JS/TS, Vue, Svelte) lists components, hooks and classes holding four or
-  more pieces of state; elsewhere, the big and complex files above and any
-  model with a `status`, `state` or `phase` field. Places to start, never
-  findings: step 3 traces them.
+- **Implicit state** starts where state piles up: `state-fields.txt`
+  (files naming a status, state or phase most), and for JS
+  `state-holders.txt` (components and hooks with four or more pieces of
+  state) and `state-stores.txt` (stores and class components, by count of
+  store calls or `setState` writes). Places to start, never findings.
 - **Secrets never reach the conversation.** `--redact` keeps values out of
   the file; the report names file, commit and kind of secret, never the
   value.
@@ -198,7 +199,8 @@ npx -y -p @ast-grep/cli ast-grep run -l ts -p 'JSON.parse($$$) as $T' <src> > "$
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'try { $$$ } catch ($E) { }' <src> > "$H/swallowed.txt"
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'JSON.parse(JSON.stringify($X))' <src> > "$H/deep-clone.txt"
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'new Promise($$$A => setTimeout($$$))' <src> > "$H/sleeps.txt"
-grep -rlE --null '(\buse(State|Reducer)[<(]|\bref[<(]|\$state[<(]|this\.setState\()' <src> --include='*.[jt]s' --include='*.[jt]sx' --include='*.vue' --include='*.svelte' --exclude='*.min.js' | xargs -0 awk 'FNR==1{c="(file)"} FILENAME ~ /(\.|_)(test|spec)\.|\/tests?\/|__tests__/{next} /^(export )?(default )?(async )?(function|class) [A-Za-z_]|^(export )?const ([A-Z]|use[A-Z])[A-Za-z0-9_]*(:[^=]*)? = /{c=$(0); sub(/^(export )?(default )?(async )?(function|class|const) /,"",c); sub(/[^A-Za-z0-9_].*/,"",c)} /^export default (async )?\(/{c="default"} {n[FILENAME" "c]+=gsub(/(use(State|Reducer)[<(]|(^|[^A-Za-z_.])ref[<(]|\$state[<(]|this\.setState\()/,"&")} END{for(k in n) if(n[k]>=4) print n[k], k}' | sort -rn > "$H/state-holders.txt"
+grep -rlE --null '(\buse(State|Reducer|Atom)[<(]|\b(ref|shallowRef|reactive|signal)[<(]|\$state(\.raw)?[<(])' <src> --include='*.[jt]s' --include='*.[jt]sx' --include='*.vue' --include='*.svelte' --exclude='*.min.js' | xargs -0 awk 'FNR==1{c="(file)"} FILENAME ~ /(\.|_)(test|spec)\.|\/tests?\/|__tests__/{next} /^(export )?(default )?(async )?(function|class) [A-Za-z_]|^(export )?const ([A-Z]|use[A-Z])[A-Za-z0-9_]*(:[^=]*)? = /{c=$(0); sub(/^(export )?(default )?(async )?(function|class|const) /,"",c); sub(/[^A-Za-z0-9_].*/,"",c)} /^export default (async )?\(|^export default class extends/{c="default"} {n[FILENAME" "c]+=gsub(/(use(State|Reducer|Atom)[<(]|(^|[^A-Za-z_.])(ref|shallowRef|reactive|signal)[<(]|\$state(\.raw)?[<(])/,"&")} END{for(k in n) if(n[k]>=4) print n[k], k}' | sort -rn > "$H/state-holders.txt"
+grep -rcE 'createSlice\(|defineStore\(|createStore\(|configureStore\(|\bcreate(<[^>]*>)?(\(\))?\(\(set|makeAutoObservable|@observable|this\.setState\(' <src> --include='*.[jt]s' --include='*.[jt]sx' --exclude='*.min.js' | grep -vE ':0$|(\.|_)(test|spec)\.|/tests?/|__tests__' | sort -t: -k2 -rn > "$H/state-stores.txt"
 npx -y npm-check-updates > "$H/outdated.txt" 2>&1
 npm audit --package-lock-only > "$H/audit.txt" 2>&1
 ```
@@ -499,53 +501,48 @@ The categories, grouped by the band they usually land in (step 5):
   wait for readiness, tests that assert on implementation, shared mutable
   state, catch-all handlers that swallow and carry on, circular imports.
 - **Implicit state** — a state machine nobody wrote down: flags and a
-  status side by side, transitions made in handlers, callbacks and effects.
-  Find it by **tracing**:
-  1. *Scope one machine.* From a lead, take the pieces one event writes
-     together or one condition branches on together — about six at most.
-     State in a store or a class (`this.setState`, a model field) is traced
-     by field name across files.
-  2. *List every write* of each piece: grep its name, its setter with and
-     without `(`, and every alias or prop it is passed on as
-     (`setTab={setView}`, `.then(setInv)`).
-  3. *Write the table*, with lines: `event → fires in → checks → writes`.
-     *Fires in* is the states the trigger can be used in: the button is
-     rendered, the route reachable, the job scheduled. *Checks* is what is
-     true when the write runs: an `if`, or the render gate that hides the
-     trigger. An async handler is two events, split at each `await` or
-     callback; after the split, nothing is checked unless it is checked
-     again.
-  4. *Read the defects off it:*
-     - a write that fires in a state it mishandles (`reopen` from any
-       state, not only `declined`);
-     - a write after an `await` that does not re-check, while what it
-       relies on can change in between (the email edited during the send;
-       on a server, check-then-act across two requests);
-     - an event that sets one piece and leaves its partner (retry sets
-       loading, never clears the error; a panel closed, its tab still
-       marked current);
-     - a state with no way out the user or caller needs (a stuck
-       `pending` with no retry or cancel).
+  status side by side, changed from handlers, callbacks, effects and other
+  clients. Find it by **tracing**:
+  1. *Scope*: start from one piece. Add what the same event writes and the
+     same condition reads — a condition that decides whether a trigger or
+     message exists, not one that only shows a value. Stop when the defect
+     is explained. Store and class state is traced by field name.
+  2. *Writes*: grep each piece's name, its setter with and without `(`,
+     and every alias or prop it is passed on as.
+  3. *Table*, with lines: `event → fires in → checks → writes`. Row 0 is
+     initialisation (URL, storage, props, defaults). *Fires in* is the
+     states the trigger can be used in: rendered, enabled, not hidden by
+     CSS, or arriving from another client or a job. *Checks* is what is
+     true when the write runs, the render gate included. An async handler
+     splits at each `await` or callback; after a split nothing is checked
+     unless it is checked again.
+  4. *Defects*, read off the table:
+     - *unguarded* — *fires in* holds a state *checks* does not exclude,
+       and the write is wrong there, unless the code says it is meant;
+     - *stale* — a write after a split relies on something that can change
+       in the window;
+     - *left behind* — an event changes one piece and leaves another the
+       same condition reads, or a piece is read and never cleared;
+     - *stuck* — a state with no way out the user or caller needs.
 
      An effect that writes one piece from another is a lead, and a defect
      only when something else writes that piece too.
 
-  A defect with the exact events that reach a bad state is **broken**,
-  fire — say "implicit state" in the write-up. Running them is better, but
-  the rules in step 1 usually forbid the dev server a UI needs: the event
-  sequence is enough, and `ux-suck-hunt`'s browser can reproduce it. With
-  no bad state but a named cost — one new state means changing these
-  eight writes in five files — it is **implicit state**, slow. Neither:
-  drop it. The fix gives the machine one home, with the table written
-  beside it: a discriminated union or enum with a reducer or transition
-  function (TypeScript, Rust, Python), a typed constant and one
-  `transition()` method (Go), one action per transition (a store), and
-  for persisted state a guarded update — `UPDATE … WHERE status = ?` or a
-  version column — since a check in code does not stop a second process.
-  A state-machine library only past about eight states, or with nested or
-  parallel ones. A status typed as `string` with no transitions spread
-  around is **typing**. How a screen should show the state is
-  `ux-suck-hunt`'s; the bug is reported here.
+  Reproduced — a component test in the scratch copy, or `ux-suck-hunt`'s
+  browser — it is **broken**, fire; say "implicit state" in the write-up.
+  Unreproduced but with the exact events, it is fire only on money, auth or
+  data loss, otherwise slow. With no bad state it is a finding only when
+  the state is written from two or more files or its file is in the top of
+  `churn.txt`: **implicit state**, slow, its cost the writes one new state
+  would touch. Otherwise drop it. The fix: one type for the state (a
+  union, an enum with `match`, a Go typed constant); one transition
+  function that rejects a move the table does not allow (in Go behind a
+  mutex or one goroutine), with the table beside it; for persisted state
+  `UPDATE … WHERE status = ?` with the affected rows checked; for synced
+  (CRDT) state, one nested map per item so concurrent edits merge. A
+  library only past about eight states, or nested or parallel ones. A
+  `string` status with no transitions spread around is **typing**. How the
+  screen shows the state is `ux-suck-hunt`'s; the bug is reported here.
 - **Performance** — the obvious kind, visible in the code: a query or HTTP
   call per item (N+1), `await` in a loop where the calls are independent, a
   list searched inside a loop over another list, the whole file rewritten on
@@ -644,11 +641,8 @@ way.
 - **Performance:** is the size real? Find where the collection comes from
   and how big it gets in use. If it stays small, drop it.
 - **Overengineered:** is there really one implementation and one caller?
-- **Implicit state:** is every row a real write, and is it one machine?
-  Pieces belong together when one event writes two of them or one
-  condition branches on two of them; a render that merely shows them does
-  not join them. For an `await` defect, show that the input can change in
-  that window (the field stays enabled, a second request can arrive). A
+- **Implicit state:** is every row a real write? For *stale*, show the
+  window: the field stays editable, a second request can arrive. A
   combination no event produces is not a finding.
 - **Suppressed:** does it still hide anything? Remove it in the scratch copy
   and rerun the tool.
