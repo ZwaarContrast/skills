@@ -14,6 +14,7 @@ function statements(sql) {
   const out = []; let start = 0, i = 0;
   while (i < sql.length) {
     const c = sql[i], rest = sql.slice(i);
+    if (c === "'" && /[eE]$/.test(sql.slice(0, i))) { const m = /^'(?:\\.|[^'\\])*'/.exec(rest); i += m ? m[0].length : rest.length; continue; } // E'..\'..'
     if (c === "'" || c === '"') { i = sql.indexOf(c, i + 1) + 1 || sql.length; continue; }
     if (rest.startsWith('--')) { i = sql.indexOf('\n', i) + 1 || sql.length; continue; }
     if (rest.startsWith('/*')) { i = sql.indexOf('*/', i) + 2 || sql.length; continue; }
@@ -27,8 +28,8 @@ function statements(sql) {
 }
 
 for (const f of files) {
-  const sql = readFileSync(f, 'utf8').split(/^--\s*(migrate:down|\+goose\s+down)/im)[0]; // up section only
-  try { await db.exec(sql); continue; } catch {}
+  const sql = readFileSync(f, 'utf8').split(/^--\s*(migrate:down|\+goose\s+down|down migration)/im)[0]; // up section only
+  try { await db.exec(sql); continue; } catch { await db.exec('ROLLBACK').catch(() => {}); }
   for (const stmt of statements(sql)) {
     if (!stmt.trim() || /^\s*(begin|commit|start transaction)\s*$/i.test(stmt)) continue;
     try { await db.exec(stmt); } catch (e) {

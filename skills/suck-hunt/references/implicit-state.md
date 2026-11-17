@@ -14,38 +14,39 @@ covers it. A schema that exists only as SQL migrations reads best from the
 engine itself — real defaults, every `CHECK`, enums, partial indexes —
 replayed into a throwaway database in memory. Nothing connects to a real
 database, nothing leaves the machine, and nothing outside `$H` is
-installed. Up migrations only, in version order (`*.down.sql` files and
-`-- migrate:down` sections are skipped):
+installed. For Postgres that is PGlite, Postgres compiled to WebAssembly
+(about 26 MB in `$H`, no server, its files kept inside itself):
 
-- **Postgres** — PGlite, Postgres compiled to WebAssembly (about 26 MB in
-  `$H`, no server):
+```
+npm i -s --ignore-scripts --prefix "$H/pg" @electric-sql/pglite@0.5.16
+git ls-files '<migrations>/*.sql' | grep -vE '(^|/|\.)down\.sql$|/U[0-9][^/]*__[^/]*$' | sort -V | tr '\n' '\0' | xargs -0 node <skill-dir>/replay-pg.mjs "$H/pg" > "$H/state-schema-db.txt" 2> "$H/replay.txt"
+```
 
-  ```
-  npm i -s --ignore-scripts --prefix "$H/pg" @electric-sql/pglite@0.5.16
-  git ls-files '<migrations>/*.sql' | grep -v '\.down\.sql$' | sort -V | tr '\n' '\0' | xargs -0 node <skill-dir>/replay-pg.mjs "$H/pg" > "$H/state-schema-db.txt" 2> "$H/replay.txt"
-  ```
-
-- **SQLite** — Python's own `sqlite3`:
-
-  ```
-  git ls-files '<migrations>/*.sql' | grep -v '\.down\.sql$' | sort -V | tr '\n' '\0' | xargs -0 uvx python@3.12 <skill-dir>/replay-sqlite.py > "$H/state-schema-db.txt" 2> "$H/replay.txt"
-  ```
+Up migrations only: down files (`*.down.sql`, `down.sql`, Flyway's `U…__`)
+are left out and down sections (`-- migrate:down`, `-- +goose Down`, `--
+Down Migration`) cut. `sort -V` is version order, except that Flyway runs
+`V1__` before `V1.1__`; where the runner keeps its own order (a journal, a
+timestamp prefix), use that.
 
 `replay.txt` lists what did not apply. An extension that is not there
 (PostGIS, `uuid-ossp`), its types read as text, a migration runner's own
 bookkeeping table, a `\connect` to a named database — none of those leave
 the schema partial. A failed `CREATE TABLE` or `ALTER TABLE` of the app's
-own does: say so in the report. Any other engine: the grep lead is what
-there is.
+own does: say so in the report. SQLite's DDL and every other engine's are
+read from `state-schema.txt`; nothing replays them.
 
 ## §2 Budget
 
-Take one lead from each non-empty lead file, in this order:
-`state-schema-db.txt` or `state-schema.txt`, `state-kv.txt`,
-`state-stores.txt`, `state-holders.txt`, `state-fields.txt` — the top line
-of each. Three leads per hunt in all, drawn from one pool that subagents
-share. The report's coverage line names the leads left unworked. A lead
-names a component, file or table, which can hold several machines.
+Go through the lead files in this order — `state-schema-db.txt` or
+`state-schema.txt`, `state-kv.txt`, `state-stores.txt`,
+`state-holders.txt`, `state-fields.txt` — taking the busiest lead of each
+non-empty one, until three leads are taken; subagents draw from that one
+pool. The busiest is the top line where the file is ranked by count; in a
+schema file it is the table (or file) with the most lines: `cut -f1
+state-schema-db.txt | uniq -c | sort -rn`, `cut -d: -f1 state-schema.txt |
+uniq -c | sort -rn`. A lead names a component, file or table, which can
+hold several machines: trace at most two per lead. The report's coverage
+line names the leads left unworked.
 
 ## §3 Pieces
 
@@ -64,7 +65,8 @@ Start from the piece the most conditions decide on; on a tie, the one
 declared first. Add a piece when one event sets both (resetting to the
 row-0 value does not count) or one condition decides on both whether
 something exists or runs. Stop at the smallest set that shows a defect,
-eight pieces at most, then start again from the next piece not yet in a
+eight pieces at most — when one event sets more, keep the eight the most
+conditions read — then start again from the next piece not yet in a
 machine. A piece that joins nothing gets a table of its own when it has
 three or more write sites (the lone `status` written from six places);
 otherwise it is closed.
@@ -93,7 +95,8 @@ With lines: `event → fires in → checks → writes`.
   in flight counting as a state, plus other clients, other tabs (the
   `storage` event; not for `sessionStorage`, which is per tab), jobs and
   queue workers, and keys that expire. Servers and workers run as more than
-  one process unless the deploy config pins one; the same code on another
+  one process unless the deploy config pins one (one replica, a singleton
+  lock); a compose file or none at all pins nothing; the same code on another
   process or client is another writer. Migrations and hand edits are not
   events: they only decide where a guard has to live (§8).
 - **Checks** is what is true when the write runs, the render gate included.
@@ -130,9 +133,9 @@ The exact events that reach a bad state are an exact input: the finding is
 **broken**, banded by SKILL.md step 5 like any bug, with "implicit state"
 in the write-up. Run them where SKILL.md step 1 allows — a test or script
 in `$H/copy` (dependencies installed there with `--ignore-scripts`; a
-component test renders with testing-library added there), or
-`ux-suck-hunt`'s browser — never against a database the run did not
-create. Move what you keep into `$H` before the copy goes, and say whether
+component test renders with testing-library added there; the PGlite of §1
+serves as its database), or `ux-suck-hunt`'s browser — never against a
+database the run did not create. Move what you keep into `$H` before the copy goes, and say whether
 you ran it.
 
 A machine with no defect in any of its pieces is **implicit state**, slow,

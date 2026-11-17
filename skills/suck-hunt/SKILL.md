@@ -85,10 +85,14 @@ order. Every subagent brief repeats this.
 **The hunt fetches its tools.** The commands below download and run
 well-known tools through `npx`, `uvx` and `go run`, and PHP's through
 `composer` into `$H` — nothing is added to the
-project. Every tool is pinned to an exact version, so a run is
-repeatable and nothing new arrives unannounced; the report names the
-versions it ran. A newer version is a deliberate edit here, not a
-surprise. osv-scanner
+project. Every tool is pinned to an exact version, and its own
+dependencies to the pin date: start `run.sh` with `export
+npm_config_before=2026-11-17 UV_EXCLUDE_NEWER=2026-11-17T00:00:00Z`.
+A run is repeatable and nothing new arrives unannounced; the report names
+the versions it ran. Newer tools are a deliberate edit of the pins and
+the date together. Where the project ships the same tool (its own `tsc`,
+`eslint`, `phpstan`), use that one: its version is the one its code is
+written for. osv-scanner
 sends package names and versions, not code, to osv.dev; if even the
 dependency list is confidential, ask first.
 
@@ -96,7 +100,8 @@ dependency list is confidential, ask first.
 
 Tools find the mechanical SUCK exhaustively, so reading can go to the rest.
 Run the **every project** set, then the section for each language the
-project uses. Replace `<src>` with the source directories. A tool's output
+project uses. Replace `<src>` with the source directories and
+`<skill-dir>` with this skill's folder. A tool's output
 is a lead, not a finding: everything goes through step 4.
 
 ### Every project
@@ -117,7 +122,7 @@ grep -rnE 'continue-on-error: *true|allow_failure: *true|\|\| *true' .github .gi
 git -c core.quotePath=off ls-files <src> | grep -E '\.(py|go|php|rb|java|kt|cs|rs|swift|ex|[jt]sx?|vue|svelte)$' | grep -vE '(\.|_)(test|spec)\.|/tests?/|__tests__|/test_[^/]*$|\.min\.js$|\.stories\.|\.pb\.go$|_generated\.|/vendor/|/generated/' | tr '\n' '\0' | xargs -0 grep -sHciE '(^|[^A-Za-z0-9_])_*(status|state|phase)([^A-Za-z0-9_]|$)' | grep -v ':0$' | sort -t: -k2 -rn | head -20 > "$H/state-fields.txt"
 git -c core.quotePath=off ls-files <src> | grep -E '\.(py|go|php|rb|java|kt|cs|rs|ex|[jt]sx?|vue|svelte)$' | grep -vE '(\.|_)(test|spec)\.|/tests?/|__tests__|\.min\.js$' | tr '\n' '\0' | xargs -0 grep -sHcE "(local|session)Storage\.(setItem|removeItem)|document\.cookie *=|setcookie\(|\bredis[A-Za-z]*\.(set|setex|setnx|hset|hdel|incr|del|expire)\(|Redis::|Cache::(put|add|forever|forget|increment)|session\(\)->(put|forget|push)" | grep -v ':0$' | sort -t: -k2 -rn | head -20 > "$H/state-kv.txt"
 git ls-files | grep -iE 'migrat.*\.sql$' | tr '\n' '\0' | xargs -0 uvx --from squawk-cli==2.71.0 squawk --reporter gcc 2>&1 | grep -vE 'prefer-robust-stmts|require-(lock|statement)-timeout|prefer-(bigint|identity|text-field|timestamptz)' > "$H/squawk.txt"   # Postgres only
-git -c core.quotePath=off ls-files | grep -E '\.(sql|prisma)$|schema\.[a-z]+$|/migrations?/|/models?\.py$|/models/[^/]+\.py$|\.entity\.[jt]s$|/[Ee]ntit(y|ies)/' | grep -vE '/vendor/|/lang/|/locales?/|/i18n/|\.down\.sql$|\.(tsx|jsx|vue|svelte)$' > "$H/schema-files.txt"; git -c core.quotePath=off ls-files | grep -E '\.([jt]sx?|py|go|php|rb|java|kt|cs|rs)$' | grep -vE '/vendor/|\.min\.js$' | tr '\n' '\0' | xargs -0 grep -sliE 'create table|alter table' >> "$H/schema-files.txt"; sort -u "$H/schema-files.txt" | tr '\n' '\0' | xargs -0 grep -sHnE "^[[:space:]]*(t\.[a-z_]+[[:space:]]+:?|\(|@Column\([^)]*\)[[:space:]]*)?[\"'\`]?([A-Za-z_]*([Ss]tatus|[Ss]tate|[Pp]hase|[Ss]tage)|is_[a-z_]+|is[A-Z][A-Za-z]*|[a-z_]+_at|[a-z]+At)[\"'\`]?([[:space:]]*[:,=(]?[[:space:]]*[A-Za-z(]|[[:space:]]*,?$)|->[a-zA-Z]+\(['\"]([a-z_]*(status|state|phase|stage)|is_[a-z_]+|[a-z_]+_at)['\"]|[Cc][Rr][Ee][Aa][Tt][Ee] [Tt][Yy][Pp][Ee] .* [Aa][Ss] [Ee][Nn][Uu][Mm]|[Cc][Hh][Ee][Cc][Kk][[:space:]]*\(.*([Ss]tatus|[Ss]tate|[Pp]hase|[Ss]tage)|^[[:space:]]*enum [A-Za-z_]*([Ss]tatus|[Ss]tate|[Pp]hase)|[Ee]num\([\"'][a-z_]*(status|state|phase)|(create|alter) table.*([a-z_]*(status|state|phase|stage)|is_[a-z_]+|[a-z_]+_at)[ ,)]" | grep -vE '[^A-Za-z](created|updated)_?[Aa]t[^A-Za-z]' > "$H/state-schema.txt"
+git -c core.quotePath=off ls-files | grep -E '\.(sql|prisma)$|schema\.[a-z]+$|/migrations?/|/models?\.py$|/models/[^/]+\.py$|\.entity\.[jt]s$|/[Ee]ntit(y|ies)/' | grep -vE '/vendor/|/lang/|/locales?/|/i18n/|(^|/|\.)down\.sql$|/U[0-9][^/]*__[^/]*$|\.(tsx|jsx|vue|svelte)$|(\.|_)(test|spec)\.|/tests?/' > "$H/schema-files.txt"; git -c core.quotePath=off ls-files | grep -E '\.([jt]sx?|py|go|php|rb|java|kt|cs|rs)$' | grep -vE '/vendor/|\.min\.js$|(\.|_)(test|spec)\.|/tests?/' | tr '\n' '\0' | xargs -0 grep -sliE 'create table|alter table' >> "$H/schema-files.txt"; sort -u "$H/schema-files.txt" | tr '\n' '\0' | xargs -0 grep -sHnE -f <skill-dir>/state-schema.patterns | grep -vE '[^A-Za-z](created|updated)_?[Aa]t[^A-Za-z]' > "$H/state-schema.txt"
 go run github.com/google/osv-scanner/v2/cmd/osv-scanner@v2.7.1 scan source -r -f markdown . > "$H/osv.md" 2>/dev/null
 go run github.com/zricethezav/gitleaks/v8@v8.30.1 git --no-banner --redact -f csv -r "$H/secrets.csv" . 2>/dev/null
 git ls-files -ci --exclude-standard > "$H/tracked-ignored.txt"
@@ -209,7 +214,7 @@ npx -y oxlint@1.94.0 -f agent <src> > "$H/oxlint.txt" 2>&1
 npx -y oxlint@1.94.0 -f agent -A all -D no-await-in-loop -D no-eval -D no-implied-eval -D no-new-func <src> > "$H/oxlint-perf-sec.txt" 2>&1
 npx -y -p oxlint@1.94.0 -p oxlint-tsgolint@7.0.2007 oxlint --type-aware -f agent -A all -D typescript/no-unnecessary-type-assertion -D typescript/no-non-null-assertion -D typescript/no-unsafe-assignment -D typescript/no-unsafe-member-access -D typescript/no-unsafe-return -D typescript/no-unsafe-argument -D typescript/no-unsafe-call <src> > "$H/oxlint-types.txt" 2>&1
 npx -y oxlint@1.94.0 -f agent --report-unused-disable-directives <src> > "$H/stale-disables.txt" 2>&1
-npx -y -p typescript@7.0.2 tsc --noEmit -p . --pretty false > "$H/tsc.txt" 2>&1
+npx -y -p typescript@7.0.2 tsc --noEmit -p . --pretty false > "$H/tsc.txt" 2>&1   # or the project's node_modules/.bin/tsc
 npx -y -p typescript@7.0.2 tsc --noEmit -p . --strict --pretty false > "$H/tsc-strict.txt" 2>&1   # if tsconfig is not strict
 grep -rnE ':\s*any\b|as any|<any>' <src> > "$H/any.txt"
 grep -rnE 'as unknown\)? as ' <src> > "$H/double-casts.txt"
@@ -231,7 +236,7 @@ npm audit --package-lock-only > "$H/audit.txt" 2>&1
   `no-unsafe-*` rules are noise — drop them then.
 - A file-wide `/* eslint-disable */` hides the file from oxlint too: lint the
   scratch copy with the disable removed. oxlint judges stale disables by its
-  own rules; if the project has eslint, `npx -y eslint
+  own rules; if the project has eslint, `npx eslint
   --report-unused-disable-directives <src>` is the authority.
 - `tsc` never reports a `@ts-ignore` that suppresses nothing;
   `@ts-expect-error` does, which makes the swap the usual fix. Delete one in
@@ -266,7 +271,7 @@ npx -y -p @ast-grep/cli@0.51.3 ast-grep run -l rust -p '$X.unwrap()' <src> > "$H
 grep -rnE 'Result<[^>]*, ?String>' <src> > "$H/string-errors.txt"
 cargo fmt --check -- -l > "$H/format.txt" 2>&1
 cargo update --dry-run --verbose > "$H/outdated.txt" 2>&1
-D=$(mktemp -d) && cargo install -q --root $D cargo-machete && $D/bin/cargo-machete > "$H/unused-deps.txt" 2>&1; rm -rf $D
+D=$(mktemp -d) && cargo install -q --root $D cargo-machete --version 0.10.1 && $D/bin/cargo-machete > "$H/unused-deps.txt" 2>&1; rm -rf $D
 ```
 
 Let cargo use the project's `target/`: a fresh one rebuilds every

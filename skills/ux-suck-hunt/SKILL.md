@@ -201,11 +201,16 @@ with the evidence:
    `mocks/` directory switched on), a Stripe `sk_test_` / `pk_test_` key.
    A managed-cloud hostname (`*.rds.amazonaws.com`, `*.supabase.co`,
    `*.neon.tech`, `*.planetscale.com`, `cluster0.*.mongodb.net`), a live
-   payment key, or a value you cannot resolve — not disposable. Look at
-   the host and the key prefix only, with a grep for the variable's name
-   (`grep -E '^DATABASE_URL=' .env | sed 's/:[^:@]*@/:***@/'`); a password,
-   token or full connection string never goes into `safety.md`, a brief or
-   the report.
+   payment key, or a value you cannot resolve — not disposable. Read only
+   each variable's name, scheme and host, or a key's first eight
+   characters; never the value itself:
+
+   ```
+   grep -hE '^(export )?[A-Z0-9_]*(DATABASE|DB_|API|SUPABASE|FIREBASE|MONGO|STRIPE|REDIS)[A-Z0-9_]*=' .env* | sed -E -e 's#^(export )?([A-Z0-9_]+)=["'"'"']?([a-z0-9+]+://)([^/?#]*@)?([^/:?#"'"'"']*).*#\2 \3\5#' -e 't' -e 's#^(export )?([A-Z0-9_]+)=["'"'"']?(.{0,8}).*#\2 \3…#'
+   ```
+
+   A password, token or full connection string never goes into
+   `safety.md`, a brief or the report.
 3. **Side effects beyond the database.** Real email (SMTP, SendGrid,
    Postmark, Resend), SMS, webhooks, payments, push. A disposable database
    that sends real mail to real addresses in its seed data is not safe.
