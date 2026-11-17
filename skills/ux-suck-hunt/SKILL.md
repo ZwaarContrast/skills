@@ -646,8 +646,9 @@ its category from here and its rule IDs from `references/`.
   nobody designed; "0 results" with no way out. A state that gets stuck or
   combines wrongly (a spinner beside an error, a second submit) often
   has an implicit state machine behind it: name it as the likely cause.
-  When both hunts run, the bug is `suck-hunt`'s finding and this one
-  links to it for what the screen should do.
+  When both hunts run, the bug is `suck-hunt`'s finding, this hunt's
+  reproduction is its evidence, and this one links to it for what the
+  screen should do.
 - **Unclear** — vague labels ("Submit"), the team's jargon (Nielsen #2,
   match the real world), the wrong icon, two words for one thing.
 - **Hard to read** — walls of text above the audience's level

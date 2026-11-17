@@ -107,9 +107,7 @@ grep -rnE 'verify=False|rejectUnauthorized: *false|InsecureSkipVerify: *true|she
 grep -rnE 'console\.(log|debug)\(|debugger;|\bdbg!\(|breakpoint\(\)|pdb\.set_trace|^\s*print\(|fmt\.Print(ln|f)?\(' <src> > "$H/debug.txt"
 grep -rnE 'eslint-disable|oxlint-disable|biome-ignore|stylelint-disable|@ts-ignore|@ts-expect-error|@ts-nocheck|noqa|type: ?ignore|pyright: ?ignore|mypy: ?ignore-errors|pylint: ?disable|#!?\[(allow|expect)\(|//\s*nolint|//lint:ignore|#nosec|\.skip\(|xit\(|todo!|unimplemented!' <src> > "$H/suppressions.txt"
 grep -rnE 'continue-on-error: *true|allow_failure: *true|\|\| *true' .github .gitlab-ci.yml .circleci > "$H/ci.txt" 2>/dev/null
-grep -roE '\b([Ii]s|[Hh]as|[Ss]hould)[A-Z_][A-Za-z_]*([[:space:]]*:[[:space:]]*bool)?[[:space:]]*(:=|[:=])[[:space:]]*(true|false|True|False)\b' <src> | grep -vE '(\.|_)(test|spec)\.|/tests?/|__tests__' | sed -E 's/^([^:]*:[A-Za-z_]+).*/\1/' | sort -u | cut -d: -f1 | uniq -c | awk '$1>=4' | sort -rn > "$H/flag-piles.txt"
-grep -rnE '(!?[[:space:]]*([A-Za-z_$]+(\.|->))?\$?\b([Ii]s|[Hh]as)[A-Z_][A-Za-z_]*[[:space:]]*(&&|\|\||and( not)?|or( not)?)[[:space:]]*){2,}!?[[:space:]]*([A-Za-z_$]+(\.|->))?\$?\b([Ii]s|[Hh]as)[A-Z_]' <src> | grep -vE '(\.|_)(test|spec)\.|/tests?/|__tests__' > "$H/flag-reads.txt"
-P="\bset[A-Z][A-Za-z]*\(['\"\`][A-Za-z_-]+['\"\`]\)|['\"]?\b([Ss]tatus|[Ss]tate|[Pp]hase|[Mm]ode|[Ss]tep|[Ss]tage)['\"]?[[:space:]]*(:=|=>|=|:)[[:space:]]*['\"\`][A-Za-z_-]+['\"\`]"; X="(\.|_)(test|spec)\.|/tests?/|__tests__|__snapshots__"; grep -rnE --exclude='*.css' --exclude='*.scss' --exclude='*.snap' "$P" <src> | grep -vE "$X" | grep -vE ":[0-9]+:[[:space:]]*(export )?(type|interface) |['\"][[:space:]]*\|[[:space:]]*['\"]|:[[:space:]]*['\"][A-Za-z_-]+['\"];|(filter|filter_by|exclude|where)\(" > "$H/state-writes.txt"; grep -rnoE --exclude='*.css' --exclude='*.scss' --exclude='*.snap' "$P" <src> | awk -F: 'NR==FNR{k[$1":"$2]=1;next} k[$1":"$2]' "$H/state-writes.txt" - | sed -E "s/^([^:]*):[0-9]+:(set)?['\"]?([A-Za-z]+).*/\3 \1/" | awk '{print tolower($1), $2}' | sort -u | cut -d' ' -f1 | uniq -c | sort -rn > "$H/state-writers.txt"
+grep -rnE --exclude='*.css' --exclude='*.scss' --exclude='*.snap' --exclude='*.min.js' "\bset[A-Z][A-Za-z]*\((['\"\`][A-Za-z_-]+['\"\`]|[A-Z][A-Za-z_]*\.[A-Za-z_]+)\)|\b([Ss]tatus|[Ss]tate|[Pp]hase|[Mm]ode|[Ss]tep|[Ss]tage)['\"]?[[:space:]]*(:=|=>|=|:)[[:space:]]*(['\"\`][A-Za-z_-]+['\"\`]|[A-Z][A-Za-z_]*\.[A-Za-z_]+|\.[a-z][A-Za-z]+)" <src> | grep -vE "(\.|_)(test|spec)\.|/tests?/|__tests__|__snapshots__|/test_[^/]*$|:[0-9]+:[[:space:]]*(//|#|\*|(export )?(type|interface) )|['\"][[:space:]]*\|[[:space:]]*['\"]|:[[:space:]]*['\"][A-Za-z_-]+['\"];|[(,][[:space:]]*[a-z_]+=['\"]|(filter|filter_by|exclude|where)\(" > "$H/state-writes.txt"
 go run github.com/google/osv-scanner/v2/cmd/osv-scanner@latest scan source -r -f markdown . > "$H/osv.md" 2>/dev/null
 go run github.com/zricethezav/gitleaks/v8@latest git --no-banner --redact -f csv -r "$H/secrets.csv" . 2>/dev/null
 git ls-files -ci --exclude-standard > "$H/tracked-ignored.txt"
@@ -144,19 +142,12 @@ the exported API of a package others import. A tool that
 - **The greps are leads.** Output that *is* the product — a CLI printing its
   result — is not a debug leftover. `cmd || true` in a cleanup step is
   normal; in a test or lint step it is a CI that cannot fail.
-- **Implicit state machines** show where state is *written*, and where
-  flags are *read together*; reading one status everywhere is how an
-  explicit machine is used. `state-writers.txt` ranks each state variable
-  (`status`, `mode`, a `setView` setter) by how many files write it, with
-  the lines in `state-writes.txt`; type declarations, unions, tests and
-  stylesheets are left out, but a tagged object built in several places
-  (`{ mode: "inside", … }`) still lands there, and one name can be two
-  machines. `flag-piles.txt` lists files setting four or more distinct
-  `is…`/`has…` flags, `usestate-flags.txt` React components holding three
-  or more boolean `useState`s, and `flag-reads.txt` conditions reading
-  three flags at once (`isLoading && !isError && hasData`). Read the top
-  ones whole and list their states, what writes each and what reads them
-  together. Step 3 says what counts.
+- **Implicit state** leads are places to start, never findings:
+  `state-writes.txt` lists writes of a status-like field or setter, and
+  `state-holders.txt` (JS/TS) the components holding four or more state
+  hooks, whatever they are named. Option objects (`{ mode: 'cors' }`) and
+  default parameters land there too. The finding comes from tracing, in
+  step 3.
 - **Secrets never reach the conversation.** `--redact` keeps values out of
   the file; the report names file, commit and kind of secret, never the
   value.
@@ -209,7 +200,7 @@ npx -y -p @ast-grep/cli ast-grep run -l ts -p 'JSON.parse($$$) as $T' <src> > "$
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'try { $$$ } catch ($E) { }' <src> > "$H/swallowed.txt"
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'JSON.parse(JSON.stringify($X))' <src> > "$H/deep-clone.txt"
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'new Promise($$$A => setTimeout($$$))' <src> > "$H/sleeps.txt"
-grep -rlE 'useState' <src> | grep -vE '(\.|_)(test|spec)\.|/tests?/|__tests__' | xargs awk 'FNR==1{c="?"} /^(export )?(default )?function [A-Z]|^(export )?const [A-Z][A-Za-z0-9]* = /{c=$0; sub(/^(export )?(default )?(function|const) /,"",c); sub(/[^A-Za-z0-9].*/,"",c)} /useState(<boolean>)?\((true|false|!!|\(\) => (true|false))/{n[FILENAME" "c]++} END{for(k in n) if(n[k]>=3) print n[k], k}' | sort -rn > "$H/usestate-flags.txt"
+grep -rlE --null 'use(State|Reducer)\(' <src> --include='*.[jt]s' --include='*.[jt]sx' --exclude='*.min.js' | xargs -0 awk 'FNR==1{c="?"} FILENAME ~ /(\.|_)(test|spec)\.|\/tests?\/|__tests__/{next} /^(export )?(default )?function [A-Z]|^(export )?const [A-Z][A-Za-z0-9]*(:[^=]*)? = /{c=$0; sub(/^(export )?(default )?(function|const) /,"",c); sub(/[^A-Za-z0-9].*/,"",c)} {n[FILENAME" "c]+=gsub(/use(State|Reducer)\(/,"&")} END{for(k in n) if(n[k]>=4) print n[k], k}' | sort -rn > "$H/state-holders.txt"
 npx -y npm-check-updates > "$H/outdated.txt" 2>&1
 npm audit --package-lock-only > "$H/audit.txt" 2>&1
 ```
@@ -509,34 +500,32 @@ The categories, grouped by the band they usually land in (step 5):
   matching on error-message strings, hard-coded paths and ports, `sleep` to
   wait for readiness, tests that assert on implementation, shared mutable
   state, catch-all handlers that swallow and carry on, circular imports.
-- **Implicit state** — a state machine nobody wrote down: `isLoading`,
-  `isError`, `hasData` and `isSubmitting` side by side, one status written
-  from many files, transitions made in event handlers and callbacks with
-  no check of the state they start from. In the UI or the domain: a
-  cancelled subscription that still grants access is one too. Two shapes,
-  each with its evidence:
-  - *A bad state you can reach* — a combination that should not exist but
-    can (loading and error both true after a retry, a second submit while
-    the first is pending, an edit screen open on a deleted item), or a
-    state with no way out (no cancel from `pending`, no retry from
-    `error`). Name it and the events that reach it. File it as
-    **broken**, fire, say "implicit state" in the write-up, and state its
-    user impact.
-  - *A machine nobody can change safely* — no bad state shown, but the
-    state is written from five or more files, or `git log -S'<state>'`
-    shows a past change that had to touch three or more of them. Count
-    them from the grep. Category **implicit state**, slow.
+- **Implicit state** — a state machine nobody wrote down: flags and a
+  status side by side, transitions made in handlers, callbacks and effects
+  with no check of the state they start from. Find it by **tracing**,
+  which two hunters do the same way. Take a component or class holding
+  several pieces of state (step 2's leads, or what reading turns up), and
+  for each piece grep its own setter or field name to list every write,
+  with the handler or effect it sits in. Write the table: `event → checks
+  → writes`, with lines. Then read the defects off it:
+  - a write that does not check where it starts from (`declined → open`
+    from any state);
+  - a state no write leaves (no cancel from `pending`, no retry from
+    `error`);
+  - an event that sets one piece and leaves its partner (retry sets
+    loading and never clears the error);
+  - an effect that writes one piece from another to keep them in sync.
 
-  Count combinations only over coupled flags (step 4 says which), and
-  "handled" means a branch in the code that deals with it: "five coupled
-  flags, 32 combinations, 4 handled anywhere". The fix is one
-  discriminated union, enum or reducer, with its states and the
-  transitions it allows written beside it, and transitions made through
-  one function that checks the state they start from; a state-machine
-  library only past about eight states, or with nested or parallel ones.
-  A status typed as `string` with no transitions spread around is
-  **typing**, not this. How a screen should present the state is
-  `ux-suck-hunt`'s; the bug and its impact are reported here.
+  A defect you can drive to a bad state — name the events, and run them
+  where the code may run, or let `ux-suck-hunt`'s browser reproduce it —
+  is **broken**, fire; say "implicit state" in the write-up. A defect not
+  yet driven is **implicit state**, slow, with the table as its evidence.
+  The fix is one discriminated union, enum or reducer, with the table
+  written beside it and every transition through one function that checks
+  where it starts; a state-machine library only past about eight states,
+  or with nested or parallel ones. A status typed as `string` with no
+  transitions spread around is **typing**. How a screen should show the
+  state is `ux-suck-hunt`'s; the bug is reported here.
 - **Performance** — the obvious kind, visible in the code: a query or HTTP
   call per item (N+1), `await` in a loop where the calls are independent, a
   list searched inside a loop over another list, the whole file rewritten on
@@ -635,14 +624,11 @@ way.
 - **Performance:** is the size real? Find where the collection comes from
   and how big it gets in use. If it stays small, drop it.
 - **Overengineered:** is there really one implementation and one caller?
-- **Implicit state:** are these one machine? Flags are coupled when one
-  event writes two of them, or one condition or render reads two of them
-  (`isLoading && !isError`); flags nothing writes or reads together are
-  independent. For a bad
-  state, write the sequence of events that reaches it and run it where the
-  code may run; flags only ever set together, or a combination no event
-  can produce, are not a finding. For change cost, count the files by
-  grepping the writes, not by estimate.
+- **Implicit state:** is every row of the table a real write, and is it
+  one machine? Pieces are one machine when one event writes two of them or
+  one condition or render reads two of them; pieces nothing writes or
+  reads together are independent. A combination no event produces is not
+  a finding.
 - **Suppressed:** does it still hide anything? Remove it in the scratch copy
   and rerun the tool.
 
