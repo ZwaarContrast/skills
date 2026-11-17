@@ -107,7 +107,7 @@ grep -rnE 'verify=False|rejectUnauthorized: *false|InsecureSkipVerify: *true|she
 grep -rnE 'console\.(log|debug)\(|debugger;|\bdbg!\(|breakpoint\(\)|pdb\.set_trace|^\s*print\(|fmt\.Print(ln|f)?\(' <src> > "$H/debug.txt"
 grep -rnE 'eslint-disable|oxlint-disable|biome-ignore|stylelint-disable|@ts-ignore|@ts-expect-error|@ts-nocheck|noqa|type: ?ignore|pyright: ?ignore|mypy: ?ignore-errors|pylint: ?disable|#!?\[(allow|expect)\(|//\s*nolint|//lint:ignore|#nosec|\.skip\(|xit\(|todo!|unimplemented!' <src> > "$H/suppressions.txt"
 grep -rnE 'continue-on-error: *true|allow_failure: *true|\|\| *true' .github .gitlab-ci.yml .circleci > "$H/ci.txt" 2>/dev/null
-git ls-files <src> | grep -E '\.(py|go|php|rb|java|kt|cs|rs|swift|ex|[jt]sx?|vue|svelte)$' | grep -vE '(\.|_)(test|spec)\.|/tests?/|__tests__|/test_[^/]*$|\.min\.js$' | tr '\n' '\0' | xargs -0 grep -HciE '(^|[^A-Za-z0-9_])_*(status|state|phase)([^A-Za-z0-9_]|$)' | grep -v ':0$' | sort -t: -k2 -rn | head -20 > "$H/state-fields.txt"
+git -c core.quotePath=off ls-files <src> | grep -E '\.(py|go|php|rb|java|kt|cs|rs|swift|ex|[jt]sx?|vue|svelte)$' | grep -vE '(\.|_)(test|spec)\.|/tests?/|__tests__|/test_[^/]*$|\.min\.js$|\.stories\.|\.pb\.go$|_generated\.|/vendor/|/generated/' | tr '\n' '\0' | xargs -0 grep -sHciE '(^|[^A-Za-z0-9_])_*(status|state|phase)([^A-Za-z0-9_]|$)' | grep -v ':0$' | sort -t: -k2 -rn | head -20 > "$H/state-fields.txt"
 go run github.com/google/osv-scanner/v2/cmd/osv-scanner@latest scan source -r -f markdown . > "$H/osv.md" 2>/dev/null
 go run github.com/zricethezav/gitleaks/v8@latest git --no-banner --redact -f csv -r "$H/secrets.csv" . 2>/dev/null
 git ls-files -ci --exclude-standard > "$H/tracked-ignored.txt"
@@ -143,10 +143,11 @@ the exported API of a package others import. A tool that
   result — is not a debug leftover. `cmd || true` in a cleanup step is
   normal; in a test or lint step it is a CI that cannot fail.
 - **Implicit state** starts where state piles up: `state-fields.txt`
-  (code files naming a status, state or phase most), and for JS
-  `state-holders.txt` (components and hooks with four or more pieces of
-  state) and `state-stores.txt` (store files and class components).
-  Places to start, never findings.
+  (code files naming a status, state or phase most; HTTP status lands
+  there too), and for JS `state-holders.txt` (components and hooks with
+  four or more pieces of state) and `state-stores.txt` (files importing a
+  store or sync library, and class components). Places to start, never
+  findings.
 - **Secrets never reach the conversation.** `--redact` keeps values out of
   the file; the report names file, commit and kind of secret, never the
   value.
@@ -199,8 +200,8 @@ npx -y -p @ast-grep/cli ast-grep run -l ts -p 'JSON.parse($$$) as $T' <src> > "$
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'try { $$$ } catch ($E) { }' <src> > "$H/swallowed.txt"
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'JSON.parse(JSON.stringify($X))' <src> > "$H/deep-clone.txt"
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'new Promise($$$A => setTimeout($$$))' <src> > "$H/sleeps.txt"
-grep -rlE --null '(\buse(State|Reducer|Atom)[<(]|\b(ref|shallowRef|reactive|signal)[<(]|\$state(\.raw)?[<(])' <src> --include='*.[jt]s' --include='*.[jt]sx' --include='*.vue' --include='*.svelte' --exclude='*.min.js' | xargs -0 awk 'FNR==1{c="(file)"} FILENAME ~ /(\.|_)(test|spec)\.|\/tests?\/|__tests__/{next} /^(export )?(default )?(async )?(function|class) [A-Za-z_]|^(export )?const ([A-Z]|use[A-Z])[A-Za-z0-9_]*(:[^=]*)? = /{c=$(0); sub(/^(export )?(default )?(async )?(function|class|const) /,"",c); sub(/[^A-Za-z0-9_].*/,"",c)} /^export default (async )?\(|^export default class extends/{c="default"} /^export default (React\.)?(memo|forwardRef)\(function [A-Za-z_]/{c=$(0); sub(/.*function /,"",c); sub(/[^A-Za-z0-9_].*/,"",c)} {n[FILENAME" "c]+=gsub(/(use(State|Reducer|Atom)[<(]|(^|[^A-Za-z_.])(ref|shallowRef|reactive|signal)[<(]|\$state(\.raw)?[<(])/,"&")} END{for(k in n) if(n[k]>=4) print n[k], k}' | sort -rn > "$H/state-holders.txt"
-grep -rcE "from ['\"](zustand|pinia|mobx|valtio|redux|@reduxjs/toolkit)['\"/]|this\.setState\(|makeAutoObservable|@observable" <src> --include='*.[jt]s' --include='*.[jt]sx' --exclude='*.min.js' | grep -vE ':0$|(\.|_)(test|spec)\.|/tests?/|__tests__' | sort -t: -k2 -rn > "$H/state-stores.txt"
+grep -rlE --null '(\buse(State|Reducer|Atom)[<(]|\b(ref|shallowRef|reactive|signal)[<(]|\$state(\.raw)?[<(]|\bcreateSignal[<(])' <src> --include='*.[jt]s' --include='*.[jt]sx' --include='*.vue' --include='*.svelte' --exclude='*.min.js' | xargs -0 awk 'FNR==1{c="(file)"} FILENAME ~ /(\.|_)(test|spec|stories)\.|\/tests?\/|__tests__/{next} /^(export )?(default )?(async )?(function|class) [A-Za-z_]|^(export )?const ([A-Z][a-z]|use[A-Z])[A-Za-z0-9_]*(:[^=]*)? = /{c=$(0); sub(/^(export )?(default )?(async )?(function|class|const) /,"",c); sub(/[^A-Za-z0-9_].*/,"",c)} /^export default (async )?(function *)?\(|^export default class extends/{c="default"} /^export default (React\.)?(memo|forwardRef)\(function [A-Za-z_]/{c=$(0); sub(/.*function /,"",c); sub(/[^A-Za-z0-9_].*/,"",c)} {n[FILENAME" "c]+=gsub(/(use(State|Reducer|Atom)[<(]|(^|[^A-Za-z_.])(ref|shallowRef|reactive|signal)[<(]|\$state(\.raw)?[<(]|createSignal[<(])/,"&")} END{for(k in n) if(n[k]>=4) print n[k], k}' | sort -rn > "$H/state-holders.txt"
+grep -rcE "from ['\"](zustand|pinia|mobx|valtio|redux|@reduxjs/toolkit|yjs|@automerge/[a-z-]+|@liveblocks/[a-z-]+)['\"/]|this\.setState\(|makeAutoObservable|@observable" <src> --include='*.[jt]s' --include='*.[jt]sx' --exclude='*.min.js' | grep -vE ':0$|(\.|_)(test|spec)\.|/tests?/|__tests__' | sort -t: -k2 -rn > "$H/state-stores.txt"
 npx -y npm-check-updates > "$H/outdated.txt" 2>&1
 npm audit --package-lock-only > "$H/audit.txt" 2>&1
 ```
@@ -274,6 +275,7 @@ go run honnef.co/go/tools/cmd/staticcheck@latest ./... > "$H/staticcheck.txt" 2>
 go run golang.org/x/tools/cmd/deadcode@latest ./... > "$H/deadcode.txt" 2>&1
 go run github.com/securego/gosec/v2/cmd/gosec@latest -quiet -fmt golint ./... > "$H/gosec.txt" 2>&1
 go run golang.org/x/vuln/cmd/govulncheck@latest ./... > "$H/govulncheck.txt" 2>&1
+go run github.com/nishanths/exhaustive/cmd/exhaustive@latest ./... > "$H/exhaustive.txt" 2>&1
 grep -rnE 'interface\{\}|\bany\b' --include='*.go' . > "$H/any.txt"
 gofmt -l . > "$H/format.txt"
 go list -m -u all > "$H/outdated.txt" 2>&1
@@ -501,52 +503,58 @@ The categories, grouped by the band they usually land in (step 5):
   wait for readiness, tests that assert on implementation, shared mutable
   state, catch-all handlers that swallow and carry on, circular imports.
 - **Implicit state** — a state machine nobody wrote down: flags and a
-  status side by side, changed from handlers, callbacks, effects, other
-  requests and other devices. Find it by **tracing**:
-  1. *Scope*: start from the piece the lead names. Add every piece that
-     shares an event with it (one handler, effect or request writes both)
-     or a gate (one condition decides whether something exists or runs on
-     both); repeat until nothing new joins.
+  status side by side, changed from handlers, effects, other clients and
+  jobs. Find it by **tracing**:
+  1. *Scope*: start from the piece the lead names. Add a piece when one
+     event sets both (resetting to the row-0 value does not count) or one
+     condition decides on both whether something exists or runs. Stop at
+     the smallest set that shows a defect, eight pieces at most; none in
+     eight is the no-bad-state case below.
   2. *Writes*: grep each piece's name, its setter with and without `(`,
-     and every alias or prop it is passed on as.
+     and every alias or prop it is passed on as. State with one shared
+     writer (`this.setState`, a store, a CRDT map's `set`) is traced by
+     field name; a dispatch is a write.
   3. *Table*, with lines: `event → fires in → checks → writes`. Row 0 is
      initialisation (URL, storage, props, defaults). *Fires in* is the
-     states the trigger is reachable in, CSS included. *Checks* is what is
-     true when the write runs, the render gate included. Split each
-     handler at every `await`, callback and request; after a split nothing
-     is checked unless it is checked again.
+     states the trigger is reachable in, a request still in flight
+     counting as a state, plus other clients and jobs. *Checks* is what is
+     true when the write runs. Split each handler at every `await`,
+     callback, request and setter call (the new value shows only after
+     the next render); after a split nothing is checked unless it is
+     checked again.
   4. *Defects*, read off the table:
      - *unguarded* — a write before any split whose *fires in* holds a
        state its *checks* do not exclude, and it is wrong there;
      - *stale* — a write after a split relies on something that can change
-       in the window;
+       in the window, across requests and processes too;
      - *left behind* — an event changes one piece and leaves another its
        gate reads, or a piece is read and never cleared;
      - *lost write* — a write replaces a whole record other writers also
-       change, or a check and its write sit in different requests,
-       processes or devices;
+       change;
      - *stuck* — a state with no way out the user or caller needs.
 
-     None counts where the code says it is meant. An effect that writes
-     one piece from another is a lead, and a defect only when something
-     else writes that piece too.
+     None counts where a test asserts the behaviour or a comment says why
+     it is harmless; a bad state you reproduced is never excused. An
+     effect that writes one piece from another is a lead, and a defect
+     only when something else writes that piece too.
 
   The exact events that reach a bad state are an exact input: the finding
   is **broken**, banded by step 5 like any bug, with "implicit state" in
-  the write-up. Run them where step 1 allows — the project's own test
-  runner, a scratch script against the library, `ux-suck-hunt`'s browser
-  — and say whether you did. With no bad state it is **implicit state**,
-  slow, only when the state is read to decide something, written from two
-  or more files, and a past commit had to change several of those writes:
-  name the commit. Otherwise drop it. The fix: one type for the state (a
-  union; an enum with `match`; a Go typed constant checked by the
-  `exhaustive` linter) and one transition function that rejects a move
-  the table does not allow, with the table beside it (in Go, behind a
-  mutex or one goroutine). Persisted: `UPDATE … WHERE status = ?` with the
-  affected rows checked. Synced (CRDT): one nested map per item, with
-  transitions re-derived after a merge. A library only past about eight
-  states, or nested or parallel ones. A `string` status with no
-  transitions spread around is **typing**.
+  the write-up. Run them where step 1 allows — a test or script in
+  `$H/copy` (dependencies installed there with `--ignore-scripts`), or
+  `ux-suck-hunt`'s browser — and say whether you did. With no bad state it
+  is **implicit state**, slow, only when the state is read to decide
+  something and `git log -S'<setter or field>'` shows one commit changing
+  two or more of its write sites; name the commit. Otherwise drop it. The
+  fix: one type for the state (a union; an enum with `match`; a Go typed
+  constant that `exhaustive` checks) and one transition function that
+  rejects a move the table does not allow, with the table beside it (in
+  Go, behind a mutex or one goroutine). Persisted: `UPDATE … WHERE status
+  = ?` with the affected rows checked; a whole-record write becomes an
+  update of the changed fields, or checks a version. Synced (CRDT): store
+  the facts, derive the status from them, and repair an illegal merged
+  state in one function. A `string` status with no transitions spread
+  around is **typing**.
 - **Performance** — the obvious kind, visible in the code: a query or HTTP
   call per item (N+1), `await` in a loop where the calls are independent, a
   list searched inside a loop over another list, the whole file rewritten on
@@ -645,10 +653,10 @@ way.
 - **Performance:** is the size real? Find where the collection comes from
   and how big it gets in use. If it stays small, drop it.
 - **Overengineered:** is there really one implementation and one caller?
-- **Implicit state:** does every piece share an event or a gate with
-  another, and is every row a real write? For *stale*, show the window
-  (the field stays editable, a second request can arrive); for *lost
-  write*, the two writers. A combination no event produces is not a
+- **Implicit state:** did each piece join through a setting event or a
+  deciding condition, and is every row a real write? For *stale*, show the
+  window (the field stays editable, a second request can arrive); for
+  *lost write*, the two writers. A combination no event produces is not a
   finding.
 - **Suppressed:** does it still hide anything? Remove it in the scratch copy
   and rerun the tool.
@@ -700,7 +708,7 @@ evidence says so:
 | Moves to | When |
 |---|---|
 | fire | exploitable; on money, auth or a trust boundary; can take the service down (unbounded growth, N+1 on a hot path); brittle code in a high-churn file; a suppression hiding a real error; a committed `.env` |
-| slow | a lazy suppression that still suppresses something; a vulnerable dependency the shipped code never reaches |
+| slow | a lazy suppression that still suppresses something; a vulnerable dependency the shipped code never reaches; a **broken** whose bad state is cosmetic and gone at the next event |
 | dead weight | dead code, however brittle or insecure — deleting it fixes everything. But dead code that looks about to go live (recent, half-wired) and holds a hazard says so in its finding |
 
 **Full write-ups for the first ten** (or all, if there are fewer), each one
