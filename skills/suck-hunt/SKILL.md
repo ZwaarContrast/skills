@@ -64,8 +64,11 @@ something — a suppression, a cast — change a throwaway copy, never the
 repository:
 
 ```
-mkdir "$H/copy" && git archive HEAD | tar -x -C "$H/copy"
+C=$(git stash create) && mkdir "$H/copy" && git archive "${C:-HEAD}" | tar -x -C "$H/copy"
 ```
+
+`git stash create` snapshots uncommitted changes to tracked files without
+touching the tree or the stash, so the copy is the code being judged.
 
 **Running project code is not free.** Tests, coverage, the entry point and
 bug reproductions all execute it. Read what will run first. Run it only if
@@ -224,7 +227,7 @@ npx -y -p @ast-grep/cli@0.51.3 ast-grep run -l ts -p 'try { $$$ } catch ($E) { }
 npx -y -p @ast-grep/cli@0.51.3 ast-grep run -l ts -p 'JSON.parse(JSON.stringify($X))' <src> > "$H/deep-clone.txt"
 npx -y -p @ast-grep/cli@0.51.3 ast-grep run -l ts -p 'new Promise($$$A => setTimeout($$$))' <src> > "$H/sleeps.txt"
 git -c core.quotePath=off ls-files <src> | grep -E '\.([jt]sx?|vue|svelte)$' | grep -vE '\.min\.js$' | tr '\n' '\0' | xargs -0 grep -slE --null '(\buse(State|Reducer|Atom)[<(]|\b(ref|shallowRef|reactive|signal)[<(]|\$state(\.raw)?[<(]|\bcreateSignal[<(])' | xargs -0 awk 'FNR==1{c="(file)"} FILENAME ~ /(\.|_)(test|spec|stories)\.|\/tests?\/|__tests__/{next} /^(export )?(default )?(async )?(function|class) [A-Za-z_]|^(export )?const ([A-Z][a-z]|use[A-Z])[A-Za-z0-9_]*(:[^=]*)? = /{c=$(0); sub(/^(export )?(default )?(async )?(function|class|const) /,"",c); sub(/[^A-Za-z0-9_].*/,"",c)} /^export default (async )?(function *)?\(|^export default class extends/{c="default"} /^export default (React\.)?(memo|forwardRef)\(function [A-Za-z_]/{c=$(0); sub(/.*function /,"",c); sub(/[^A-Za-z0-9_].*/,"",c)} {n[FILENAME" "c]+=gsub(/(use(State|Reducer|Atom)[<(]|(^|[^A-Za-z_.])(ref|shallowRef|reactive|signal)[<(]|\$state(\.raw)?[<(]|createSignal[<(])/,"&")} END{for(k in n) if(n[k]>=4) print n[k], k}' | sort -rn > "$H/state-holders.txt"
-git -c core.quotePath=off ls-files <src> | grep -E '\.[jt]sx?$' | grep -vE '\.min\.js$' | tr '\n' '\0' | xargs -0 grep -sHcE "from ['\"](zustand|pinia|mobx|valtio|redux|@reduxjs/toolkit|yjs|@automerge/[a-z-]+|@liveblocks/[a-z-]+)['\"/]|this\.setState\(|makeAutoObservable|@observable" | grep -vE ':0$|(\.|_)(test|spec)\.|/tests?/|__tests__' | sort -t: -k2 -rn > "$H/state-stores.txt"
+git -c core.quotePath=off ls-files <src> | grep -E '\.[jt]sx?$' | grep -vE '\.min\.js$|(\.|_)(test|spec)\.|/tests?/|__tests__' | tr '\n' '\0' | xargs -0 grep -slE --null "from ['\"](zustand|pinia|mobx|valtio|redux|@reduxjs/toolkit|yjs|@automerge/[a-z-]+|@liveblocks/[a-z-]+)['\"/]|this\.setState\(|makeAutoObservable|@observable" | xargs -0 grep -sHcE "\.(set|insert|delete|push|unshift|transact|applyUpdate)\(|setState\(|dispatch\(|\bset\(" | grep -v ':0$' | sort -t: -k2 -rn > "$H/state-stores.txt"
 npx -y npm-check-updates@23.1.1 > "$H/outdated.txt" 2>&1
 npm audit --package-lock-only > "$H/audit.txt" 2>&1
 ```

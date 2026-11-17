@@ -45,9 +45,10 @@ Go through the lead files in this order — `state-schema-db.txt` or
 non-empty one, until three leads are taken; subagents draw from that one
 pool. The busiest is the top line where the file is ranked by count; in a
 schema file it is the table (or file) with the most lines: `cut -f1
-state-schema-db.txt | uniq -c | sort -rn`, `cut -d: -f1 state-schema.txt |
-uniq -c | sort -rn`, a data dump counted per table. Ties go to the lead with
-more write sites. A lead that turns out to hold no state is skipped and
+state-schema-db.txt | sort | uniq -c | sort -rn`, `cut -d: -f1
+state-schema.txt | sort | uniq -c | sort -rn`, a data dump counted per
+table. Ties go to the lead with more write sites: lines in it, or calling
+it, that match §5's write forms. A lead that turns out to hold no state is skipped and
 does not count. A lead names a component, file or table, which can
 hold several machines: trace at most two per lead. The report's coverage
 line names the leads left unworked.
@@ -140,17 +141,20 @@ The exact events that reach a bad state are an exact input: the finding is
 **broken**, banded by SKILL.md step 5 like any bug, with "implicit state"
 in the write-up. Run them where SKILL.md step 1 allows — a test or script
 in `$H/copy` (dependencies installed there with `--ignore-scripts`; a
-component test renders with testing-library added there; a reproduction
-in raw SQL, or through drizzle's PGlite driver, can run against §1's
-PGlite — an app's own Postgres client cannot reach it), or `ux-suck-hunt`'s browser — never against a
-database the run did not create. Move what you keep into `$H` before the copy goes, and say whether
-you ran it.
+component test renders with testing-library added there), or `ux-suck-
+hunt`'s browser — never against a database the run did not create. The
+app's own SQL statements replayed in their order against §1's PGlite count
+as reproduced "at SQL level", and the write-up says so; a race between
+processes replayed one step at a time counts the same way. An app's own
+Postgres client cannot reach PGlite. Move what you keep into `$H` before
+the copy goes, and say whether you ran it.
 
 A machine with no defect in any of its pieces is **implicit state**, slow,
 only when the state is read to decide something and `git log -G'<a write
 of it>'` (`SET status`, `.status =`, the setter's name) shows one commit
-changing two or more of its write sites; name the commit. Otherwise drop
-it.
+changing two or more of its write sites that already existed — the commit
+that created them, or a squash, is not evidence; name the commit.
+Otherwise drop it.
 
 ## §8 Fix
 
