@@ -61,8 +61,8 @@ live there. Find rules there and read only their lines:
 
 ```
 R=<skill-dir>/references; grep -i 'contrast' "$R/RULES.tsv"                      # every rule on a subject
-R=<skill-dir>/references; awk -F'\t' '$2=="web.md"{print $5}' "$R/RULES.tsv" | uniq # one file's topics
-R=<skill-dir>/references; awk -F'\t' '$5 ~ /^Forms/' "$R/RULES.tsv"              # one topic's rules
+R=<skill-dir>/references; awk -F'\t' '$(2)=="web.md"{print $(5)}' "$R/RULES.tsv" | uniq # one file's topics
+R=<skill-dir>/references; awk -F'\t' '$(5) ~ /^Forms/' "$R/RULES.tsv"              # one topic's rules
 R=<skill-dir>/references; sed -n '54,55p' "$R/web.md"                            # read a rule: WEB-21's start,end
 R=<skill-dir>/references; sed -n '/^## Measure/,/^## Sources/p' "$R/apple.md"    # a platform's tools
 ```
@@ -528,7 +528,7 @@ once. Before walking, it lists the rule topics that apply — the
 always-files plus its platform's:
 
 ```
-awk -F'\t' '$2 ~ /^(web|a11y|content|visual|touch|apple)\.md$/ {print $2"\t"$5}' <skill-dir>/references/RULES.tsv | sort -u
+awk -F'\t' '$(2) ~ /^(web|a11y|content|visual|touch|apple)\.md$/ {print $(2)"\t"$(5)}' <skill-dir>/references/RULES.tsv | sort -u
 ```
 
 It picks every topic its screens touch: Forms for a form, Navigation for a

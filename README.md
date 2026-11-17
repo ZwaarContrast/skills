@@ -110,6 +110,11 @@ npx skills add /path/to/this/clone --skill clean-room
 `--list` against the same path is a safe read-only check that a new skill is
 discoverable and its frontmatter parses.
 
+Write awk fields as `$(1)`, never `$1`, in a `SKILL.md`: when a skill is
+invoked with arguments, Claude Code replaces `$0`–`$9` in its text, and the
+command still runs, wrong. `grep -nE '\$[0-9]' skills/*/SKILL.md` must
+print nothing.
+
 ## Add a skill
 
 ```

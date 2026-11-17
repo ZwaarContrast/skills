@@ -112,7 +112,7 @@ go run github.com/google/osv-scanner/v2/cmd/osv-scanner@latest scan source -r -f
 go run github.com/zricethezav/gitleaks/v8@latest git --no-banner --redact -f csv -r "$H/secrets.csv" . 2>/dev/null
 git ls-files -ci --exclude-standard > "$H/tracked-ignored.txt"
 git ls-tree -r -l HEAD | sort -k4 -rn | head -20 > "$H/big-blobs-now.txt"
-git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | awk '$1=="blob" && $3 > 1048576 {print $3, $4}' | sort -rn | head -20 > "$H/big-blobs-history.txt"
+git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | awk '$(1)=="blob" && $(3) > 1048576 {print $(3), $(4)}' | sort -rn | head -20 > "$H/big-blobs-history.txt"
 [ -f README.md ] && grep -oE '\]\([^)#:]+\)' README.md | sed 's/](\(.*\))/\1/' | while read f; do [ -e "$f" ] || echo "dead link: $f"; done > "$H/readme-links.txt"
 git ls-files '*.sh' '*.bash' | xargs uvx --from shellcheck-py shellcheck -f gcc > "$H/shellcheck.txt" 2>&1   # only if any are listed
 ```
@@ -200,7 +200,7 @@ npx -y -p @ast-grep/cli ast-grep run -l ts -p 'JSON.parse($$$) as $T' <src> > "$
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'try { $$$ } catch ($E) { }' <src> > "$H/swallowed.txt"
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'JSON.parse(JSON.stringify($X))' <src> > "$H/deep-clone.txt"
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'new Promise($$$A => setTimeout($$$))' <src> > "$H/sleeps.txt"
-grep -rlE --null 'use(State|Reducer)\(' <src> --include='*.[jt]s' --include='*.[jt]sx' --exclude='*.min.js' | xargs -0 awk 'FNR==1{c="?"} FILENAME ~ /(\.|_)(test|spec)\.|\/tests?\/|__tests__/{next} /^(export )?(default )?function [A-Z]|^(export )?const [A-Z][A-Za-z0-9]*(:[^=]*)? = /{c=$0; sub(/^(export )?(default )?(function|const) /,"",c); sub(/[^A-Za-z0-9].*/,"",c)} {n[FILENAME" "c]+=gsub(/use(State|Reducer)\(/,"&")} END{for(k in n) if(n[k]>=4) print n[k], k}' | sort -rn > "$H/state-holders.txt"
+grep -rlE --null 'use(State|Reducer)\(' <src> --include='*.[jt]s' --include='*.[jt]sx' --exclude='*.min.js' | xargs -0 awk 'FNR==1{c="?"} FILENAME ~ /(\.|_)(test|spec)\.|\/tests?\/|__tests__/{next} /^(export )?(default )?function [A-Z]|^(export )?const [A-Z][A-Za-z0-9]*(:[^=]*)? = /{c=$(0); sub(/^(export )?(default )?(function|const) /,"",c); sub(/[^A-Za-z0-9].*/,"",c)} {n[FILENAME" "c]+=gsub(/use(State|Reducer)\(/,"&")} END{for(k in n) if(n[k]>=4) print n[k], k}' | sort -rn > "$H/state-holders.txt"
 npx -y npm-check-updates > "$H/outdated.txt" 2>&1
 npm audit --package-lock-only > "$H/audit.txt" 2>&1
 ```
@@ -307,7 +307,7 @@ printf 'includes:\n  - %s/vendor/shipmonk/dead-code-detector/rules.neon\n' "$P" 
 grep -rnE '\b(unserialize|extract|shell_exec|exec|system|passthru|proc_open|popen|create_function)\(|SSL_VERIFY(PEER|HOST)[^;]*(false|0)|\b(md5|sha1)\(' --include='*.php' <src> > "$H/security-php.txt"
 grep -rnE '\b(var_dump|print_r|var_export|dd|dump|ray)\(' --include='*.php' <src> > "$H/debug-php.txt"
 grep -rnE '@phpstan-ignore|@psalm-suppress|phpcs:(ignore|disable)|@codingStandardsIgnore|(^\s*|[=(,!] *)@[a-z_\\]+\(' --include='*.php' <src> > "$H/suppressions-php.txt"
-grep -hE '^\s+count: [0-9]+' phpstan-baseline.neon 2>/dev/null | awk '{s+=$2} END {print s+0, "errors in phpstan-baseline.neon"}' > "$H/baseline.txt"
+grep -hE '^\s+count: [0-9]+' phpstan-baseline.neon 2>/dev/null | awk '{s+=$(2)} END {print s+0, "errors in phpstan-baseline.neon"}' > "$H/baseline.txt"
 npx -y -p @ast-grep/cli ast-grep run -l php -p 'try { $$$ } catch ($$$) { }' <src> > "$H/swallowed-php.txt"
 ```
 

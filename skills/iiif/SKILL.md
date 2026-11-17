@@ -40,7 +40,7 @@ or pull a table of contents:
 
 ```bash
 cd <skill-dir>/docs
-awk -F'\t' '$1=="api/presentation/3.0.md" && $4<=3' SECTIONS.tsv
+awk -F'\t' '$(1)=="api/presentation/3.0.md" && $(4)<=3' SECTIONS.tsv
 sed -n '578,628p' api/presentation/3.0.md
 ```
 
