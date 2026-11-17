@@ -69,8 +69,8 @@ mkdir "$H/copy" && git archive HEAD | tar -x -C "$H/copy"
 
 **Running project code is not free.** Tests, coverage, the entry point and
 bug reproductions all execute it. Read what will run first. Run it only if
-it is self-contained: nothing that migrates or seeds a database the run did
-not create, calls a real external service, sends mail, deploys, or starts a
+it is self-contained: nothing that migrates, seeds or writes to a database,
+cache or queue the run did not create, calls a real external service, sends mail, deploys, or starts a
 server that stays up. Give it `TMPDIR="$H/tmp"` so leftovers land in the
 hunt directory (and `PYTHONDONTWRITEBYTECODE=1` for Python), and stop it
 after ten minutes — the shell tool's timeout, or `timeout 600` where it
@@ -103,12 +103,15 @@ npx -y jscpd@5 --dead-code --reporters ai . > "$H/dead.txt" 2>&1                
 git log --since=1.year --format= --name-only | grep . | sort | uniq -c | sort -rn | head -30 > "$H/churn.txt"
 git ls-files <src> | xargs wc -l | sort -rn | head -15 > "$H/big-files.txt"
 uvx lizard -w <src> > "$H/complexity.txt" 2>&1; uvx lizard <src> | tail -3 >> "$H/complexity.txt"
+git -c core.quotePath=off ls-files <src> | grep -vE '\.min\.js$' > "$H/lizard-files.txt" && uvx lizard -w -f "$H/lizard-files.txt" 2>/dev/null | sed -nE 's/^(.*): warning: (.*) has [0-9]+ NLOC, ([0-9]+) CCN.*/\3 \2 \1/p' | sort -rn | head -25 > "$H/complexity-ranked.txt"
 grep -rnE 'verify=False|rejectUnauthorized: *false|InsecureSkipVerify: *true|shell=True|\beval\(|new Function\(|pickle\.loads?\(|yaml\.load\(|innerHTML *=|dangerouslySetInnerHTML|\bunsafe *\{' <src> > "$H/security.txt"
 grep -rnE 'console\.(log|debug)\(|debugger;|\bdbg!\(|breakpoint\(\)|pdb\.set_trace|^\s*print\(|fmt\.Print(ln|f)?\(' <src> > "$H/debug.txt"
 grep -rnE 'eslint-disable|oxlint-disable|biome-ignore|stylelint-disable|@ts-ignore|@ts-expect-error|@ts-nocheck|noqa|type: ?ignore|pyright: ?ignore|mypy: ?ignore-errors|pylint: ?disable|#!?\[(allow|expect)\(|//\s*nolint|//lint:ignore|#nosec|\.skip\(|xit\(|todo!|unimplemented!' <src> > "$H/suppressions.txt"
 grep -rnE 'continue-on-error: *true|allow_failure: *true|\|\| *true' .github .gitlab-ci.yml .circleci > "$H/ci.txt" 2>/dev/null
 git -c core.quotePath=off ls-files <src> | grep -E '\.(py|go|php|rb|java|kt|cs|rs|swift|ex|[jt]sx?|vue|svelte)$' | grep -vE '(\.|_)(test|spec)\.|/tests?/|__tests__|/test_[^/]*$|\.min\.js$|\.stories\.|\.pb\.go$|_generated\.|/vendor/|/generated/' | tr '\n' '\0' | xargs -0 grep -sHciE '(^|[^A-Za-z0-9_])_*(status|state|phase)([^A-Za-z0-9_]|$)' | grep -v ':0$' | sort -t: -k2 -rn | head -20 > "$H/state-fields.txt"
-git -c core.quotePath=off ls-files | grep -iE '\.(sql|prisma)$|schema\.[a-z]+$|/migrations?/' | grep -vE '/vendor/' | tr '\n' '\0' | xargs -0 grep -sHniE "^[[:space:]]*[\"'\`]?_*(status|state|phase)[\"'\`]?[[:space:]]*:?[[:space:]]*[A-Za-z]|create type [A-Za-z_\".]+ as enum|check[[:space:]]*\(.*(status|state|phase)" > "$H/state-schema.txt"
+git -c core.quotePath=off ls-files <src> | grep -E '\.(py|go|php|rb|java|kt|cs|rs|ex|[jt]sx?|vue|svelte)$' | grep -vE '(\.|_)(test|spec)\.|/tests?/|__tests__|\.min\.js$' | tr '\n' '\0' | xargs -0 grep -sHcE "(local|session)Storage\.(setItem|removeItem)|document\.cookie *=|[Ss]et-[Cc]ookie|\b(redis|cache|client)\.(set|setex|setnx|hset|hdel|incr|del|expire)\(|Redis::(set|hset|del|incr|expire)" | grep -v ':0$' | sort -t: -k2 -rn | head -20 > "$H/state-kv.txt"
+git ls-files | grep -iE 'migrat.*\.sql$' | tr '\n' '\0' | xargs -0 npx -y squawk-cli --reporter gcc > "$H/squawk.txt" 2>&1   # Postgres only
+git -c core.quotePath=off ls-files | grep -iE '\.prisma$|schema\.[a-z]+$|models?\.py$|entit(y|ies)|/migrations?/.*\.(py|rb|php|[jt]s)$' | grep -vE '/vendor/' | tr '\n' '\0' | xargs -0 grep -sHniE "^[[:space:]]*(t\.[a-z_]+[[:space:]]+:?|\(|@Column\([^)]*\)[[:space:]]*)?[\"'\`]?[A-Za-z_]*(status|state|phase|stage|_at|At|is_?[A-Z_a-z][A-Za-z_]*)[\"'\`]?[[:space:]]*[:,=]?[[:space:]]*[A-Za-z]|^[[:space:]]*enum [A-Za-z_]*(status|state|phase)|enum\([\"'][a-z_]*(status|state|phase)" | grep -viE '[^A-Za-z](created|updated)_?[Aa]t' > "$H/state-schema.txt"
 go run github.com/google/osv-scanner/v2/cmd/osv-scanner@latest scan source -r -f markdown . > "$H/osv.md" 2>/dev/null
 go run github.com/zricethezav/gitleaks/v8@latest git --no-banner --redact -f csv -r "$H/secrets.csv" . 2>/dev/null
 git ls-files -ci --exclude-standard > "$H/tracked-ignored.txt"
@@ -128,7 +131,9 @@ further only turns up in reading. Ignore clones inside tests unless they are
 large. `--semantic`
   finds the same logic in different words but downloads a 548 MB model — ask
   first. Dead code is scanned from `.` so the tests count as importers;
-  report paths relative to the repository root.
+  report paths relative to the repository root. To confirm and measure a
+  twin found by reading, pass the two paths: `npx -y jscpd@5 --reporters
+  consoleFull --min-tokens 50 <a> <b>`.
 - **Entry points decide dead code.** Scripts, CLIs, tests, framework routes,
   anything named in a manifest, and anything loaded by a name built at
   runtime (``import(`./handlers/${kind}.ts`)``) are entry points, and so is
@@ -145,11 +150,15 @@ the exported API of a package others import. A tool that
   normal; in a test or lint step it is a CI that cannot fail.
 - **Implicit state** starts where state piles up: `state-fields.txt`
   (code files naming a status, state or phase most; HTTP status lands
-  there too), `state-schema.txt` (status columns, enum types and `CHECK`
-  constraints in schemas and migrations), and for JS `state-holders.txt` (components and hooks with
-  four or more pieces of state) and `state-stores.txt` (files importing a
-  store or sync library, and class components). Places to start, never
-  findings.
+  there too), `state-schema.txt` (status, flag and timestamp columns in
+  schemas, models and migrations), `state-kv.txt` (browser storage,
+  cookies and Redis), and for JS `state-holders.txt` and
+  `state-stores.txt`. A schema that exists only as SQL migrations reads
+  best from the engine itself, replayed into a database the run creates —
+  [`references/implicit-state.md`](references/implicit-state.md), Schema,
+  says how and when. Places to start, never findings. `complexity-ranked.txt`
+  is the attack order for **unreadable**; `squawk.txt` flags Postgres
+  migrations that lock or rewrite a table (**brittle**).
 - **Secrets never reach the conversation.** `--redact` keeps values out of
   the file; the report names file, commit and kind of secret, never the
   value.
@@ -202,8 +211,8 @@ npx -y -p @ast-grep/cli ast-grep run -l ts -p 'JSON.parse($$$) as $T' <src> > "$
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'try { $$$ } catch ($E) { }' <src> > "$H/swallowed.txt"
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'JSON.parse(JSON.stringify($X))' <src> > "$H/deep-clone.txt"
 npx -y -p @ast-grep/cli ast-grep run -l ts -p 'new Promise($$$A => setTimeout($$$))' <src> > "$H/sleeps.txt"
-grep -rlE --null '(\buse(State|Reducer|Atom)[<(]|\b(ref|shallowRef|reactive|signal)[<(]|\$state(\.raw)?[<(]|\bcreateSignal[<(])' <src> --include='*.[jt]s' --include='*.[jt]sx' --include='*.vue' --include='*.svelte' --exclude='*.min.js' | xargs -0 awk 'FNR==1{c="(file)"} FILENAME ~ /(\.|_)(test|spec|stories)\.|\/tests?\/|__tests__/{next} /^(export )?(default )?(async )?(function|class) [A-Za-z_]|^(export )?const ([A-Z][a-z]|use[A-Z])[A-Za-z0-9_]*(:[^=]*)? = /{c=$(0); sub(/^(export )?(default )?(async )?(function|class|const) /,"",c); sub(/[^A-Za-z0-9_].*/,"",c)} /^export default (async )?(function *)?\(|^export default class extends/{c="default"} /^export default (React\.)?(memo|forwardRef)\(function [A-Za-z_]/{c=$(0); sub(/.*function /,"",c); sub(/[^A-Za-z0-9_].*/,"",c)} {n[FILENAME" "c]+=gsub(/(use(State|Reducer|Atom)[<(]|(^|[^A-Za-z_.])(ref|shallowRef|reactive|signal)[<(]|\$state(\.raw)?[<(]|createSignal[<(])/,"&")} END{for(k in n) if(n[k]>=4) print n[k], k}' | sort -rn > "$H/state-holders.txt"
-grep -rcE "from ['\"](zustand|pinia|mobx|valtio|redux|@reduxjs/toolkit|yjs|@automerge/[a-z-]+|@liveblocks/[a-z-]+)['\"/]|this\.setState\(|makeAutoObservable|@observable" <src> --include='*.[jt]s' --include='*.[jt]sx' --exclude='*.min.js' | grep -vE ':0$|(\.|_)(test|spec)\.|/tests?/|__tests__' | sort -t: -k2 -rn > "$H/state-stores.txt"
+git -c core.quotePath=off ls-files <src> | grep -E '\.([jt]sx?|vue|svelte)$' | grep -vE '\.min\.js$' | tr '\n' '\0' | xargs -0 grep -lE --null '(\buse(State|Reducer|Atom)[<(]|\b(ref|shallowRef|reactive|signal)[<(]|\$state(\.raw)?[<(]|\bcreateSignal[<(])' | xargs -0 awk 'FNR==1{c="(file)"} FILENAME ~ /(\.|_)(test|spec|stories)\.|\/tests?\/|__tests__/{next} /^(export )?(default )?(async )?(function|class) [A-Za-z_]|^(export )?const ([A-Z][a-z]|use[A-Z])[A-Za-z0-9_]*(:[^=]*)? = /{c=$(0); sub(/^(export )?(default )?(async )?(function|class|const) /,"",c); sub(/[^A-Za-z0-9_].*/,"",c)} /^export default (async )?(function *)?\(|^export default class extends/{c="default"} /^export default (React\.)?(memo|forwardRef)\(function [A-Za-z_]/{c=$(0); sub(/.*function /,"",c); sub(/[^A-Za-z0-9_].*/,"",c)} {n[FILENAME" "c]+=gsub(/(use(State|Reducer|Atom)[<(]|(^|[^A-Za-z_.])(ref|shallowRef|reactive|signal)[<(]|\$state(\.raw)?[<(]|createSignal[<(])/,"&")} END{for(k in n) if(n[k]>=4) print n[k], k}' | sort -rn > "$H/state-holders.txt"
+git -c core.quotePath=off ls-files <src> | grep -E '\.[jt]sx?$' | grep -vE '\.min\.js$' | tr '\n' '\0' | xargs -0 grep -sHcE "from ['\"](zustand|pinia|mobx|valtio|redux|@reduxjs/toolkit|yjs|@automerge/[a-z-]+|@liveblocks/[a-z-]+)['\"/]|this\.setState\(|makeAutoObservable|@observable" | grep -vE ':0$|(\.|_)(test|spec)\.|/tests?/|__tests__' | sort -t: -k2 -rn > "$H/state-stores.txt"
 npx -y npm-check-updates > "$H/outdated.txt" 2>&1
 npm audit --package-lock-only > "$H/audit.txt" 2>&1
 ```
@@ -312,6 +321,7 @@ grep -rnE '\b(unserialize|extract|shell_exec|exec|system|passthru|proc_open|pope
 grep -rnE '\b(var_dump|print_r|var_export|dd|dump|ray)\(' --include='*.php' <src> > "$H/debug-php.txt"
 grep -rnE '@phpstan-ignore|@psalm-suppress|phpcs:(ignore|disable)|@codingStandardsIgnore|(^\s*|[=(,!] *)@[a-z_\\]+\(' --include='*.php' <src> > "$H/suppressions-php.txt"
 grep -hE '^\s+count: [0-9]+' phpstan-baseline.neon 2>/dev/null | awk '{s+=$(2)} END {print s+0, "errors in phpstan-baseline.neon"}' > "$H/baseline.txt"
+awk '/identifier:/{id=$(2)} /count:/{n[id]+=$(2)} END{for(i in n) print n[i], i}' phpstan-baseline.neon 2>/dev/null | sort -rn | head -15 > "$H/baseline-clusters.txt"
 npx -y -p @ast-grep/cli ast-grep run -l php -p 'try { $$$ } catch ($$$) { }' <src> > "$H/swallowed-php.txt"
 ```
 
@@ -329,7 +339,11 @@ add `--ignore-platform-reqs` — analysis only, say so in the report.
   group it by message ("no value type specified in iterable type array",
   "mixed given") rather than reading it line by line. A
   `phpstan-baseline.neon` is a suppression file; its total is the count of
-  errors the project decided to stop seeing.
+  errors the project decided to stop seeing. `baseline-clusters.txt` groups
+  it by identifier: when one holds most of it, find the one structural
+  cause behind it — untyped Eloquent relations, a missing generic, a
+  mistyped helper. "480 of 705 are three fixes" is the finding; the total
+  is not.
 - **Dead code** (shipmonk) knows Symfony, Doctrine and PHPUnit entry
   points, not a DI container wired by config, routes in a closure file or a
   callback named in a string. Expect controllers and actions to show up
@@ -346,7 +360,9 @@ add `--ignore-platform-reqs` — analysis only, say so in the report.
   `md5`/`sha1` is a finding on passwords and tokens only, not on cache keys.
 - **Laravel:** without `larastan/larastan` PHPStan drowns in facades and
   magic properties. Larastan boots the application, which runs project code
-  — step 1 decides.
+  — step 1 decides. It infers `config()` types from the defaults in
+  `config/*.php`, so an empty-string default makes `! $x` look always true
+  or always false: not dead code.
 
 ### WordPress
 
@@ -505,75 +521,17 @@ The categories, grouped by the band they usually land in (step 5):
   wait for readiness, tests that assert on implementation, shared mutable
   state, catch-all handlers that swallow and carry on, circular imports.
 - **Implicit state** — a state machine nobody wrote down: flags and a
-  status side by side, changed from handlers, effects, other clients and
-  jobs. Find it by **tracing**:
-  1. *Scope*: work the leads by count, holders and stores first. A lead
-     names a component, file or table, which can hold several machines:
-     list its pieces — state, refs and module variables, one per field of
-     a record or CRDT value; a derived value is traced through its source
-     — and start from the one with the most write sites. Add a piece when
-     one event sets both (resetting to the row-0 value does not count) or
-     one condition decides on both whether something exists or runs. Stop
-     at the smallest set that shows a defect, eight pieces at most, then
-     start again from the next piece not yet in a machine, until every
-     piece is in one.
-  2. *Writes*: grep each piece's name, its setter with and without `(`,
-     and every alias or prop it is passed on as. State with one shared
-     writer (`this.setState`, a store, a CRDT map's `set`) is traced by
-     field name; a dispatch is a write. State in storage is a column, a key
-     (localStorage, cookie, Redis) or a document field, and its writes are
-     `UPDATE` and `INSERT`, an ORM save or update, `setItem`, `SET`,
-     `HSET`, `DEL` and `EXPIRE`.
-  3. *Table*, with lines: `event → fires in → checks → writes`. Row 0 is
-     initialisation (URL, storage, props, defaults). *Fires in* is the
-     states the trigger is reachable in, a request still in flight
-     counting as a state, plus what changes it from outside: other
-     clients, jobs and queue workers, other tabs (the `storage` event),
-     keys that expire, migrations and hand edits. *Checks* is what is
-     true when the write runs. Split each handler at every `await`,
-     callback, request and setter call (the new value shows only after
-     the next render); after a split nothing is checked unless it is
-     checked again.
-  4. *Defects*, read off the table:
-     - *unguarded* — a write before any split whose *fires in* holds a
-       state its *checks* do not exclude, and it is wrong there;
-     - *stale* — a write after a split relies on something that can change
-       in the window, across requests and processes too;
-     - *left behind* — an event changes one piece and leaves another its
-       gate reads, or a piece is read and never cleared; one piece kept in
-       two stores (a row, its cache, a browser copy) counts as two;
-     - *lost write* — a write replaces a whole record other writers also
-       change, the same code on another client included;
-     - *stuck* — a state with no way out the user or caller needs.
-
-     None counts where a test asserts the behaviour or a comment says why
-     it is harmless; a bad state you reproduced is never excused. An
-     effect that writes one piece from another is a lead, and a defect
-     only when something else writes that piece too.
-
-  The exact events that reach a bad state are an exact input: the finding
-  is **broken**, banded by step 5 like any bug, with "implicit state" in
-  the write-up. Run them where step 1 allows — a test or script in
-  `$H/copy` (dependencies installed there with `--ignore-scripts`; a
-  component test renders with testing-library added there), or
-  `ux-suck-hunt`'s browser — move what you keep into `$H` before the copy
-  goes, and say whether you ran it. A machine with no defect in any of its
-  pieces is the no-bad-state case: it is **implicit state**, slow, only
-  when the state is read to decide something and `git log -S'<setter or
-  field>'` shows one commit changing two or more of its write sites; name
-  the commit. Otherwise drop it. The fix: one type for the state (a union;
-  an enum with `match`; a Go typed constant that `exhaustive` checks) and
-  one transition function that rejects a move the table does not allow,
-  with the table beside it (in Go, behind a mutex or one goroutine).
-  Persisted state is guarded in the store, where a second service or a
-  hand edit cannot skip it: an enum type or `CHECK` constraint, `UPDATE …
-  WHERE status = ?` with the affected rows checked, or a trigger that
-  rejects a move the table forbids; in Redis, `WATCH`/`MULTI` or one Lua
-  script for check-then-set. A whole-record write becomes an update of the
-  changed fields, or checks a version. A browser copy carries a version
-  and is validated at row 0. Synced (CRDT): store the facts, derive the
-  status from them, and repair an illegal merged state in one function. A
-  `string` status with no transitions spread around is **typing**.
+  status side by side, changed from handlers, callbacks, effects, other
+  clients and jobs, in memory or in storage. It is found by tracing a
+  lead into a table, `event → fires in → checks → writes`, and reading
+  five defects off it: *unguarded*, *stale*, *left behind*, *lost write*
+  and *stuck*. Read
+  [`references/implicit-state.md`](references/implicit-state.md) before
+  the first lead; it holds the procedure, the budget and the fixes. A bad
+  state reached by exact events is **broken**, banded by step 5; a machine
+  with no bad state is **implicit state**, slow, only with a commit that
+  had to change two of its writes. A `string` status with no transitions
+  spread around is **typing**.
 - **Performance** — the obvious kind, visible in the code: a query or HTTP
   call per item (N+1), `await` in a loop where the calls are independent, a
   list searched inside a loop over another list, the whole file rewritten on
@@ -727,7 +685,7 @@ evidence says so:
 | Moves to | When |
 |---|---|
 | fire | exploitable; on money, auth or a trust boundary; can take the service down (unbounded growth, N+1 on a hot path); brittle code in a high-churn file; a suppression hiding a real error; a committed `.env` |
-| slow | a lazy suppression that still suppresses something; a vulnerable dependency the shipped code never reaches; a **broken** whose bad state is only cosmetic — a wrong highlight or message, no data, money or access touched |
+| slow | a lazy suppression that still suppresses something; a vulnerable dependency the shipped code never reaches; a **broken** whose bad state only shows on screen, clears at the next action, and neither misreports an outcome nor blocks a task |
 | dead weight | dead code, however brittle or insecure — deleting it fixes everything. But dead code that looks about to go live (recent, half-wired) and holds a hazard says so in its finding |
 
 **Full write-ups for the first ten** (or all, if there are fewer), each one
